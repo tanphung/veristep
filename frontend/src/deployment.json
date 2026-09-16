@@ -8,11 +8,18 @@
   "sourceHash": "baedb9762690220aa8620fc6a94065b993700cbccb5ded586b4560ee3fc4019b",
   "verifiedAt": "2026-09-16T14:30:00.000Z",
   "releaseStatus": "LIVE_GATES_PENDING",
-  "workerAvailable": false,
+  "writesEnabled": true,
+  "workerAvailable": true,
+  "workerUrl": "https://veristep-agent-worker.veristep.workers.dev",
+  "hostedWorkers": {
+    "A": "0xe78def025cE53c9b46ac56cF19f720391119fa5b",
+    "B": "0xd2A9bdb94935Bf7ed069F19b993acF0308eBbBd0"
+  },
   "limitations": [
     "Studio Next cannot prove a native transfer receipt inside the Intelligent Contract.",
     "The Studio Next web host has not proven that hidden redirects are observable or preventable.",
-    "The optional hosted A/B delivery path is not enabled for the early submission release."
+    "The live B-fault scenario ended UNDETERMINED and is not claimed as a passing release gate.",
+    "Timeout writes remain unavailable because Studio Next simulation time has not proven the deadline predicate."
   ],
   "submissionReady": false
 }

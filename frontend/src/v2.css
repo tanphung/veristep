@@ -117,11 +117,12 @@
 .v2-alert-grid span,.v2-alert-grid strong { display: block; font-size: .68rem; }
 .v2-alert-grid p { margin: 4px 0 0; font-size: .7rem; }
 .receipt-list { display: grid; gap: 8px; }
-.receipt-list > article { display: grid; grid-template-columns: 90px minmax(0,1fr) 110px 110px; align-items: center; gap: 13px; padding: 13px 15px; background: #fbfcfa; border: 1px solid var(--line); border-radius: 10px; }
+.receipt-list > article { display: grid; grid-template-columns: 150px minmax(0,1fr) 110px 110px; align-items: center; gap: 13px; padding: 13px 15px; background: #fbfcfa; border: 1px solid var(--line); border-radius: 10px; }
 .receipt-list article > div { display: grid; gap: 3px; }
 .receipt-list small { color: var(--muted); font-size: .64rem; }
 .receipt-state { width: fit-content; padding: 5px 8px; border-radius: 999px; font-size: .62rem; font-weight: 800; text-transform: uppercase; }
 .receipt-state.eligible { color: #7b5f1b; background: #f8ecc7; }
+.receipt-state.dispatched_unverified { color: #315f79; background: #e5f0f5; }
 .receipt-state.routed { color: #315f79; background: #e5f0f5; }
 .receipt-state.confirmed { color: #28654f; background: #e0f3e8; }
 .receipt-amount { text-align: right; }
