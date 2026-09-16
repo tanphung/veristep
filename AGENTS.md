@@ -56,6 +56,27 @@ Never invent GenLayer APIs, decorators, storage types, CLI flags, RPC methods,
 fee fields, receipt fields, or transaction status names. Look up uncertain APIs
 before coding.
 
+## Live-incident discipline
+
+Never default a live failure to Studio Next, a chain, or platform behavior.
+Investigate and record the first failing layer in this order:
+
+1. VeriStep input, configuration, and environment;
+2. frontend, worker, and runner scripts;
+3. deployed contract logic and finalized contract state;
+4. prompt, schema, and model response;
+5. evidence fetch and external API behavior;
+6. only then, platform or Studio Next.
+
+Every live-incident note must state **Expected**, **Actual**, **first failure
+point**, **evidence/log**, and either `ROOT_CAUSE_CONFIRMED`,
+`ROOT_CAUSE_HYPOTHESIS`, or `ROOT_CAUSE_UNKNOWN`. A platform conclusion requires
+evidence that the earlier layers have been excluded. Before any retry, recovery,
+or redeployment, create a minimal reproduction and determine whether it fails
+independently of the full application. Do not broadcast a timeout transaction
+until a no-broadcast reproduction records the actual GenVM transaction time,
+stored deadline, and exact predicate result.
+
 ## Compatible RC family
 
 Keep the Studio Next release family coherent and pinned:

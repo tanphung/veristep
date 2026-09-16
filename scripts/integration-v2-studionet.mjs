@@ -519,6 +519,13 @@ for (const fixture of activeFixtures) {
   const dealId = recovery === 0
     ? `v2-studio-${fixture.id}-${evidenceCommit.slice(0, 7)}`
     : `v2-studio-${fixture.id}-r${recovery}-${evidenceCommit.slice(0, 7)}`;
+  if (!manifest.steps[`${prefix}-create`]) {
+    assert.equal(
+      process.env.VERISTEP_ALLOW_NEW_RECOVERY,
+      "1",
+      `New live ${prefix} creation is locked. Record a minimal reproduction and root-cause status before allowing recovery.`,
+    );
+  }
   await write(`${prefix}-create`, "client", "create_terms", [dealId, JSON.stringify(makeTerms(commitments))]);
   let deal = await readDeal(dealId);
   assert.equal(deal.deal_id, dealId);

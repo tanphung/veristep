@@ -2,6 +2,25 @@
 
 ## Checkpoint mới nhất — không lặp giao dịch (16/09/2026)
 
+- Quy tắc incident bắt buộc: không được mặc định lỗi là Studio Next/chain. Mỗi
+  lỗi live phải kiểm input/config → script worker/frontend → contract/state →
+  prompt/schema/model → evidence/API → platform, và ghi Expected, Actual, điểm
+  fail đầu tiên, evidence/log, cùng `ROOT_CAUSE_CONFIRMED`,
+  `ROOT_CAUSE_HYPOTHESIS` hoặc `ROOT_CAUSE_UNKNOWN`. Retry/recovery/redeploy cần
+  minimal reproduction độc lập trước. `AGENTS.md` là nguồn policy đầy đủ.
+
+- Timeout minimal reproduction cho deal `v2-studio-a-fault-358323c` được lưu ở
+  `reports/studio-next-agent-tank/timeout-diagnostic-v2-studio-a-fault-358323c.json`.
+  Contract/deployment/source hash khớp; state `REVIEW_REQUESTED`; deadline là
+  `1789487114` Unix seconds = `1789483514` (review request) + `3600`, nên không
+  cộng timeout hai lần. RPC latest timestamp là `1789558005` Unix seconds, nhưng
+  SDK simulation **và** raw RPC `sim_call` cùng trả `DEADLINE_NOT_REACHED`; raw
+  reproduction có HTTP 200/RPC `-32000`. Contract predicate do đó false cho
+  simulation (`_now() < 1789487114`), nhưng receipt không expose absolute GenVM
+  timestamp. Root cause được ghi đúng là `ROOT_CAUSE_UNKNOWN`, không phải Studio
+  Next/platform, và timeout cleanup bị broadcast-lock cho tới một reproduction
+  mới chứng minh `_now() >= deadline`.
+
 - Không redeploy và không tạo lại bất kỳ case/hashi cũ nào. Audit đọc trực tiếp
   Studio Next đã đối chiếu **48 hash** trong
   `reports/studio-next-agent-tank/manifest.json`: không hash trùng, không hash
@@ -14,11 +33,11 @@
   `VERISTEP_STUDIO_NEXT_CASES=no-fault`. Nó xác nhận lại A/B `SATISFIED`, deal
   `SETTLEMENT_PENDING`, và bốn leg `DISPATCHED_UNVERIFIED`; runner no-op toàn bộ
   hash cũ. Kết quả tổng vẫn `partial` vì A-fault/B-fault chưa có consensus pass.
-- Đã thử cleanup timeout bằng script manifest-guarded. Studio Next từ chối tại
-  `sim_estimateTransactionFees` trước khi ký vì transaction datetime mô phỏng
-  vẫn trước deadline contract. Nonce client giữ `43 → 43`; **không có hash hay
-  giao dịch timeout mới**. Không bypass estimate và không tạo A-r3/B-recovery
-  chỉ để lặp lại outage.
+- Đã thử cleanup timeout bằng script manifest-guarded. Estimate bị từ chối trước
+  khi ký; minimal reproduction sau đó xác nhận predicate false nhưng không
+  expose actual GenVM timestamp (xem evidence ở trên). Nonce client giữ `43 →
+  43`; **không có hash hay giao dịch timeout mới**. Không bypass estimate và
+  không tạo A-r3/B-recovery chỉ để lặp lại outage.
 - `fee-profile.json` giờ đúng schema `version`/`methods` của GenLayer: được tái
   tạo có kiểm tra từ 48 quote live, lấy maximum theo method và headroom 25%.
   Frontend dùng Transaction Kit với `suggestions`; worker dùng profile +

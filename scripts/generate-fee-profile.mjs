@@ -79,7 +79,7 @@ const profile = {
       },
     },
     excludedMethods: {
-      advance_timeout: "No successful Studio Next estimate exists because its simulated transaction datetime is behind the stored deadline. Browser signing is intentionally blocked until a fresh estimate succeeds.",
+      advance_timeout: "A no-broadcast raw sim_call reproduces DEADLINE_NOT_REACHED, but the simulation receipt does not expose its GenVM timestamp. Browser signing remains blocked until a fresh simulation proves the predicate.",
     },
   },
 };

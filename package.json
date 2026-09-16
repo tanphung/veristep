@@ -15,6 +15,7 @@
     "audit:studio-next": "node scripts/audit-studio-next-manifest.mjs",
     "generate:fee-profile": "node scripts/generate-fee-profile.mjs",
     "check:fee-profile": "node scripts/generate-fee-profile.mjs --check",
+    "diagnose:studio-next-timeout": "node scripts/diagnose-studio-next-timeout.mjs",
     "test:router": "node scripts/test-receipt-router.mjs",
     "test:worker": "vitest run --config vitest.worker.config.ts",
     "test:openai-smoke": "node scripts/worker-openai-smoke.mjs",

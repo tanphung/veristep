@@ -1,0 +1,95 @@
+{
+  "mode": "READ_AND_SIMULATE_ONLY_NO_BROADCAST",
+  "dealId": "v2-studio-a-fault-358323c",
+  "contract": {
+    "address": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+    "sourceHash": "baedb9762690220aa8620fc6a94065b993700cbccb5ded586b4560ee3fc4019b",
+    "deploymentTransaction": "0x6200be8f09bb10d670ac7c3a1def9ba11893bc618ae4d4b2d261ffd2ab39494b"
+  },
+  "storedDeal": {
+    "status": "REVIEW_REQUESTED",
+    "adjudicationDeadline": {
+      "unixSeconds": 1789487114,
+      "iso8601": "2026-09-15T15:45:14.000Z"
+    },
+    "reviewRequestedAt": {
+      "unixSeconds": 1789483514,
+      "iso8601": "2026-09-15T14:45:14.000Z"
+    },
+    "adjudicationWindowSeconds": 3600,
+    "deadlineFormula": "1789483514 + 3600 = 1789487114",
+    "deadlineMatchesSingleAddition": true
+  },
+  "rpcLatestBlock": {
+    "timestampUnixSeconds": 1789558005,
+    "iso8601": "2026-09-16T11:26:45.000Z",
+    "unit": "Unix seconds"
+  },
+  "simulation": {
+    "outcome": "REJECTED_IN_SIMULATION",
+    "errorCodes": [
+      "DEADLINE_NOT_REACHED"
+    ],
+    "exposedTimeFields": [],
+    "relevantErrorShape": {
+      "executionResult": "ERROR",
+      "resultType": "string",
+      "genvmErrorCodeType": "object",
+      "genvmRawErrorType": "object",
+      "genvmErrorDescriptionType": "object",
+      "paramKeys": [
+        "type",
+        "to",
+        "from",
+        "data",
+        "transaction_hash_variant"
+      ]
+    },
+    "rawRpcReproduction": {
+      "attempted": true,
+      "httpStatus": 200,
+      "rpcCode": -32000,
+      "errorCodes": [
+        "DEADLINE_NOT_REACHED"
+      ],
+      "exposedTimeFields": [],
+      "relevantErrorShape": {
+        "executionResult": "ERROR",
+        "resultType": "string",
+        "genvmErrorCodeType": "object",
+        "genvmRawErrorType": "object",
+        "genvmErrorDescriptionType": "object",
+        "paramKeys": [
+          "type",
+          "to",
+          "from",
+          "data",
+          "transaction_hash_variant"
+        ]
+      }
+    },
+    "selectedGenVmTransactionTime": null,
+    "unit": "Unix seconds when numeric; ISO 8601 when datetime"
+  },
+  "contractPredicate": "advance_timeout in REVIEW_REQUESTED executes _require(_now() >= adjudication_deadline, 'DEADLINE_NOT_REACHED')",
+  "comparison": {
+    "proven": true,
+    "expression": "_now() >= adjudication_deadline",
+    "result": "false",
+    "inferredGenVmRelation": "_now() < 1789487114",
+    "actualTimestamp": "NOT_EXPOSED_BY_SIMULATION_RECEIPT"
+  },
+  "incident": {
+    "expected": "If the GenVM transaction timestamp is at least 1789487114, advance_timeout must satisfy _now() >= adjudication_deadline.",
+    "actual": "Both SDK simulateWriteContract and the exact raw sim_call request reject with DEADLINE_NOT_REACHED; no broadcast occurred.",
+    "firstFailurePoint": "Raw Studio Next sim_call execution of advance_timeout",
+    "evidence": [
+      "Contract address and deployed source SHA-256 match the Studio Next manifest.",
+      "Deal is REVIEW_REQUESTED and stored deadline equals one review-request timestamp plus one adjudication window.",
+      "Raw RPC reproduction returns HTTP 200 / JSON-RPC -32000 / DEADLINE_NOT_REACHED.",
+      "Simulation receipt does not expose a GenVM datetime/current_timestamp field."
+    ],
+    "rootCause": "ROOT_CAUSE_UNKNOWN",
+    "rootCauseScope": "The contract predicate is proven false for the simulator call, but the RPC does not expose its actual GenVM transaction timestamp; do not attribute that hidden timestamp to VeriStep or Studio Next without further evidence."
+  }
+}

@@ -65,6 +65,11 @@ const client = createClient({
 });
 assert.equal(await client.getChainId(), 61997, "Studio Next chain guard failed");
 assert.equal(manifest.contract.toLowerCase(), contract.toLowerCase(), "Manifest contract guard failed");
+assert.equal(
+  process.env.VERISTEP_TIMEOUT_GENVM_TIME_CONFIRMED,
+  "1",
+  "Timeout cleanup is broadcast-locked. First run npm run diagnose:studio-next-timeout and record a proven _now() >= deadline predicate.",
+);
 const save = () => writeFile(manifestPath, stringify(manifest));
 const readDeal = async (dealId) => JSON.parse(await client.readContract({ address: contract, functionName: "get_terms", args: [dealId] }));
 
