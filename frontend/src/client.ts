@@ -8,6 +8,7 @@ import {canonical,digest,verifyArtifacts} from './evidence';
 export const chain = studioNext;
 if(chain.id!==deployment.chainId)throw new Error('Deployment RPC chain configuration mismatch');
 export const contract = deployment.contract as Address;
+export const deploymentTransaction = deployment.deploymentTransaction;
 export const evidenceChainId = deployment.contractChainId;
 export const writesEnabled = deployment.network === 'studio-next' && deployment.writesEnabled;
 export const hostedWorkers = deployment.hostedWorkers as Record<'A'|'B',Address>;

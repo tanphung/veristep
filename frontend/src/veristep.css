@@ -48,7 +48,7 @@ h1,h2,h3{color:var(--vs-text)}
 .vs-navbar nav a{transition:color .16s ease}
 .vs-navbar nav a:hover{color:#fff}
 .vs-nav-actions{display:flex;align-items:center;gap:9px}
-.vs-navbar .network{color:#9fb2ce;background:rgba(15,24,45,.72);border-color:var(--vs-line)}
+.nav-launch{display:inline-flex;align-items:center;gap:7px;min-height:42px;padding:0 14px;color:#c9d8ed;background:#0d1528;border:1px solid var(--vs-line);border-radius:8px;font-size:.76rem;font-weight:750}.nav-launch:hover{color:#fff;background:#121e35}.nav-launch svg{width:15px}
 .vs-github{display:grid;place-items:center;width:40px;height:40px;border:1px solid var(--vs-line);border-radius:10px;background:#0d1528}
 .vs-github svg,.vs-navbar .wallet-button svg{width:17px}
 .vs-navbar .wallet-button{min-height:42px;color:#fff;background:linear-gradient(110deg,#289ed9,#7657e9);border:0}
@@ -146,7 +146,7 @@ label{color:#c5d1e3}input,textarea,select{color:#f3f6ff;background:#080f20;borde
 }
 
 @media(max-width:780px){
-  .vs-navbar{height:68px;padding:0 16px;gap:12px}.vs-navbar .network,.vs-github{display:none}.vs-navbar .wallet-button{padding:9px 12px;font-size:.72rem}.vs-brand img{width:34px;height:34px}.vs-brand strong{font-size:1.08rem}
+  .vs-navbar{height:68px;padding:0 16px;gap:12px}.vs-github{display:none}.nav-launch{padding:0 10px;font-size:.68rem}.nav-launch svg{display:none}.vs-navbar .wallet-button{padding:9px 12px;font-size:.72rem}.vs-brand img{width:34px;height:34px}.vs-brand strong{font-size:1.08rem}
   .vs-hero{min-height:0;padding:82px 18px 32px}.vs-hero-copy h1{font-size:clamp(2.65rem,12vw,4rem)}.vs-hero-copy p{font-size:.92rem}.vs-hero-mark{right:-150px;top:90px;width:390px}
   .vs-causal{grid-template-columns:1fr 1fr;width:100%;margin-top:48px;padding:14px}.vs-causal li:last-child{grid-column:1/-1}
   .vs-story,.vs-product{width:calc(100vw - 28px);padding:78px 0}.vs-boundary{padding:78px 14px}.vs-story-grid,.vs-boundary-grid{grid-template-columns:1fr}.vs-story-grid article:last-child{grid-column:auto}
@@ -156,7 +156,7 @@ label{color:#c5d1e3}input,textarea,select{color:#f3f6ff;background:#080f20;borde
 }
 
 @media(max-width:500px){
-  .vs-navbar .wallet-button svg{display:none}.vs-navbar .wallet-button{max-width:132px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .vs-navbar .wallet-button svg{display:none}.vs-navbar .wallet-button{max-width:112px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.nav-launch{min-height:38px;padding:0 8px}
   .vs-hero{padding-top:66px}.vs-hero-copy{min-width:0;max-width:100%}.vs-hero-copy .eyebrow{font-size:.57rem;line-height:1.6}.vs-hero-copy h1{max-width:100%;font-size:clamp(2.1rem,10.2vw,2.5rem);line-height:1.04;overflow-wrap:anywhere}.vs-hero-copy h1 br{display:none}.vs-hero-copy p{font-size:.86rem}.vs-hero-copy .hero-actions{align-items:stretch;flex-direction:column}.vs-hero-copy .hero-actions>*{width:100%;justify-content:center}
   .vs-causal{grid-template-columns:1fr}.vs-causal li:last-child{grid-column:auto}
   .vs-story h2,.vs-section-head h2{font-size:2.15rem}.vs-story-grid article{min-height:0}
