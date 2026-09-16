@@ -5,7 +5,7 @@ import {chain,contract,readClient,writesEnabled} from "./client";
 import {readV2Deal} from "./v2-client";
 import {executionName,statusName} from "../../scripts/receipts.mjs";
 import feeProfile from "../../fee-profile.json";
-import type {TxRecord,Phase,Provider} from "./transactions";
+import {injected,type TxRecord,type Phase} from "./transactions";
 
 export const v2HistoryKey=`veristep:v2:transactions:${chain.id}:${contract.toLowerCase()}`;
 export const v2Pending=(record:TxRecord)=>["SIGNING","PENDING","ACCEPTED","UNKNOWN"].includes(record.phase);
@@ -19,7 +19,7 @@ function assertMeasuredProfile(method:string){
     throw new Error(excluded[method]??"No shared fee profile exists for this contract action");
   }
 }
-function provider(){const value=(window as unknown as {ethereum?:Provider}).ethereum;if(!value?.request)throw new Error("MetaMask with the GenLayer Wallet Snap is required");return value;}
+function provider(){return injected();}
 function routeAllocation(recipient:Address):MessageFeeAllocationInput{
   const config=feeProfile.provenance.routeSettlement;
   return {

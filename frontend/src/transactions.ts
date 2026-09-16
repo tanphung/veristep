@@ -22,22 +22,35 @@ function save(record:TxRecord){
   localStorage.setItem(historyKey,JSON.stringify(records));
   window.dispatchEvent(new Event('veristep:transactions'));
 }
+type InjectedProvider=Provider & {isMetaMask?:boolean;isOkxWallet?:boolean;isOKExWallet?:boolean;providers?:InjectedProvider[]};
+function providerCandidates():InjectedProvider[]{
+  const browser=window as unknown as {ethereum?:InjectedProvider;okxwallet?:InjectedProvider};
+  const candidates=[...(Array.isArray(browser.ethereum?.providers)?browser.ethereum.providers:[]),browser.ethereum,browser.okxwallet].filter((item):item is InjectedProvider=>Boolean(item?.request));
+  return [...new Set(candidates)].sort((left,right)=>Number(Boolean(right.isMetaMask))-Number(Boolean(left.isMetaMask))||Number(Boolean(right.isOkxWallet||right.isOKExWallet))-Number(Boolean(left.isOkxWallet||left.isOKExWallet)));
+}
 export function injected():Provider {
-  const provider=(window as unknown as {ethereum?:Provider}).ethereum;
-  if(!provider?.request)throw new Error('Open this page in MetaMask with the GenLayer Wallet Snap. Never paste a private key here.');
+  const provider=providerCandidates()[0];
+  if(!provider)throw new Error('Install or unlock an EIP-1193 wallet such as MetaMask or OKX Wallet. Never paste a private key here.');
   return provider;
+}
+function chainParams(){return {chainId:`0x${chain.id.toString(16)}`,chainName:chain.name,rpcUrls:chain.rpcUrls.default.http,nativeCurrency:chain.nativeCurrency,blockExplorerUrls:chain.blockExplorers?.default.url?[chain.blockExplorers.default.url]:undefined};}
+function errorCode(error:unknown):number|undefined{return typeof error==='object'&&error!==null&&'code' in error&&typeof error.code==='number'?error.code:undefined;}
+async function connectChain(provider:Provider):Promise<void>{
+  const expected=`0x${chain.id.toString(16)}`;
+  if(await provider.request({method:'eth_chainId'})===expected)return;
+  try{await provider.request({method:'wallet_switchEthereumChain',params:[{chainId:expected}]});}
+  catch(error){
+    if(errorCode(error)!==4902)throw error;
+    await provider.request({method:'wallet_addEthereumChain',params:[chainParams()]});
+    await provider.request({method:'wallet_switchEthereumChain',params:[{chainId:expected}]});
+  }
+  if(await provider.request({method:'eth_chainId'})!==expected)throw new Error(`Switch your wallet to ${chain.name}`);
 }
 export async function connect():Promise<Address>{
   const provider=injected();
   const accounts=await provider.request({method:'eth_requestAccounts'}) as Address[];
   if(!accounts?.[0])throw new Error('No wallet account selected');
-  const client=createClient({chain,account:accounts[0],provider});
-  try{await client.connect(chain.id===61997?'studioDevnet':chain.id===61999?'studionet':'testnetBradbury');}
-  catch(error){
-    const message=error instanceof Error?error.message:String(error);
-    if(/wallet_(?:get|request)Snaps/i.test(message))throw new Error('This GenLayer wallet flow requires MetaMask and the GenLayer Wallet Snap. Approve the Snap request, then reconnect.');
-    throw error;
-  }
+  await connectChain(provider);
   const actual=await provider.request({method:'eth_chainId'});
   if(Number(actual)!==chain.id)throw new Error(`Switch your wallet to ${chain.name}`);
   const current=await provider.request({method:'eth_accounts'}) as Address[];

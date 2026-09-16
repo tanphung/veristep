@@ -35,6 +35,20 @@ describe('transaction safety',()=>{
     mocks.request.mockImplementation(async({method}:{method:string})=>method==='eth_chainId'?`0x${chain.id.toString(16)}`:method==='eth_requestAccounts'?[account]:['0x3333333333333333333333333333333333333333']);
     await expect(connect()).rejects.toThrow('during connection');
   });
+  it('connects an OKX-style EIP-1193 provider without MetaMask Snap RPCs',async()=>{
+    const calls:string[]=[];
+    mocks.request.mockImplementation(async({method}:{method:string})=>{calls.push(method);if(method==='eth_chainId')return `0x${chain.id.toString(16)}`;if(method==='eth_requestAccounts'||method==='eth_accounts')return [account];throw new Error(`unexpected ${method}`);});
+    Object.defineProperty(window,'ethereum',{value:{isOkxWallet:true,request:mocks.request},configurable:true});
+    await expect(connect()).resolves.toBe(account);
+    expect(calls).toEqual(['eth_requestAccounts','eth_chainId','eth_chainId','eth_accounts']);
+    expect(calls).not.toContain('wallet_getSnaps');expect(calls).not.toContain('wallet_requestSnaps');
+  });
+  it('adds and switches Studio Next only when the selected wallet lacks the chain',async()=>{
+    let active='0x1';const calls:string[]=[];
+    mocks.request.mockImplementation(async({method}:{method:string})=>{calls.push(method);if(method==='eth_requestAccounts'||method==='eth_accounts')return [account];if(method==='eth_chainId')return active;if(method==='wallet_switchEthereumChain'){if(active==='0x1'){const error=Object.assign(new Error('unknown chain'),{code:4902});active='0x2';throw error;}active=`0x${chain.id.toString(16)}`;return null;}if(method==='wallet_addEthereumChain')return null;throw new Error(`unexpected ${method}`);});
+    await expect(connect()).resolves.toBe(account);
+    expect(calls).toEqual(['eth_requestAccounts','eth_chainId','wallet_switchEthereumChain','wallet_addEthereumChain','wallet_switchEthereumChain','eth_chainId','eth_chainId','eth_accounts']);
+  });
   it('does not mark finalized execution successful until expected state is observable',async()=>{
     const item=record();localStorage.setItem(historyKey,JSON.stringify([item]));
     vi.mocked(readClient.getTransaction).mockResolvedValue({...matchedReceipt(),status:'FINALIZED',tx_execution_result_name:'FINISHED_WITH_RETURN'} as never);
