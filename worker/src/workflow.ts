@@ -1,7 +1,7 @@
 import {WorkflowEntrypoint, type WorkflowEvent, type WorkflowStep} from "cloudflare:workers";
+import {generatePersistedArtifact, markArtifactPublished} from "./artifacts";
 import {acquireArtifact, publishArtifact} from "./github";
 import {assertHostedWorkers, inspectTransaction, markTransactionFinal, readFinalDeal, submissionArgs, writeAgentAction} from "./genlayer";
-import {generateArtifact} from "./openai";
 import {buildAgentPrompt} from "./policy";
 import type {AgentRole, Env, RunParams, WorkerDeal} from "./types";
 
@@ -47,8 +47,9 @@ export class VeriStepWorkflow extends WorkflowEntrypoint<Env, RunParams> {
         await step.do("stage-agent-a", ONCE, () => setStage(this.env, params, "AGENT_A_GENERATING"));
         const source = await step.do("fetch-full-source", ONCE, () => acquireArtifact(this.env, deal.artifacts.SOURCE!.commitment));
         const prompt = buildAgentPrompt(deal, "A", {SOURCE: source});
-        const generated = await step.do("openai-agent-a", ONCE, () => generateArtifact(this.env, `${params.runId}:A`, prompt));
-        const published = await step.do("publish-agent-a", ONCE, () => publishArtifact(this.env, params.runId, deal.deal_id, "A", generated.artifact, deal.manifest.terms.origins.A));
+        const artifact = await step.do("generate-persist-agent-a", ONCE, () => generatePersistedArtifact(this.env, params.runId, deal, "A", prompt));
+        const published = await step.do("publish-agent-a", ONCE, () => publishArtifact(this.env, params.runId, deal.deal_id, "A", artifact, deal.manifest.terms.origins.A));
+        await step.do("checkpoint-published-agent-a", ONCE, () => markArtifactPublished(this.env, params.runId, "A", published));
         const hash = await step.do("A-submit-artifact", ONCE, () => writeAgentAction(this.env, params, "A", "submit_artifact", submissionArgs(deal, "A", published.commitment), 0n));
         await waitFinal(step, this.env, params, "A", "submit_artifact", hash);
       }
@@ -61,8 +62,9 @@ export class VeriStepWorkflow extends WorkflowEntrypoint<Env, RunParams> {
         const a = await step.do("fetch-full-finalized-a", ONCE, () => acquireArtifact(this.env, deal.artifacts.A!.commitment));
         const source = required.has("SOURCE") ? await step.do("refetch-full-source-for-b", ONCE, () => acquireArtifact(this.env, deal.artifacts.SOURCE!.commitment)) : undefined;
         const prompt = buildAgentPrompt(deal, "B", {A: a, SOURCE: source});
-        const generated = await step.do("openai-agent-b", ONCE, () => generateArtifact(this.env, `${params.runId}:B`, prompt));
-        const published = await step.do("publish-agent-b", ONCE, () => publishArtifact(this.env, params.runId, deal.deal_id, "B", generated.artifact, deal.manifest.terms.origins.B));
+        const artifact = await step.do("generate-persist-agent-b", ONCE, () => generatePersistedArtifact(this.env, params.runId, deal, "B", prompt));
+        const published = await step.do("publish-agent-b", ONCE, () => publishArtifact(this.env, params.runId, deal.deal_id, "B", artifact, deal.manifest.terms.origins.B));
+        await step.do("checkpoint-published-agent-b", ONCE, () => markArtifactPublished(this.env, params.runId, "B", published));
         const hash = await step.do("B-submit-artifact", ONCE, () => writeAgentAction(this.env, params, "B", "submit_artifact", submissionArgs(deal, "B", published.commitment), 0n));
         await waitFinal(step, this.env, params, "B", "submit_artifact", hash);
       }

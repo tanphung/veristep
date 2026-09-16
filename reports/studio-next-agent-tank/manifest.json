@@ -502,6 +502,205 @@
       "nonceBefore": "43",
       "nonceAfter": "43",
       "finishedAt": "2026-09-16T11:14:08.737Z"
+    },
+    "a-fault-recovery-3-create": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-16T11:47:13.573Z",
+      "hash": "0x91db939374c8d7f161f74a7c6b38722b79271d5dee836606521bc72e50d8e990",
+      "submittedAt": "2026-09-16T11:47:17.593Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+      "finishedAt": "2026-09-16T11:47:55.620Z"
+    },
+    "a-fault-recovery-3-fund": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-16T11:47:57.049Z",
+      "hash": "0x73c7458652d8c4313625fe7cbe508306fcf9b51317029a451648c2de12ea95a2",
+      "submittedAt": "2026-09-16T11:48:00.968Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+      "finishedAt": "2026-09-16T11:49:13.270Z"
+    },
+    "a-fault-recovery-3-accept-a": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-16T11:49:13.271Z",
+      "hash": "0x3f50b928b118de6c36c0c1074fe3315bf704e137001a4ab1b0c1082a0585ce65",
+      "submittedAt": "2026-09-16T11:49:17.320Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+      "finishedAt": "2026-09-16T11:49:55.607Z"
+    },
+    "a-fault-recovery-3-accept-b": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-16T11:49:55.608Z",
+      "hash": "0xcde29064140750539a4d8c257ff2e13faf2bc4e7d8617e9b15de900fd912ee29",
+      "submittedAt": "2026-09-16T11:50:01.906Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+      "finishedAt": "2026-09-16T11:50:36.663Z"
+    },
+    "a-fault-recovery-3-submit-a": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-16T11:50:37.427Z",
+      "hash": "0x8063cef4099539ebacb50ec6ad7360e59a4ba6d0945180f348bea04121fc681c",
+      "submittedAt": "2026-09-16T11:50:41.840Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+      "finishedAt": "2026-09-16T11:51:17.280Z"
+    },
+    "a-fault-recovery-3-submit-b": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-16T11:51:18.155Z",
+      "hash": "0xbdabcf669d8db7087d13e2335eb7327c37313a1ee6fe9d777b6485eefec5b496",
+      "submittedAt": "2026-09-16T11:51:22.774Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+      "finishedAt": "2026-09-16T11:51:59.322Z"
+    },
+    "a-fault-recovery-3-request-review": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-16T11:51:59.324Z",
+      "hash": "0x8e3cfbacf4c68910414fa985ecfa04f5b6c4ab87b179bef1da56619def8901be",
+      "submittedAt": "2026-09-16T11:52:03.322Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+      "finishedAt": "2026-09-16T11:52:42.017Z"
+    },
+    "a-fault-recovery-3-resolve-review": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-16T11:52:42.018Z",
+      "hash": "0x3d3b69c4cb96a089cd062fc8a00eb9a3cb6a3acea656b12e1d9923c78c8a2ddc",
+      "submittedAt": "2026-09-16T11:52:59.626Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+      "finishedAt": "2026-09-16T11:54:50.821Z"
+    },
+    "a-fault-recovery-3-route-a-refund": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-16T11:54:51.737Z",
+      "hash": "0x1aef433655ab49d76c63bc5a72161236c4c8b0f2867cba868c2f179939c3d04b",
+      "submittedAt": "2026-09-16T11:54:55.267Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+      "finishedAt": "2026-09-16T11:55:34.712Z"
+    },
+    "a-fault-recovery-3-route-a-bond-return": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-16T11:55:35.577Z",
+      "hash": "0x389711cd7c833d0a0d0da0249e768c0f118e52c4bc61f039a0f9cb6e20916b19",
+      "submittedAt": "2026-09-16T11:55:39.084Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+      "finishedAt": "2026-09-16T11:56:17.881Z"
+    },
+    "a-fault-recovery-3-route-b-payout": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-16T11:56:19.096Z",
+      "hash": "0xce8f637cc9d74435898578ff5df00c0b897cbc0f7d4d3f88959673da4f9727d4",
+      "submittedAt": "2026-09-16T11:56:23.145Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+      "finishedAt": "2026-09-16T11:57:04.563Z"
+    },
+    "a-fault-recovery-3-route-b-bond-return": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-16T11:57:05.392Z",
+      "hash": "0x5261b05d41e9420f717c10c1bcb5b442d61dc41dcec391a72b0a04a1407fe43c",
+      "submittedAt": "2026-09-16T11:57:25.757Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+      "finishedAt": "2026-09-16T11:58:02.571Z"
+    },
+    "b-fault-recovery-1-create": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-16T11:58:04.669Z",
+      "hash": "0xafe2f894938b3345239bf159cc21e55b8c58a924618a5e195f8072471331f703",
+      "submittedAt": "2026-09-16T11:58:08.722Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+      "finishedAt": "2026-09-16T11:58:43.713Z"
+    },
+    "b-fault-recovery-1-fund": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-16T12:47:23.573Z",
+      "hash": "0x6b09997a6448dfe63a2c8b05c04d1c2cfabf3afaa1bcd5488aa28cce60f85beb",
+      "submittedAt": "2026-09-16T12:47:27.778Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+      "finishedAt": "2026-09-16T12:48:06.328Z"
+    },
+    "b-fault-recovery-1-accept-a": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-16T12:48:06.330Z",
+      "hash": "0x6ac8901d7c1921612bf1851b2d8b83792e484e4ee97057e50108478919281334",
+      "submittedAt": "2026-09-16T12:48:10.627Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+      "finishedAt": "2026-09-16T12:48:51.868Z"
+    },
+    "b-fault-recovery-1-accept-b": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-16T12:48:51.869Z",
+      "hash": "0x5502ddff67c55e085e9433020ec82a3ab8143592b207212da1c7b99311f3c854",
+      "submittedAt": "2026-09-16T12:49:01.707Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+      "finishedAt": "2026-09-16T12:49:35.527Z"
+    },
+    "b-fault-recovery-1-submit-a": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-16T12:49:36.395Z",
+      "hash": "0xa8ee33d9f7e816f9466af6245ba2b6e0bd227ce43ed68c01c60bcbf9465c361f",
+      "submittedAt": "2026-09-16T12:49:44.139Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+      "finishedAt": "2026-09-16T12:50:20.433Z"
+    },
+    "b-fault-recovery-1-submit-b": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-16T12:50:21.251Z",
+      "hash": "0x4ac75d5dc7a3fa630d3e8d1890ed3d8333ce052f99a4b30dbb5f0de7fc9fb7ab",
+      "submittedAt": "2026-09-16T12:50:25.429Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+      "finishedAt": "2026-09-16T12:51:06.296Z"
+    },
+    "b-fault-recovery-1-request-review": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-16T12:51:06.298Z",
+      "hash": "0x2fa32a8b8449a46fb940cbd00a1f4888284709f477fbf62e30cfa8ba6b17f73d",
+      "submittedAt": "2026-09-16T12:51:10.677Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+      "finishedAt": "2026-09-16T12:51:49.991Z"
+    },
+    "b-fault-recovery-1-resolve-review": {
+      "phase": "UNDETERMINED",
+      "startedAt": "2026-09-16T12:51:49.991Z",
+      "hash": "0xfc0d1405e9561526f04ba1973225e2afd05f34b744585f0caae5505113760387",
+      "submittedAt": "2026-09-16T12:51:57.296Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_ERROR",
+      "finishedAt": "2026-09-16T12:52:22.717Z"
     }
   },
   "cases": {
@@ -548,6 +747,53 @@
           "amount": "500",
           "state": "DISPATCHED_UNVERIFIED",
           "transaction": "0x41360d47b006149b3e2b452b904cdfc0962ef956ee6712ea7d7f741edad85a0f"
+        }
+      ],
+      "passed": true
+    },
+    "a-fault": {
+      "dealId": "v2-studio-a-fault-r3-358323c",
+      "expected": {
+        "A": "VIOLATED",
+        "B": "SATISFIED"
+      },
+      "actual": {
+        "A": "VIOLATED",
+        "B": "SATISFIED"
+      },
+      "status": "SETTLEMENT_PENDING",
+      "settlementDispatch": [
+        {
+          "id": "A:REFUND",
+          "kind": "REFUND",
+          "recipient": "0x04D9beb3ae05ca01C77C7252d0B4fDbf4485b2e8",
+          "amount": "1300",
+          "state": "DISPATCHED_UNVERIFIED",
+          "transaction": "0x1aef433655ab49d76c63bc5a72161236c4c8b0f2867cba868c2f179939c3d04b"
+        },
+        {
+          "id": "A:BOND_RETURN",
+          "kind": "BOND_RETURN",
+          "recipient": "0xe78def025cE53c9b46ac56cF19f720391119fa5b",
+          "amount": "200",
+          "state": "DISPATCHED_UNVERIFIED",
+          "transaction": "0x389711cd7c833d0a0d0da0249e768c0f118e52c4bc61f039a0f9cb6e20916b19"
+        },
+        {
+          "id": "B:PAYOUT",
+          "kind": "PAYOUT",
+          "recipient": "0xd2A9bdb94935Bf7ed069F19b993acF0308eBbBd0",
+          "amount": "1000",
+          "state": "DISPATCHED_UNVERIFIED",
+          "transaction": "0xce8f637cc9d74435898578ff5df00c0b897cbc0f7d4d3f88959673da4f9727d4"
+        },
+        {
+          "id": "B:BOND_RETURN",
+          "kind": "BOND_RETURN",
+          "recipient": "0xd2A9bdb94935Bf7ed069F19b993acF0308eBbBd0",
+          "amount": "500",
+          "state": "DISPATCHED_UNVERIFIED",
+          "transaction": "0x5261b05d41e9420f717c10c1bcb5b442d61dc41dcec391a72b0a04a1407fe43c"
         }
       ],
       "passed": true
@@ -1409,6 +1655,392 @@
       }
     },
     "b-fault-resolve-review-retry-1": {
+      "feeValue": "723871200010352",
+      "distribution": {
+        "leaderTimeunitsAllocation": "100",
+        "validatorTimeunitsAllocation": "200",
+        "appealRounds": "0",
+        "executionBudgetPerRound": "180967800000000",
+        "executionConsumed": "0",
+        "totalMessageFees": "0",
+        "rotations": [
+          "3"
+        ],
+        "maxPriceGenPerTimeUnit": "2",
+        "storageFeeMaxGasPrice": "300000000",
+        "receiptFeeMaxGasPrice": "300000000"
+      },
+      "fallbackCandidate": "b-fault-resolve-review"
+    },
+    "a-fault-recovery-3-create": {
+      "feeValue": "614066400010352",
+      "distribution": {
+        "leaderTimeunitsAllocation": "100",
+        "validatorTimeunitsAllocation": "200",
+        "appealRounds": "0",
+        "executionBudgetPerRound": "153516600000000",
+        "executionConsumed": "0",
+        "totalMessageFees": "0",
+        "rotations": [
+          "3"
+        ],
+        "maxPriceGenPerTimeUnit": "2",
+        "storageFeeMaxGasPrice": "300000000",
+        "receiptFeeMaxGasPrice": "300000000"
+      }
+    },
+    "a-fault-recovery-3-fund": {
+      "feeValue": "614060400010352",
+      "distribution": {
+        "leaderTimeunitsAllocation": "100",
+        "validatorTimeunitsAllocation": "200",
+        "appealRounds": "0",
+        "executionBudgetPerRound": "153515100000000",
+        "executionConsumed": "0",
+        "totalMessageFees": "0",
+        "rotations": [
+          "3"
+        ],
+        "maxPriceGenPerTimeUnit": "2",
+        "storageFeeMaxGasPrice": "300000000",
+        "receiptFeeMaxGasPrice": "300000000"
+      }
+    },
+    "a-fault-recovery-3-accept-a": {
+      "feeValue": "614060400010352",
+      "distribution": {
+        "leaderTimeunitsAllocation": "100",
+        "validatorTimeunitsAllocation": "200",
+        "appealRounds": "0",
+        "executionBudgetPerRound": "153515100000000",
+        "executionConsumed": "0",
+        "totalMessageFees": "0",
+        "rotations": [
+          "3"
+        ],
+        "maxPriceGenPerTimeUnit": "2",
+        "storageFeeMaxGasPrice": "300000000",
+        "receiptFeeMaxGasPrice": "300000000"
+      }
+    },
+    "a-fault-recovery-3-accept-b": {
+      "feeValue": "614062800010352",
+      "distribution": {
+        "leaderTimeunitsAllocation": "100",
+        "validatorTimeunitsAllocation": "200",
+        "appealRounds": "0",
+        "executionBudgetPerRound": "153515700000000",
+        "executionConsumed": "0",
+        "totalMessageFees": "0",
+        "rotations": [
+          "3"
+        ],
+        "maxPriceGenPerTimeUnit": "2",
+        "storageFeeMaxGasPrice": "300000000",
+        "receiptFeeMaxGasPrice": "300000000"
+      }
+    },
+    "a-fault-recovery-3-submit-a": {
+      "feeValue": "614091600010352",
+      "distribution": {
+        "leaderTimeunitsAllocation": "100",
+        "validatorTimeunitsAllocation": "200",
+        "appealRounds": "0",
+        "executionBudgetPerRound": "153522900000000",
+        "executionConsumed": "0",
+        "totalMessageFees": "0",
+        "rotations": [
+          "3"
+        ],
+        "maxPriceGenPerTimeUnit": "2",
+        "storageFeeMaxGasPrice": "300000000",
+        "receiptFeeMaxGasPrice": "300000000"
+      }
+    },
+    "a-fault-recovery-3-submit-b": {
+      "feeValue": "614121600010352",
+      "distribution": {
+        "leaderTimeunitsAllocation": "100",
+        "validatorTimeunitsAllocation": "200",
+        "appealRounds": "0",
+        "executionBudgetPerRound": "153530400000000",
+        "executionConsumed": "0",
+        "totalMessageFees": "0",
+        "rotations": [
+          "3"
+        ],
+        "maxPriceGenPerTimeUnit": "2",
+        "storageFeeMaxGasPrice": "300000000",
+        "receiptFeeMaxGasPrice": "300000000"
+      }
+    },
+    "a-fault-recovery-3-request-review": {
+      "feeValue": "614127600010352",
+      "distribution": {
+        "leaderTimeunitsAllocation": "100",
+        "validatorTimeunitsAllocation": "200",
+        "appealRounds": "0",
+        "executionBudgetPerRound": "153531900000000",
+        "executionConsumed": "0",
+        "totalMessageFees": "0",
+        "rotations": [
+          "3"
+        ],
+        "maxPriceGenPerTimeUnit": "2",
+        "storageFeeMaxGasPrice": "300000000",
+        "receiptFeeMaxGasPrice": "300000000"
+      }
+    },
+    "a-fault-recovery-3-resolve-review": {
+      "feeValue": "726913200010352",
+      "distribution": {
+        "leaderTimeunitsAllocation": "100",
+        "validatorTimeunitsAllocation": "200",
+        "appealRounds": "0",
+        "executionBudgetPerRound": "181728300000000",
+        "executionConsumed": "0",
+        "totalMessageFees": "0",
+        "rotations": [
+          "3"
+        ],
+        "maxPriceGenPerTimeUnit": "2",
+        "storageFeeMaxGasPrice": "300000000",
+        "receiptFeeMaxGasPrice": "300000000"
+      },
+      "fallbackCandidate": "a-fault-recovery-2-resolve-review"
+    },
+    "a-fault-recovery-3-route-a-refund": {
+      "feeValue": "120619984800020704",
+      "distribution": {
+        "leaderTimeunitsAllocation": "100",
+        "validatorTimeunitsAllocation": "200",
+        "appealRounds": "0",
+        "executionBudgetPerRound": "154996200000000",
+        "executionConsumed": "0",
+        "totalMessageFees": "120000000000010352",
+        "rotations": [
+          "3"
+        ],
+        "maxPriceGenPerTimeUnit": "2",
+        "storageFeeMaxGasPrice": "300000000",
+        "receiptFeeMaxGasPrice": "300000000"
+      },
+      "messageAllocations": [
+        {
+          "messageType": 1,
+          "onAcceptance": false,
+          "parentIndex": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+          "recipient": "0x04d9beb3ae05ca01c77c7252d0b4fdbf4485b2e8",
+          "callKey": "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "budget": "120000000000010352",
+          "feeParams": "0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000006400000000000000000000000000000000000000000000000000000000000000c800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000058d15e17628000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000011e1a3000000000000000000000000000000000000000000000000000000000011e1a30000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000003"
+        }
+      ]
+    },
+    "a-fault-recovery-3-route-a-bond-return": {
+      "feeValue": "120619986000020704",
+      "distribution": {
+        "leaderTimeunitsAllocation": "100",
+        "validatorTimeunitsAllocation": "200",
+        "appealRounds": "0",
+        "executionBudgetPerRound": "154996500000000",
+        "executionConsumed": "0",
+        "totalMessageFees": "120000000000010352",
+        "rotations": [
+          "3"
+        ],
+        "maxPriceGenPerTimeUnit": "2",
+        "storageFeeMaxGasPrice": "300000000",
+        "receiptFeeMaxGasPrice": "300000000"
+      },
+      "messageAllocations": [
+        {
+          "messageType": 1,
+          "onAcceptance": false,
+          "parentIndex": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+          "recipient": "0xe78def025ce53c9b46ac56cf19f720391119fa5b",
+          "callKey": "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "budget": "120000000000010352",
+          "feeParams": "0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000006400000000000000000000000000000000000000000000000000000000000000c800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000058d15e17628000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000011e1a3000000000000000000000000000000000000000000000000000000000011e1a30000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000003"
+        }
+      ]
+    },
+    "a-fault-recovery-3-route-b-payout": {
+      "feeValue": "120619987200020704",
+      "distribution": {
+        "leaderTimeunitsAllocation": "100",
+        "validatorTimeunitsAllocation": "200",
+        "appealRounds": "0",
+        "executionBudgetPerRound": "154996800000000",
+        "executionConsumed": "0",
+        "totalMessageFees": "120000000000010352",
+        "rotations": [
+          "3"
+        ],
+        "maxPriceGenPerTimeUnit": "2",
+        "storageFeeMaxGasPrice": "300000000",
+        "receiptFeeMaxGasPrice": "300000000"
+      },
+      "messageAllocations": [
+        {
+          "messageType": 1,
+          "onAcceptance": false,
+          "parentIndex": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+          "recipient": "0xd2a9bdb94935bf7ed069f19b993acf0308ebbbd0",
+          "callKey": "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "budget": "120000000000010352",
+          "feeParams": "0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000006400000000000000000000000000000000000000000000000000000000000000c800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000058d15e17628000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000011e1a3000000000000000000000000000000000000000000000000000000000011e1a30000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000003"
+        }
+      ]
+    },
+    "a-fault-recovery-3-route-b-bond-return": {
+      "feeValue": "120619988400020704",
+      "distribution": {
+        "leaderTimeunitsAllocation": "100",
+        "validatorTimeunitsAllocation": "200",
+        "appealRounds": "0",
+        "executionBudgetPerRound": "154997100000000",
+        "executionConsumed": "0",
+        "totalMessageFees": "120000000000010352",
+        "rotations": [
+          "3"
+        ],
+        "maxPriceGenPerTimeUnit": "2",
+        "storageFeeMaxGasPrice": "300000000",
+        "receiptFeeMaxGasPrice": "300000000"
+      },
+      "messageAllocations": [
+        {
+          "messageType": 1,
+          "onAcceptance": false,
+          "parentIndex": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+          "recipient": "0xd2a9bdb94935bf7ed069f19b993acf0308ebbbd0",
+          "callKey": "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "budget": "120000000000010352",
+          "feeParams": "0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000006400000000000000000000000000000000000000000000000000000000000000c800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000058d15e17628000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000011e1a3000000000000000000000000000000000000000000000000000000000011e1a30000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000003"
+        }
+      ]
+    },
+    "b-fault-recovery-1-create": {
+      "feeValue": "614066400010352",
+      "distribution": {
+        "leaderTimeunitsAllocation": "100",
+        "validatorTimeunitsAllocation": "200",
+        "appealRounds": "0",
+        "executionBudgetPerRound": "153516600000000",
+        "executionConsumed": "0",
+        "totalMessageFees": "0",
+        "rotations": [
+          "3"
+        ],
+        "maxPriceGenPerTimeUnit": "2",
+        "storageFeeMaxGasPrice": "300000000",
+        "receiptFeeMaxGasPrice": "300000000"
+      }
+    },
+    "b-fault-recovery-1-fund": {
+      "feeValue": "614060400010352",
+      "distribution": {
+        "leaderTimeunitsAllocation": "100",
+        "validatorTimeunitsAllocation": "200",
+        "appealRounds": "0",
+        "executionBudgetPerRound": "153515100000000",
+        "executionConsumed": "0",
+        "totalMessageFees": "0",
+        "rotations": [
+          "3"
+        ],
+        "maxPriceGenPerTimeUnit": "2",
+        "storageFeeMaxGasPrice": "300000000",
+        "receiptFeeMaxGasPrice": "300000000"
+      }
+    },
+    "b-fault-recovery-1-accept-a": {
+      "feeValue": "614060400010352",
+      "distribution": {
+        "leaderTimeunitsAllocation": "100",
+        "validatorTimeunitsAllocation": "200",
+        "appealRounds": "0",
+        "executionBudgetPerRound": "153515100000000",
+        "executionConsumed": "0",
+        "totalMessageFees": "0",
+        "rotations": [
+          "3"
+        ],
+        "maxPriceGenPerTimeUnit": "2",
+        "storageFeeMaxGasPrice": "300000000",
+        "receiptFeeMaxGasPrice": "300000000"
+      }
+    },
+    "b-fault-recovery-1-accept-b": {
+      "feeValue": "614062800010352",
+      "distribution": {
+        "leaderTimeunitsAllocation": "100",
+        "validatorTimeunitsAllocation": "200",
+        "appealRounds": "0",
+        "executionBudgetPerRound": "153515700000000",
+        "executionConsumed": "0",
+        "totalMessageFees": "0",
+        "rotations": [
+          "3"
+        ],
+        "maxPriceGenPerTimeUnit": "2",
+        "storageFeeMaxGasPrice": "300000000",
+        "receiptFeeMaxGasPrice": "300000000"
+      }
+    },
+    "b-fault-recovery-1-submit-a": {
+      "feeValue": "614091600010352",
+      "distribution": {
+        "leaderTimeunitsAllocation": "100",
+        "validatorTimeunitsAllocation": "200",
+        "appealRounds": "0",
+        "executionBudgetPerRound": "153522900000000",
+        "executionConsumed": "0",
+        "totalMessageFees": "0",
+        "rotations": [
+          "3"
+        ],
+        "maxPriceGenPerTimeUnit": "2",
+        "storageFeeMaxGasPrice": "300000000",
+        "receiptFeeMaxGasPrice": "300000000"
+      }
+    },
+    "b-fault-recovery-1-submit-b": {
+      "feeValue": "614121600010352",
+      "distribution": {
+        "leaderTimeunitsAllocation": "100",
+        "validatorTimeunitsAllocation": "200",
+        "appealRounds": "0",
+        "executionBudgetPerRound": "153530400000000",
+        "executionConsumed": "0",
+        "totalMessageFees": "0",
+        "rotations": [
+          "3"
+        ],
+        "maxPriceGenPerTimeUnit": "2",
+        "storageFeeMaxGasPrice": "300000000",
+        "receiptFeeMaxGasPrice": "300000000"
+      }
+    },
+    "b-fault-recovery-1-request-review": {
+      "feeValue": "614127600010352",
+      "distribution": {
+        "leaderTimeunitsAllocation": "100",
+        "validatorTimeunitsAllocation": "200",
+        "appealRounds": "0",
+        "executionBudgetPerRound": "153531900000000",
+        "executionConsumed": "0",
+        "totalMessageFees": "0",
+        "rotations": [
+          "3"
+        ],
+        "maxPriceGenPerTimeUnit": "2",
+        "storageFeeMaxGasPrice": "300000000",
+        "receiptFeeMaxGasPrice": "300000000"
+      }
+    },
+    "b-fault-recovery-1-resolve-review": {
       "feeValue": "723871200010352",
       "distribution": {
         "leaderTimeunitsAllocation": "100",

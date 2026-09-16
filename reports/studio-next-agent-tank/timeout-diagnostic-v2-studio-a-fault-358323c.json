@@ -21,8 +21,8 @@
     "deadlineMatchesSingleAddition": true
   },
   "rpcLatestBlock": {
-    "timestampUnixSeconds": 1789558005,
-    "iso8601": "2026-09-16T11:26:45.000Z",
+    "timestampUnixSeconds": 1789558794,
+    "iso8601": "2026-09-16T11:39:54.000Z",
     "unit": "Unix seconds"
   },
   "simulation": {
@@ -71,13 +71,40 @@
     "selectedGenVmTransactionTime": null,
     "unit": "Unix seconds when numeric; ISO 8601 when datetime"
   },
+  "independentTimeProbe": {
+    "contract": "0x64Ac3D85382887e7319395Df49C29117802C0F4B",
+    "deploymentHash": "0x938e704f3f9d2225fa91d159974a22a6af1056a1f2dedb4ea3a1279f1b594bda",
+    "sourceHash": "d72ef6bb42c92bb9fd6992f94e7c68718e4a05654f2968350e5fb370efab1000",
+    "result": {
+      "unit": "Unix seconds (message datetime parsed from ISO 8601)",
+      "probeMessageDatetime": {
+        "raw": "2024-11-26T06:42:42.424242Z",
+        "unixSeconds": 1732603362
+      },
+      "probeTimeTime": 1732603362.424242,
+      "rpcLatestBlock": {
+        "unixSeconds": 1789558722,
+        "iso8601": "2026-09-16T11:38:42.000Z"
+      },
+      "veristepDeadline": {
+        "unixSeconds": 1789487114,
+        "iso8601": "2026-09-15T15:45:14.000Z"
+      },
+      "predicateAtProbe": "1732603362 >= 1789487114 is false",
+      "deltaProbeMinusDeadlineSeconds": -56883752
+    }
+  },
   "contractPredicate": "advance_timeout in REVIEW_REQUESTED executes _require(_now() >= adjudication_deadline, 'DEADLINE_NOT_REACHED')",
   "comparison": {
     "proven": true,
-    "expression": "_now() >= adjudication_deadline",
-    "result": "false",
-    "inferredGenVmRelation": "_now() < 1789487114",
-    "actualTimestamp": "NOT_EXPOSED_BY_SIMULATION_RECEIPT"
+    "expression": "1732603362 >= 1789487114",
+    "result": false,
+    "deltaSeconds": -56883752,
+    "actualTimestamp": {
+      "raw": "2024-11-26T06:42:42.424242Z",
+      "unixSeconds": 1732603362
+    },
+    "source": "independent Studio Next time probe using SDK sim_call and its exact raw sim_call request"
   },
   "incident": {
     "expected": "If the GenVM transaction timestamp is at least 1789487114, advance_timeout must satisfy _now() >= adjudication_deadline.",
@@ -89,7 +116,7 @@
       "Raw RPC reproduction returns HTTP 200 / JSON-RPC -32000 / DEADLINE_NOT_REACHED.",
       "Simulation receipt does not expose a GenVM datetime/current_timestamp field."
     ],
-    "rootCause": "ROOT_CAUSE_UNKNOWN",
-    "rootCauseScope": "The contract predicate is proven false for the simulator call, but the RPC does not expose its actual GenVM transaction timestamp; do not attribute that hidden timestamp to VeriStep or Studio Next without further evidence."
+    "rootCause": "ROOT_CAUSE_CONFIRMED",
+    "rootCauseScope": "A separate state-free contract, invoked through SDK sim_call and the captured identical raw sim_call request, returns a 2024 GenVM datetime. It is 56,883,752 seconds before the stored 2026 deadline, which confirms the simulator predicate cannot pass. This establishes the simulation-time behavior; it does not claim an on-chain timeout broadcast would use a different time, so no broadcast is allowed while required simulation rejects."
   }
 }

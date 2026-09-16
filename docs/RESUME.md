@@ -2,6 +2,52 @@
 
 ## Checkpoint mới nhất — không lặp giao dịch (16/09/2026)
 
+- **Submission-first checkpoint:** người dùng quyết định không để hosted A/B,
+  B-fault hoặc timeout chặn lần nộp Portal đầu tiên. Bằng chứng lõi dùng
+  no-fault và A-fault r3 đã pass, mỗi case có bốn leg
+  `DISPATCHED_UNVERIFIED`. Frontend production giữ read-only,
+  `submissionReady=false`, và hosted controls bị khóa. Hosted deal
+  `v2-hosted-agent-live-1` chỉ có create/fund/accept A/accept B finalized; không
+  có submit B. Worker đã generate và publish canonical A tại commit
+  `c875720dcbeeeb6d9d5abd376d02faa68a5bf624`; submit A hash
+  `0x03e4b526bcc69df0aaa59e4d3abb059a62e371cc684ef1a9ae7e4aa431918568`
+  finalized lỗi `SUBMISSION_WINDOW_CLOSED` vì deadline đã qua. Hosted run bị loại
+  khỏi claim nộp sớm. Không tạo lại deal hoặc resend năm hash đã finalized.
+
+- **B-fault recovery 1 đã chạy đến terminal (16/09/2026):** create, fund,
+  accept A/B, submit A/B và request review đều `FINALIZED_SUCCESS +
+  FINISHED_WITH_RETURN`. Resolve hash
+  `0xfc0d1405e9561526f04ba1973225e2afd05f34b744585f0caae5505113760387`
+  kết thúc `UNDETERMINED + FINISHED_WITH_ERROR`; leader receipt trả
+  `HTTP_UNAVAILABLE`, ba validator vote `disagree`, và bốn leader rotation
+  không đạt consensus. No-broadcast reproduction ngay sau đó cho chính deal
+  `v2-studio-b-fault-r1-358323c` trả `SUCCESS` qua SDK và exact raw
+  `sim_call`. Vì vậy first failure point là live nondeterministic consensus ở
+  `resolve_review`; root cause vẫn `ROOT_CAUSE_UNKNOWN`, không được quy mặc
+  định cho chain/contract. Xem
+  `reports/studio-next-agent-tank/b-fault-recovery-1-incident.json`. Không
+  resend hash đã terminal và không tạo B-fault recovery 2 nếu chưa có quyết
+  định mới rõ ràng.
+
+- **Checkpoint Git sau A-fault r3 (16/09/2026):** A-fault recovery 3 đã hoàn
+  thành đúng outcome `A=VIOLATED`, `B=SATISFIED`: create/fund/accept A/accept
+  B/submit A/submit B/request review/resolve review và bốn native dispatch đều
+  `FINALIZED_SUCCESS + FINISHED_WITH_RETURN`. Resolve hash là
+  `0x3d3b69c4cb96a089cd062fc8a00eb9a3cb6a3acea656b12e1d9923c78c8a2ddc`;
+  B-bond dispatch hash là
+  `0x5261b05d41e9420f717c10c1bcb5b442d61dc41dcec391a72b0a04a1407fe43c`.
+  Các leg vẫn chỉ là `DISPATCHED_UNVERIFIED`. B-fault recovery 1 **chỉ** có
+  create hash `0xafe2f894938b3345239bf159cc21e55b8c58a924618a5e195f8072471331f703`
+  đã finalized; runner đã được dừng trước fund nên lần sau resume chính case
+  này, tuyệt đối không tạo recovery 2.
+
+- Minimal direct reproduction mới của `resolve_review` cho A-fault r2 và
+  B-fault đều trả `SUCCESS` qua SDK và exact raw `sim_call`; nó loại trừ HTTP
+  instability hiện thời trước recovery. Audit consensus xác nhận deployed
+  callback không strict-equal reason/citations; receipts lịch sử không expose
+  candidate nội bộ của validator, nên first sub-check lịch sử giữa independent
+  material candidate và grounding boolean vẫn `ROOT_CAUSE_UNKNOWN`.
+
 - Quy tắc incident bắt buộc: không được mặc định lỗi là Studio Next/chain. Mỗi
   lỗi live phải kiểm input/config → script worker/frontend → contract/state →
   prompt/schema/model → evidence/API → platform, và ghi Expected, Actual, điểm
@@ -17,9 +63,11 @@
   SDK simulation **và** raw RPC `sim_call` cùng trả `DEADLINE_NOT_REACHED`; raw
   reproduction có HTTP 200/RPC `-32000`. Contract predicate do đó false cho
   simulation (`_now() < 1789487114`), nhưng receipt không expose absolute GenVM
-  timestamp. Root cause được ghi đúng là `ROOT_CAUSE_UNKNOWN`, không phải Studio
-  Next/platform, và timeout cleanup bị broadcast-lock cho tới một reproduction
-  mới chứng minh `_now() >= deadline`.
+  timestamp. Time-probe độc lập sau đó đã xác nhận SDK simulation và exact raw
+  `sim_call` đang trả `gl.message.raw["datetime"]`/`time.time()` là
+  `1732603362` (2024-11-26), thấp hơn deadline `56,883,752` giây. Root cause
+  của **simulation rejection** là `ROOT_CAUSE_CONFIRMED`; timeout cleanup vẫn
+  broadcast-lock vì required simulation không thể thỏa `_now() >= deadline`.
 
 - Không redeploy và không tạo lại bất kỳ case/hashi cũ nào. Audit đọc trực tiếp
   Studio Next đã đối chiếu **48 hash** trong
@@ -45,19 +93,20 @@
   mỗi thao tác. `route_settlement` giữ recipient-specific message allocation
   đã được đo; `advance_timeout` cố ý không có profile và browser block signing
   cho đến khi Studio trả estimate thành công.
+- UI deal quá hạn hiện chỉ hiện trạng thái “Timeout signing is locked pending a
+  successful no-broadcast simulation”; nó không render nút ký
+  `advance_timeout`. Regression frontend bảo đảm khóa này không thể bị bỏ qua
+  tình cờ khi deal có deadline quá hạn.
 - Đã thêm `npm run audit:studio-next`, `npm run generate:fee-profile` và
   `npm run check:fee-profile`. Các runner không ghi raw RPC error vào manifest/
   console để tránh rò bí mật của hạ tầng validator.
 - Các gate local sau thay đổi đạt: GenVM lint hai contract, Python suite,
-  worker TypeScript + 16 tests, frontend TypeScript + 77 tests, production
+  worker TypeScript + 16 tests, frontend TypeScript + 78 tests, production
   Vite build và `check:fee-profile`. Còn chạy secret scan, audit dependency,
   Wrangler dry-run và commit/push checkpoint sau khi review staged diff.
-- Blocker thực tế còn lại: `GITHUB_EVIDENCE_TOKEN` **repo-scoped** cho
-  `tanphung/veristep-evidence` chưa được cài làm Worker secret, khiến health
-  `ready=false` và không thể chạy hosted A/B case; timeout estimate Studio Next
-  hiện chưa đạt. Không dùng broad personal GitHub token và không tự tạo/đoán
-  token. Không deploy Vercel current release hoặc bật `submissionReady` trước
-  khi hai blocker và ba live gate được giải quyết.
+- Hosted A/B và timeout vẫn là gate hậu submission. Không dùng broad personal
+  GitHub token, không broadcast timeout khi simulation predicate chưa đạt, và
+  không bật `submissionReady` chỉ để làm đẹp hồ sơ nộp sớm.
 
 ## Safe stop trước khi người dùng nghỉ
 

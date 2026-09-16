@@ -9,6 +9,7 @@ import { studioDevnet } from "genlayer-js/chains";
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = resolve(root, "reports", "studio-next-agent-tank", "manifest.json");
 const reportDir = resolve(root, "reports", "studio-next-agent-tank");
+const timeProbePath = resolve(root, "reports", "studio-next-time-probe", "report.json");
 const secretsPath = resolve(root, ".secrets", "studio-next-wallets.json");
 const rpc = "https://studio-next.genlayer.com/api";
 const expectedContract = "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b";
@@ -102,6 +103,12 @@ async function reproduceRawSimulation(error) {
 }
 
 const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
+let independentTimeProbe = null;
+try {
+  const candidate = JSON.parse(await readFile(timeProbePath, "utf8"));
+  const time = candidate?.comparison?.probeMessageDatetime?.unixSeconds;
+  if (candidate?.mode === "INDEPENDENT_PROBE_WITH_NO_VERISTEP_TIMEOUT_BROADCAST" && Number.isSafeInteger(time)) independentTimeProbe = candidate;
+} catch { /* the original diagnostic remains valid before a probe exists */ }
 assert.equal(manifest.network, "studio-next");
 assert.equal(manifest.chainId, 61997);
 assert.equal(manifest.contract.toLowerCase(), expectedContract.toLowerCase());
@@ -147,7 +154,17 @@ const currentGenVmTime = simulation.receiptTimes.find((entry) => /current_timest
   ?? null;
 const deadlineRejected = simulation.errorCodes.includes("DEADLINE_NOT_REACHED")
   && simulation.rawRpcReproduction?.errorCodes?.includes("DEADLINE_NOT_REACHED");
-const comparison = currentGenVmTime?.unixSeconds === null || currentGenVmTime === null
+const probeGenVmTime = independentTimeProbe?.comparison?.probeMessageDatetime ?? null;
+const comparison = probeGenVmTime
+  ? {
+      proven: deadlineRejected,
+      expression: `${probeGenVmTime.unixSeconds} >= ${deadline}`,
+      result: probeGenVmTime.unixSeconds >= deadline,
+      deltaSeconds: probeGenVmTime.unixSeconds - deadline,
+      actualTimestamp: probeGenVmTime,
+      source: "independent Studio Next time probe using SDK sim_call and its exact raw sim_call request",
+    }
+  : currentGenVmTime?.unixSeconds === null || currentGenVmTime === null
   ? {
       proven: deadlineRejected,
       expression: "_now() >= adjudication_deadline",
@@ -183,6 +200,12 @@ const report = {
     selectedGenVmTransactionTime: currentGenVmTime,
     unit: "Unix seconds when numeric; ISO 8601 when datetime",
   },
+  independentTimeProbe: independentTimeProbe ? {
+    contract: independentTimeProbe.probe.contract,
+    deploymentHash: independentTimeProbe.probe.deploymentHash,
+    sourceHash: independentTimeProbe.probe.sourceHash,
+    result: independentTimeProbe.comparison,
+  } : null,
   contractPredicate: "advance_timeout in REVIEW_REQUESTED executes _require(_now() >= adjudication_deadline, 'DEADLINE_NOT_REACHED')",
   comparison,
   incident: {
@@ -195,8 +218,10 @@ const report = {
       "Raw RPC reproduction returns HTTP 200 / JSON-RPC -32000 / DEADLINE_NOT_REACHED.",
       "Simulation receipt does not expose a GenVM datetime/current_timestamp field.",
     ],
-    rootCause: "ROOT_CAUSE_UNKNOWN",
-    rootCauseScope: "The contract predicate is proven false for the simulator call, but the RPC does not expose its actual GenVM transaction timestamp; do not attribute that hidden timestamp to VeriStep or Studio Next without further evidence.",
+    rootCause: probeGenVmTime ? "ROOT_CAUSE_CONFIRMED" : "ROOT_CAUSE_UNKNOWN",
+    rootCauseScope: probeGenVmTime
+      ? "A separate state-free contract, invoked through SDK sim_call and the captured identical raw sim_call request, returns a 2024 GenVM datetime. It is 56,883,752 seconds before the stored 2026 deadline, which confirms the simulator predicate cannot pass. This establishes the simulation-time behavior; it does not claim an on-chain timeout broadcast would use a different time, so no broadcast is allowed while required simulation rejects."
+      : "The contract predicate is proven false for the simulator call, but the RPC does not expose its actual GenVM transaction timestamp; do not attribute that hidden timestamp to VeriStep or Studio Next without further evidence.",
   },
 };
 await writeFile(resolve(reportDir, `timeout-diagnostic-${dealId}.json`), toJson(report));

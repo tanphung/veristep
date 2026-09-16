@@ -1,6 +1,7 @@
 import {verifyMessage, type Hex} from "viem";
 import {budgetSnapshot} from "./budget";
-import {assertHostedWorkers, readFinalDeal} from "./genlayer";
+import {agentClients, assertHostedWorkers, readFinalDeal} from "./genlayer";
+import {checkEvidenceRepositoryAccess} from "./github";
 import {canonicalAuthMessage, MAX_ACTIVE_RUNS, MAX_DAILY_RUNS} from "./policy";
 import type {Env, RunParams} from "./types";
 export {VeriStepWorkflow} from "./workflow";
@@ -59,7 +60,7 @@ async function consumeAuthorization(env: Env, body: AuthBody): Promise<void> {
 async function startRun(env: Env, request: Request): Promise<Response> {
   const body = parseAuth(await bodyJson(request));
   await consumeAuthorization(env, body);
-  const params: RunParams = {runId: crypto.randomUUID().replace(/-/g, ""), client: body.address.toLowerCase(), chainId: body.chainId, contract: body.contract.toLowerCase(), dealId: body.dealId};
+  const params: RunParams = {runId: crypto.randomUUID().replace(/-/g, ""), client: body.address.toLowerCase(), chainId: body.chainId, contract: env.VERISTEP_V2_CONTRACT, dealId: body.dealId};
   const deal = await readFinalDeal(env, params);
   if (deal.terms_hash !== body.termsHash) throw new Error("Authorization terms hash differs from finalized terms");
   assertHostedWorkers(env, deal);
@@ -90,7 +91,7 @@ async function manageRun(env: Env, request: Request, runId: string, command: "re
   const body = parseAuth(await bodyJson(request));
   await consumeAuthorization(env, body);
   const run = await env.DB.prepare("SELECT run_id, client, chain_id, contract, deal_id, terms_hash, state FROM worker_runs WHERE run_id = ?").bind(runId).first<{run_id: string; client: string; chain_id: number; contract: string; deal_id: string; terms_hash: string; state: string}>();
-  if (!run || run.client !== body.address.toLowerCase() || run.chain_id !== body.chainId || run.contract !== body.contract.toLowerCase() || run.deal_id !== body.dealId || run.terms_hash !== body.termsHash) throw new Error("Run authorization domain mismatch");
+  if (!run || run.client !== body.address.toLowerCase() || run.chain_id !== body.chainId || run.contract.toLowerCase() !== body.contract.toLowerCase() || run.deal_id !== body.dealId || run.terms_hash !== body.termsHash) throw new Error("Run authorization domain mismatch");
   const instance = await env.VERISTEP_RUNNER.get(runId);
   if (command === "resume") {
     if (run.state !== "ERROR") throw new Error("Only an errored run can be resumed");
@@ -109,18 +110,31 @@ export default {
     const url = new URL(request.url);
     if (request.method === "OPTIONS") return new Response(null, {status: 204, headers: {...headers(env, request), "access-control-allow-methods": "GET, POST, OPTIONS", "access-control-allow-headers": "content-type"}});
     try {
-      if (request.method === "GET" && url.pathname === "/api/health") return json(env, request, {
-        ok: true,
-        ready: Boolean(env.OPENAI_API_KEY && env.WORKER_A_PRIVATE_KEY && env.WORKER_B_PRIVATE_KEY && env.GITHUB_EVIDENCE_TOKEN),
-        dependencies: {
+      if (request.method === "GET" && url.pathname === "/api/health") {
+        const workers = agentClients(env);
+        const repositoryAccess = env.GITHUB_EVIDENCE_TOKEN ? await checkEvidenceRepositoryAccess(env) : false;
+        const publishedEvidence = await env.DB.prepare("SELECT 1 AS proven FROM agent_artifacts WHERE state = 'PUBLISHED' LIMIT 1").first<{proven: number}>();
+        const dependencies = {
           openai: Boolean(env.OPENAI_API_KEY),
           workerWallets: Boolean(env.WORKER_A_PRIVATE_KEY && env.WORKER_B_PRIVATE_KEY),
           githubEvidence: Boolean(env.GITHUB_EVIDENCE_TOKEN),
-        },
-        network: {chainId: Number(env.VERISTEP_CHAIN_ID), rpc: env.GENLAYER_RPC_URL, contract: env.VERISTEP_V2_CONTRACT},
-        budget: await budgetSnapshot(env.DB),
-        model: env.OPENAI_WORKER_MODEL,
-      });
+          githubEvidenceAccess: repositoryAccess,
+        };
+        return json(env, request, {
+          ok: true,
+          ready: Object.values(dependencies).every(Boolean),
+          dependencies,
+          evidence: {githubContentsWriteProven: publishedEvidence?.proven === 1},
+          network: {
+            chainId: Number(env.VERISTEP_CHAIN_ID),
+            rpc: env.GENLAYER_RPC_URL,
+            contract: env.VERISTEP_V2_CONTRACT,
+            workers: {A: workers.A.account.address, B: workers.B.account.address},
+          },
+          budget: await budgetSnapshot(env.DB),
+          model: env.OPENAI_WORKER_MODEL,
+        });
+      }
       if (request.method === "GET" && url.pathname === "/api/worker-nonce") {
         const address = (url.searchParams.get("address") ?? "").toLowerCase();
         if (!ADDRESS.test(address)) throw new Error("Invalid wallet address");

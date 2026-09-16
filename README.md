@@ -17,11 +17,16 @@ The active release target is **GenLayer Studio Next**, not Bradbury.
   `baedb9762690220aa8620fc6a94065b993700cbccb5ded586b4560ee3fc4019b`
 - Explorer: [Studio Next contract](https://explorer-studio-dev.genlayer.com/contracts/0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b)
 
-The no-fault live case has finalized with A and B both `SATISFIED`; all four
-native settlement legs are honestly recorded as `DISPATCHED_UNVERIFIED`. The
-A-fault and B-fault evidence runs are preserved with their terminal consensus
-failures. Read the [live manifest](reports/studio-next-agent-tank/manifest.json)
-and [resume checkpoint](docs/RESUME.md) before running any live command.
+Two live cases have finalized with their predetermined semantic outcomes:
+
+- no-fault: A/B `SATISFIED`;
+- A-fault recovery 3: A `VIOLATED`, B `SATISFIED`.
+
+Both cases have four native settlement legs honestly recorded as
+`DISPATCHED_UNVERIFIED`. B-fault recovery 1 ended `UNDETERMINED`; its incident
+is preserved rather than presented as a pass. Read the [release evidence](docs/RELEASE-EVIDENCE.md),
+[live manifest](reports/studio-next-agent-tank/manifest.json), and
+[resume checkpoint](docs/RESUME.md) before running any live command.
 
 ## What the contract enforces
 
@@ -40,6 +45,16 @@ not proven hidden redirects are observable or preventable; VeriStep preserves
 canonical origin and whole-artifact hash checks but does not claim to solve that
 platform limitation.
 
+## Public application
+
+The early submission build is published at:
+
+`https://veristep-genlayer.vercel.app`
+
+It is deliberately read-only. Reviewers can inspect finalized deals, validator
+findings, immutable evidence and transaction links without a wallet. Signing new
+writes remains release-locked while the remaining optional gates are unfinished.
+
 ## Hosted A/B worker
 
 The optional Cloudflare Worker only accepts work and submits immutable artifacts.
@@ -48,10 +63,13 @@ health endpoint is:
 
 `https://veristep-agent-worker.veristep.workers.dev/api/health`
 
-OpenAI, worker keys, D1 budget, chain and contract configuration are ready. Public
-worker runs remain locked until a repository-scoped `GITHUB_EVIDENCE_TOKEN` is
-installed and the remaining live gates pass. Never place a key in a frontend
-variable or use a broad personal GitHub token for this service.
+OpenAI, worker keys, D1 budget, chain and contract configuration are deployed.
+The optional hosted run is not part of the early submission claim. It proved a
+real server-side Agent A generation and GitHub Contents publish, but the later
+submit-A transaction correctly rolled back with `SUBMISSION_WINDOW_CLOSED` after
+the frozen delivery deadline elapsed. The frontend therefore keeps hosted
+controls locked. Never place a key in a frontend variable or use a broad personal
+GitHub token for this service.
 
 ## Local development
 

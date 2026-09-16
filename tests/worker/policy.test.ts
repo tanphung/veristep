@@ -1,5 +1,5 @@
 import {describe, expect, it} from "vitest";
-import {actualCostNanoUsd, BUILD_BUDGET_NANO_USD, buildAgentPrompt, canonicalAuthMessage, estimateMaxInputTokens, validateArtifact, worstCaseCostNanoUsd} from "../../worker/src/policy";
+import {actualCostNanoUsd, BUILD_BUDGET_NANO_USD, buildAgentPrompt, canonicalAuthMessage, estimateMaxInputTokens, sameOrigin, validateAgentArtifact, validateArtifact, worstCaseCostNanoUsd} from "../../worker/src/policy";
 import type {WorkerDeal} from "../../worker/src/types";
 
 function deal(): WorkerDeal {
@@ -44,6 +44,30 @@ describe("worker policy", () => {
   it("rejects oversized and control-character artifacts", () => {
     expect(() => validateArtifact("x".repeat(4097))).toThrow("4096");
     expect(() => validateArtifact("ok\u0000bad")).toThrow("canonical");
+  });
+
+  it("compares frozen origins by fields instead of object key order", () => {
+    const left = deal().manifest.terms.origins.SOURCE;
+    const right = {repository_id: left.repository_id, repository: left.repository, owner_id: left.owner_id, owner: left.owner, hostname: left.hostname, provider: left.provider};
+    expect(sameOrigin(left, right)).toBe(true);
+    expect(sameOrigin(left, {...right, repository_id: 999})).toBe(false);
+  });
+
+  it("locks the hosted export-policy artifacts to the three material facts", () => {
+    const value = deal();
+    value.manifest.terms.semantic_obligations = [
+      {id: "SEM_A_POLICY_ACCURACY", stage: "A", statement: "Preserve policy", evidence_ids: ["SOURCE", "A"]},
+      {id: "SEM_B_FAITHFUL_HANDOFF", stage: "B", statement: "Preserve A", evidence_ids: ["A", "B"]},
+    ];
+    const correct = [
+      "Trial accounts cannot export.",
+      "Paid accounts may export only after administrator approval.",
+      "Every paid-account export requires administrator approval; there is no automatic-export exception.",
+    ].join("\n");
+    expect(buildAgentPrompt(value, "A", {SOURCE: "Policy source"})).toContain("include each of these material statements verbatim");
+    expect(validateAgentArtifact(value, "A", correct)).toBe(correct);
+    expect(validateAgentArtifact(value, "B", correct)).toBe(correct);
+    expect(() => validateAgentArtifact(value, "A", "Trial accounts cannot export.")).toThrow("missing");
   });
 
   it("binds authorization to exact wallet, chain, contract, deal and scope", () => {

@@ -4,7 +4,7 @@ Track: Future of Work
 
 Repository: https://github.com/tanphung/veristep
 
-Website: pending Studio Next Vercel release
+Website: https://veristep-genlayer.vercel.app
 
 Contract: https://explorer-studio-dev.genlayer.com/contracts/0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b
 
@@ -44,11 +44,14 @@ explicitly unverified.
   `baedb9762690220aa8620fc6a94065b993700cbccb5ded586b4560ee3fc4019b`
 - No-fault live case: A/B `SATISFIED`; settlement legs are
   `DISPATCHED_UNVERIFIED`, not payment-confirmed.
-- A-fault/B-fault runs: evidence and terminal `UNDETERMINED` consensus receipts
-  are preserved; do not represent them as passing demos.
-- Hosted worker: code, D1 and key configuration are deployed; a repository-scoped
-  GitHub evidence token and live hosted A/B case remain open.
-- Public Studio Next Vercel URL: not deployed yet.
+- A-fault recovery 3: A `VIOLATED`, B `SATISFIED`; all four settlement legs are
+  `DISPATCHED_UNVERIFIED`.
+- B-fault recovery 1 ended `UNDETERMINED`; its receipt and incident report are
+  preserved and are not represented as a passing demo.
+- The optional hosted worker is excluded from the early submission claim. It
+  generated and published Agent A at immutable commit `c875720d…`, but submit A
+  correctly rolled back `SUBMISSION_WINDOW_CLOSED` after the delivery deadline.
+- Public Studio Next application: `https://veristep-genlayer.vercel.app`.
 - Portal account linkage, video recording and final submission: user-owned,
   incomplete.
 
@@ -56,6 +59,6 @@ explicitly unverified.
 
 - Contract-side confirmation of Studio Next native transfers.
 - Prevention or observation of hidden redirects by the Studio Next web host.
-- A finalized A-fault/B-fault consensus result until the corresponding live receipt
+- A finalized B-fault consensus result until a corresponding passing live receipt
   exists.
 - Hackathon acceptance or submission before the user completes Portal actions.

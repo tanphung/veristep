@@ -1,0 +1,94 @@
+{
+  "version": "studio-next-time-probe-1",
+  "mode": "INDEPENDENT_PROBE_WITH_NO_VERISTEP_TIMEOUT_BROADCAST",
+  "network": "studio-next",
+  "chainId": 61997,
+  "veristep": {
+    "contract": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+    "dealId": "v2-studio-a-fault-358323c",
+    "deadline": {
+      "unixSeconds": 1789487114,
+      "iso8601": "2026-09-15T15:45:14.000Z"
+    }
+  },
+  "probe": {
+    "source": "contracts/studio_next_time_probe.py",
+    "sourceHash": "d72ef6bb42c92bb9fd6992f94e7c68718e4a05654f2968350e5fb370efab1000",
+    "contract": "0x64Ac3D85382887e7319395Df49C29117802C0F4B",
+    "deploymentHash": "0x938e704f3f9d2225fa91d159974a22a6af1056a1f2dedb4ea3a1279f1b594bda"
+  },
+  "steps": {
+    "schema": {
+      "passed": true,
+      "methods": [
+        "probe"
+      ]
+    },
+    "deploy": {
+      "phase": "FINALIZED_SUCCESS",
+      "feeValue": "100000000000010352",
+      "distribution": {
+        "leaderTimeunitsAllocation": "100",
+        "validatorTimeunitsAllocation": "200",
+        "appealRounds": "0",
+        "executionBudgetPerRound": "25000000000000000",
+        "executionConsumed": "0",
+        "totalMessageFees": "0",
+        "rotations": [
+          "3"
+        ],
+        "maxPriceGenPerTimeUnit": "2",
+        "storageFeeMaxGasPrice": "300000000",
+        "receiptFeeMaxGasPrice": "300000000"
+      },
+      "hash": "0x938e704f3f9d2225fa91d159974a22a6af1056a1f2dedb4ea3a1279f1b594bda",
+      "finalized": true,
+      "execution": null
+    },
+    "sdkSimulation": {
+      "outcome": "RETURNED",
+      "values": {
+        "gl.message_raw.datetime": "2024-11-26T06:42:42.424242Z",
+        "time.time": 1732603362.424242
+      },
+      "receiptExecution": "SUCCESS"
+    },
+    "rawSimCall": {
+      "httpStatus": 200,
+      "rpcCode": null,
+      "hasResult": true,
+      "sameRequestAsSdk": true
+    }
+  },
+  "startedAt": "2026-09-16T11:36:42.218Z",
+  "comparison": {
+    "unit": "Unix seconds (message datetime parsed from ISO 8601)",
+    "probeMessageDatetime": {
+      "raw": "2024-11-26T06:42:42.424242Z",
+      "unixSeconds": 1732603362
+    },
+    "probeTimeTime": 1732603362.424242,
+    "rpcLatestBlock": {
+      "unixSeconds": 1789558722,
+      "iso8601": "2026-09-16T11:38:42.000Z"
+    },
+    "veristepDeadline": {
+      "unixSeconds": 1789487114,
+      "iso8601": "2026-09-15T15:45:14.000Z"
+    },
+    "predicateAtProbe": "1732603362 >= 1789487114 is false",
+    "deltaProbeMinusDeadlineSeconds": -56883752
+  },
+  "incident": {
+    "expected": "The independent probe returns both gl.message.raw['datetime'] and time.time() through the SDK sim_call path, then the same raw sim_call request succeeds.",
+    "actual": "Probe completed.",
+    "firstFailurePoint": null,
+    "evidence": [
+      "Probe is a separate state-free contract.",
+      "VeriStep advance_timeout was not simulated or broadcast by this script.",
+      "The raw RPC call reuses the SDK-captured sim_call params."
+    ],
+    "rootCause": "ROOT_CAUSE_CONFIRMED"
+  },
+  "finishedAt": "2026-09-16T11:38:44.440Z"
+}

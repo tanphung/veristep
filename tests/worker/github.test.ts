@@ -1,6 +1,6 @@
 import {createHash} from "node:crypto";
 import {afterEach, describe, expect, it, vi} from "vitest";
-import {acquireArtifact} from "../../worker/src/github";
+import {acquireArtifact, checkEvidenceRepositoryAccess} from "../../worker/src/github";
 import type {Commitment, Env} from "../../worker/src/types";
 
 const content = "Full artifact opening.\nFinal contradiction remains visible.";
@@ -13,6 +13,34 @@ const env = {GITHUB_EVIDENCE_TOKEN: "test"} as Env;
 afterEach(() => vi.unstubAllGlobals());
 
 describe("GitHub immutable acquisition", () => {
+  it("requires push permission on the exact public evidence repository", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({
+      full_name: `${origin.owner}/${origin.repository}`,
+      private: false,
+      owner: {login: origin.owner},
+      permissions: {push: true},
+    }), {status: 200, headers: {"content-type": "application/json"}})));
+    await expect(checkEvidenceRepositoryAccess({
+      ...env,
+      EVIDENCE_GITHUB_OWNER: origin.owner,
+      EVIDENCE_GITHUB_REPOSITORY: origin.repository,
+    })).resolves.toBe(true);
+  });
+
+  it("fails the repository preflight without push permission", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({
+      full_name: `${origin.owner}/${origin.repository}`,
+      private: false,
+      owner: {login: origin.owner},
+      permissions: {push: false},
+    }), {status: 200, headers: {"content-type": "application/json"}})));
+    await expect(checkEvidenceRepositoryAccess({
+      ...env,
+      EVIDENCE_GITHUB_OWNER: origin.owner,
+      EVIDENCE_GITHUB_REPOSITORY: origin.repository,
+    })).resolves.toBe(false);
+  });
+
   it("checks exact repository identity and complete bytes", async () => {
     const fetchMock = vi.fn()
       .mockResolvedValueOnce(new Response(JSON.stringify({id: 20, name: origin.repository, full_name: `${origin.owner}/${origin.repository}`, private: false, default_branch: "main", owner: {id: 10, login: origin.owner}}), {status: 200, headers: {"content-type": "application/json"}}))
@@ -21,6 +49,15 @@ describe("GitHub immutable acquisition", () => {
     await expect(acquireArtifact(env, commitment)).resolves.toBe(content);
     expect(fetchMock.mock.calls[1][0].toString()).toContain(`ref=${commitment.commit}`);
     expect(fetchMock.mock.calls[1][1].redirect).toBe("manual");
+  });
+
+  it("accepts the same frozen repository identity with reordered keys", async () => {
+    const reordered = {...commitment, origin: {repository_id: origin.repository_id, repository: origin.repository, owner_id: origin.owner_id, owner: origin.owner, hostname: origin.hostname, provider: origin.provider}};
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify({id: 20, name: origin.repository, full_name: `${origin.owner}/${origin.repository}`, private: false, default_branch: "main", owner: {id: 10, login: origin.owner}}), {status: 200, headers: {"content-type": "application/json"}}))
+      .mockResolvedValueOnce(new Response(JSON.stringify({type: "file", sha: blob, size: bytes.length, encoding: "base64", content: bytes.toString("base64")}), {status: 200, headers: {"content-type": "application/json"}}));
+    vi.stubGlobal("fetch", fetchMock);
+    await expect(acquireArtifact(env, reordered)).resolves.toBe(content);
   });
 
   it("rejects redirects before accepting provider data", async () => {

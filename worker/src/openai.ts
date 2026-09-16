@@ -24,7 +24,7 @@ export function parseOpenAIArtifact(payload: ResponsesPayload): {artifact: strin
   return {artifact: validateArtifact((decoded as {artifact: string}).artifact), inputTokens: inputTokens as number, outputTokens: outputTokens as number};
 }
 
-export async function generateArtifact(env: Env, requestId: string, prompt: string): Promise<{artifact: string; costNanoUsd: number}> {
+export async function generateArtifact(env: Env, requestId: string, prompt: string, requiredArtifact?: string): Promise<{artifact: string; costNanoUsd: number}> {
   if (env.OPENAI_WORKER_MODEL !== OPENAI_MODEL) throw new Error(`OPENAI_WORKER_MODEL must remain pinned to ${OPENAI_MODEL}`);
   const reserve = await reserveBudget(env.DB, requestId, worstCaseCostNanoUsd(prompt));
   await markBudgetDispatched(env.DB, reserve);
@@ -49,7 +49,9 @@ export async function generateArtifact(env: Env, requestId: string, prompt: stri
             strict: true,
             schema: {
               type: "object",
-              properties: {artifact: {type: "string", minLength: 1, maxLength: 4096}},
+              properties: {artifact: requiredArtifact
+                ? {type: "string", enum: [requiredArtifact]}
+                : {type: "string", minLength: 1, maxLength: 4096}},
               required: ["artifact"],
               additionalProperties: false,
             },

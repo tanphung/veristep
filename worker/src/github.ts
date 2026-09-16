@@ -1,4 +1,4 @@
-import {MAX_ARTIFACT_BYTES, utf8Bytes, validateArtifact} from "./policy";
+import {MAX_ARTIFACT_BYTES, sameOrigin, utf8Bytes, validateArtifact} from "./policy";
 import type {Commitment, Env, Origin, PublishedArtifact} from "./types";
 
 function apiUrl(path: string): URL {
@@ -50,6 +50,15 @@ async function gitBlobId(bytes: Uint8Array): Promise<string> {
   return hexDigest("SHA-1", body);
 }
 
+async function githubFailure(response: Response, operation: string): Promise<Error> {
+  let detail = "request failed";
+  try {
+    const body = await response.json() as {message?: string; documentation_url?: string};
+    detail = [body.message, body.documentation_url].filter(Boolean).join(" | ") || detail;
+  } catch { /* HTTP status remains sufficient and no credentials are included. */ }
+  return new Error(`${operation}: ${response.status} ${detail}`);
+}
+
 async function repoOrigin(env: Env): Promise<{origin: Origin; defaultBranch: string}> {
   const owner = env.EVIDENCE_GITHUB_OWNER;
   const repository = env.EVIDENCE_GITHUB_REPOSITORY;
@@ -62,9 +71,26 @@ async function repoOrigin(env: Env): Promise<{origin: Origin; defaultBranch: str
   return {origin: {provider: "github", hostname: "api.github.com", owner, owner_id: data.owner.id!, repository, repository_id: data.id!}, defaultBranch: data.default_branch};
 }
 
+export async function checkEvidenceRepositoryAccess(env: Env): Promise<boolean> {
+  const owner = env.EVIDENCE_GITHUB_OWNER;
+  const repository = env.EVIDENCE_GITHUB_REPOSITORY;
+  const response = await githubFetch(env, `/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repository)}`);
+  if (!response.ok) return false;
+  const data = await response.json() as {
+    full_name?: string;
+    private?: boolean;
+    owner?: {login?: string};
+    permissions?: {push?: boolean};
+  };
+  return data.full_name === `${owner}/${repository}`
+    && data.owner?.login === owner
+    && data.private === false
+    && data.permissions?.push === true;
+}
+
 export async function acquireArtifact(env: Env, commitment: Commitment): Promise<string> {
   const {origin} = await repoOrigin({...env, EVIDENCE_GITHUB_OWNER: commitment.origin.owner, EVIDENCE_GITHUB_REPOSITORY: commitment.origin.repository});
-  if (JSON.stringify(origin) !== JSON.stringify(commitment.origin)) throw new Error("Frozen GitHub origin identity mismatch");
+  if (!sameOrigin(origin, commitment.origin)) throw new Error("Frozen GitHub origin identity mismatch");
   const path = commitment.path.split("/").map(encodeURIComponent).join("/");
   const response = await githubFetch(env, `/repos/${encodeURIComponent(origin.owner)}/${encodeURIComponent(origin.repository)}/contents/${path}?ref=${commitment.commit}`);
   if (!response.ok) throw new Error(`GitHub artifact lookup failed: ${response.status}`);
@@ -87,17 +113,16 @@ async function ensureRunBranch(env: Env, branch: string, defaultBranch: string):
   const baseJson = await base.json() as {object?: {sha?: string}};
   if (!baseJson.object?.sha || !/^[0-9a-f]{40}$/.test(baseJson.object.sha)) throw new Error("GitHub default branch SHA invalid");
   const created = await githubFetch(env, `/repos/${owner}/${repo}/git/refs`, {method: "POST", body: JSON.stringify({ref: `refs/heads/${branch}`, sha: baseJson.object.sha})});
-  if (!created.ok && created.status !== 422) throw new Error(`GitHub branch creation failed: ${created.status}`);
+  if (!created.ok && created.status !== 422) throw await githubFailure(created, "GitHub branch creation failed");
 }
 
 export async function publishArtifact(env: Env, runId: string, dealId: string, role: "A" | "B", content: string, expectedOrigin: Origin): Promise<PublishedArtifact> {
   content = validateArtifact(content);
   const {origin, defaultBranch} = await repoOrigin(env);
-  if (JSON.stringify(origin) !== JSON.stringify(expectedOrigin)) throw new Error(`Hosted evidence repository does not match frozen ${role} origin`);
+  if (!sameOrigin(origin, expectedOrigin)) throw new Error(`Hosted evidence repository does not match frozen ${role} origin`);
   if (!/^[a-z0-9][a-z0-9-]{0,63}$/.test(dealId) || !/^[a-zA-Z0-9-]{1,64}$/.test(runId)) throw new Error("Unsafe immutable artifact path");
-  const branch = `veristep-${runId}`;
+  const branch = defaultBranch;
   const path = `jobs/${dealId}/${role.toLowerCase()}.md`;
-  await ensureRunBranch(env, branch, defaultBranch);
   const bytes = utf8Bytes(content);
   const owner = encodeURIComponent(origin.owner), repo = encodeURIComponent(origin.repository), encodedPath = path.split("/").map(encodeURIComponent).join("/");
   let commit = "", blob = "";
@@ -116,7 +141,7 @@ export async function publishArtifact(env: Env, runId: string, dealId: string, r
     const commits = await githubFetch(env, `/repos/${owner}/${repo}/commits?path=${encodeURIComponent(path)}&sha=${encodeURIComponent(branch)}&per_page=1`);
     const rows = await commits.json() as Array<{sha?: string}>;
     commit = rows[0]?.sha ?? "";
-  } else throw new Error(`GitHub artifact publication failed: ${put.status}`);
+  } else throw await githubFailure(put, "GitHub artifact publication failed");
   const expectedBlob = await gitBlobId(bytes);
   if (!/^[0-9a-f]{40}$/.test(commit) || blob !== expectedBlob) throw new Error("Published GitHub object identity mismatch");
   return {content, commitment: {origin, commit, path, blob, content_type: "text/markdown", encoding: "utf-8", byte_length: bytes.byteLength, sha256: await hexDigest("SHA-256", bytes)}};
