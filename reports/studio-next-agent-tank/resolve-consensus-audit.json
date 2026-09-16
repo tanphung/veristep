@@ -1,0 +1,51 @@
+{
+  "mode": "READ_ONLY_SOURCE_AND_FINALIZED_RECEIPT_AUDIT_NO_BROADCAST",
+  "auditedAt": "2026-09-16T11:45:00.000Z",
+  "contract": {
+    "address": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+    "deployedSource": "contracts/veristep_release.py",
+    "sourceHash": "baedb9762690220aa8620fc6a94065b993700cbccb5ded586b4560ee3fc4019b"
+  },
+  "equivalencePrinciple": {
+    "entrypoint": "resolve_review calls _review_consensus, which calls gl.vm.run_nondet(leader, validator)",
+    "leaderOutput": ["artifacts", "semantic"],
+    "validatorArtifactComparison": "Canonical JSON of independently acquired, immutable artifact/provenance data is compared exactly. These fields are commitment-bound and deterministic.",
+    "validatorSemanticComparison": ["obligation_id", "status", "missing_evidence_ids"],
+    "notComparedForEquality": ["reason", "citations", "citation ordering", "free-text wording"],
+    "reasonAndCitationTreatment": "The validator sends the leader candidate plus independently acquired complete evidence to a separate grounding prompt. Its only consensus output is supported:true/false. Thus reason/citations can be rejected if ungrounded, but are not strict-equal to a validator-generated JSON response."
+  },
+  "receiptEvidence": {
+    "aFault": {
+      "successfulLeaderExecution": {
+        "receipt": "a-fault-recovery-2-resolve-review.receipt.json",
+        "transactionExecution": "FINISHED_WITH_RETURN",
+        "lifecycle": "UNDETERMINED",
+        "leaderMaterialSemanticOutput": {
+          "SEM_A_POLICY_ACCURACY": "VIOLATED",
+          "SEM_B_FAITHFUL_HANDOFF": "SATISFIED"
+        },
+        "validatorOutputs": ["disagree / SUCCESS / boolean false", "disagree / SUCCESS / boolean false", "idle after validator quorum"],
+        "meaning": "The receipt exposes one leader candidate with the expected A-fault material verdict and validator boolean votes, not independently generated validator assessment JSON. It cannot show a same-verdict/different-reason or citation-order equality conflict."
+      },
+      "otherResolveAttempts": "a-fault-resolve-review, a-fault-recovery-1-resolve-review, a-fault-recovery-1-resolve-review-retry-1 and a-fault-recovery-2-resolve-review-retry-1 expose HTTP_UNAVAILABLE validator errors rather than competing semantic JSON outputs."
+    },
+    "bFault": {
+      "receipts": ["b-fault-resolve-review.receipt.json", "b-fault-resolve-review-retry-1.receipt.json"],
+      "validatorOutputs": "HTTP_UNAVAILABLE or idle-after-quorum; no leader semantic candidate or independent validator assessment JSON is exposed.",
+      "meaning": "There is no evidence that material verdicts matched while free text differed."
+    }
+  },
+  "incident": {
+    "expected": "A consensus rule should reject unsupported reasoning/citations while not requiring byte-identical free text from independent models.",
+    "actual": "The deployed source implements material-field comparison plus a separate grounding boolean. Available A/B receipts do not contain competing validator semantic JSON, and therefore do not demonstrate a free-text equality failure.",
+    "firstFailurePoint": "Not a strict JSON equality comparison in VeriStep. Historical A/B receipts first expose validator HTTP_UNAVAILABLE or a grounding/validator boolean disagreement.",
+    "evidence": ["contracts/veristep_release.py lines 367-381", "contracts/veristep.py lines 640-700 are the readable, behavior-matching source", "finalized A/B resolve receipts listed above"],
+    "rootCause": "ROOT_CAUSE_CONFIRMED",
+    "rootCauseScope": "The specific strict_eq-on-free-text anti-pattern is absent from the deployed VeriStep consensus callback. Whether the observed boolean disagreements were caused by the grounding model's substantive evaluation, transient evidence acquisition, or another validator-runtime condition remains ROOT_CAUSE_UNKNOWN."
+  },
+  "safeProposalOnly": {
+    "change": "Do not replace grounding with strict outcome-only equality. If a future contract revision is justified by fresh evidence, retain exact immutable artifact/provenance checks and exact material obligation IDs/statuses/missing-evidence IDs; reduce the validator return to a deterministic material projection only after separately preserving evidence-grounding validation.",
+    "validationPreserved": ["complete immutable artifact acquisition", "whole-byte hash/provenance verification", "all obligation IDs required exactly once", "status and missing-evidence semantics", "citation quote membership/uniqueness", "independent grounding of leader assertions"],
+    "deploymentAction": "No source change, no VeriStep redeployment, and no new live transaction follows from this audit."
+  }
+}

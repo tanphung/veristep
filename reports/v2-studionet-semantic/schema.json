@@ -1,0 +1,181 @@
+{
+  "ctor": {
+    "params": [
+      [
+        "router",
+        "string"
+      ]
+    ],
+    "kwparams": {}
+  },
+  "methods": {
+    "accept_work": {
+      "params": [
+        [
+          "deal_id",
+          "string"
+        ],
+        [
+          "terms_hash",
+          "string"
+        ]
+      ],
+      "kwparams": {},
+      "readonly": false,
+      "ret": "null",
+      "payable": true
+    },
+    "advance_timeout": {
+      "params": [
+        [
+          "deal_id",
+          "string"
+        ]
+      ],
+      "kwparams": {},
+      "readonly": false,
+      "ret": "null",
+      "payable": false
+    },
+    "confirm_settlement": {
+      "params": [
+        [
+          "deal_id",
+          "string"
+        ],
+        [
+          "leg_id",
+          "string"
+        ]
+      ],
+      "kwparams": {},
+      "readonly": false,
+      "ret": "null",
+      "payable": false
+    },
+    "create_terms": {
+      "params": [
+        [
+          "deal_id",
+          "string"
+        ],
+        [
+          "terms_json",
+          "string"
+        ]
+      ],
+      "kwparams": {},
+      "readonly": false,
+      "ret": "null",
+      "payable": false
+    },
+    "fund_terms": {
+      "params": [
+        [
+          "deal_id",
+          "string"
+        ],
+        [
+          "terms_hash",
+          "string"
+        ]
+      ],
+      "kwparams": {},
+      "readonly": false,
+      "ret": "null",
+      "payable": true
+    },
+    "get_capabilities": {
+      "params": [],
+      "kwparams": {},
+      "readonly": true,
+      "ret": "string"
+    },
+    "get_terms": {
+      "params": [
+        [
+          "deal_id",
+          "string"
+        ]
+      ],
+      "kwparams": {},
+      "readonly": true,
+      "ret": "string"
+    },
+    "list_deals": {
+      "params": [
+        [
+          "offset",
+          "int"
+        ],
+        [
+          "limit",
+          "int"
+        ]
+      ],
+      "kwparams": {},
+      "readonly": true,
+      "ret": "string"
+    },
+    "request_review": {
+      "params": [
+        [
+          "deal_id",
+          "string"
+        ]
+      ],
+      "kwparams": {},
+      "readonly": false,
+      "ret": "null",
+      "payable": false
+    },
+    "resolve_review": {
+      "params": [
+        [
+          "deal_id",
+          "string"
+        ]
+      ],
+      "kwparams": {},
+      "readonly": false,
+      "ret": "null",
+      "payable": false
+    },
+    "route_settlement": {
+      "params": [
+        [
+          "deal_id",
+          "string"
+        ],
+        [
+          "leg_id",
+          "string"
+        ]
+      ],
+      "kwparams": {},
+      "readonly": false,
+      "ret": "null",
+      "payable": false
+    },
+    "submit_artifact": {
+      "params": [
+        [
+          "deal_id",
+          "string"
+        ],
+        [
+          "commitment_json",
+          "string"
+        ],
+        [
+          "upstream_submission_id",
+          "string"
+        ]
+      ],
+      "kwparams": {},
+      "readonly": false,
+      "ret": "null",
+      "payable": false
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "version": "tasktrace-v2-local-1",
+  "chainId": 61999,
+  "sourceHash": "3133e10bf159d16a9fa49a1ec93f70cd02d1396e6f37983ed75534c5b2c3768e",
+  "commitSha": "926821c5c48c6c91fc7f11d3c5d654f1180f3e87",
+  "wallets": {
+    "client": "0xc3A6308920A5f3152a7E76e87F2F807610a76757",
+    "A": "0x51838D5d14cb755ca8D09e279006cBF5Fe65e02c",
+    "B": "0x7F949126f5F8FD2465A67C5A21436eb8D3DaF924"
+  },
+  "steps": {
+    "fund-client": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-12T09:18:29.123Z",
+      "hash": "0x87edc1009cce3e7f7bcd0a2fdea4e38136cffcee82156530545b88862b26fa6d",
+      "submittedAt": "2026-09-12T09:18:29.142Z",
+      "finalized": true,
+      "to": "0xc3A6308920A5f3152a7E76e87F2F807610a76757",
+      "finishedAt": "2026-09-12T09:18:35.252Z"
+    },
+    "fund-A": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-12T09:18:35.265Z",
+      "hash": "0xe08b4d37e6c1e7946006b226b7f484156184142c3fa0a20bf638ed14878dcb54",
+      "submittedAt": "2026-09-12T09:18:35.282Z",
+      "finalized": true,
+      "to": "0x51838D5d14cb755ca8D09e279006cBF5Fe65e02c",
+      "finishedAt": "2026-09-12T09:18:39.843Z"
+    },
+    "fund-B": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-12T09:18:39.858Z",
+      "hash": "0x65cb29ca14d0e631c1ae802a32d89f66010f87ed9142c3a8f65e98e377d9023b",
+      "submittedAt": "2026-09-12T09:18:39.871Z",
+      "finalized": true,
+      "to": "0x7F949126f5F8FD2465A67C5A21436eb8D3DaF924",
+      "finishedAt": "2026-09-12T09:18:44.440Z"
+    },
+    "deploy-router": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-12T09:18:44.932Z",
+      "hash": "0x4b181a05aa0e7b3f85f816c555ee4b1de4c396d86f20f9241d814ec1a29f1b9f",
+      "submittedAt": "2026-09-12T09:18:44.943Z",
+      "finalized": true,
+      "to": "0x1fa02b2d6a771842690194cf62d91bdd92bfe28d"
+    },
+    "deploy-contract": {
+      "phase": "PENDING",
+      "startedAt": "2026-09-12T09:18:44.947Z",
+      "hash": "0x57f5c946cf6f9ab83e71de2949c38a0ea830db2e69a299ee390271be86716deb",
+      "submittedAt": "2026-09-12T09:18:45.236Z"
+    },
+    "evm-fund-client": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-12T14:01:31.810Z",
+      "hash": "0xfbe888f53036baacff22be706068d7a08bcbf811ddb44b5a882a94e669b49c42",
+      "submittedAt": "2026-09-12T14:01:31.820Z",
+      "finalized": true,
+      "finishedAt": "2026-09-12T14:01:31.824Z"
+    },
+    "evm-fund-A": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-12T14:01:31.827Z",
+      "hash": "0xf771681d66bfdba34c3b4ec0abe16588370e07c459f182a4a5b5ff1d213f168a",
+      "submittedAt": "2026-09-12T14:01:31.834Z",
+      "finalized": true,
+      "finishedAt": "2026-09-12T14:01:31.838Z"
+    },
+    "evm-fund-B": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-12T14:01:31.841Z",
+      "hash": "0xaf4aad79968f702268c916d190121056f5a75fe46ef1bd12fb01651c955578a4",
+      "submittedAt": "2026-09-12T14:01:31.847Z",
+      "finalized": true,
+      "finishedAt": "2026-09-12T14:01:31.851Z"
+    }
+  },
+  "startedAt": "2026-09-12T09:18:29.110Z",
+  "router": "0x1fa02b2d6a771842690194cf62d91bdd92bfe28d"
+}

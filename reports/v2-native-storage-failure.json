@@ -1,0 +1,11 @@
+{
+  "scope": "REAL_GENVM_CONTROLLED_HOST_NOT_CHAIN_E2E",
+  "runner": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6",
+  "source_sha256": "eb1b832244565097a3d8807460b29a5c62dcd51dc0bd56e52d511e524f09b111",
+  "process_exit": 0,
+  "result_kind": "INTERNAL_ERROR",
+  "reads": [],
+  "sends": [],
+  "stdout": "executed with `InternalError(\"\")`\n",
+  "stderr": "{\"level\":\"error\",\"target\":\"genvm\",\"message\":\"internal error\",\"error\":{\"causes\":[\"VMError(OOM storage)\"]},\"file\":\"src/lib.rs:249\",\"ts\":\"1789125522701\"}\n{\"level\":\"error\",\"target\":\"genvm::exe::run\",\"message\":\"error running genvm\",\"error\":{\"causes\":[\"running genvm\",\"VMError(OOM storage)\"]},\"file\":\"src/exe/run.rs:143\",\"ts\":\"1789125522702\"}\nrunning genvm\n\nCaused by:\n    VMError(OOM storage)\n"
+}

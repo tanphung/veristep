@@ -1,0 +1,722 @@
+{
+  "a_deadline": 1789285655,
+  "accept_deadline": 1789285579,
+  "accepted": {
+    "A": true,
+    "B": true
+  },
+  "activated_at": 1789283855,
+  "adjudication_deadline": 1789287569,
+  "artifacts": {
+    "A": {
+      "commitment": {
+        "blob": "2907762c6751e27ea951e6b2529dafce03cb56b1",
+        "byte_length": 140,
+        "commit": "f4b48b235d15c0be61cbd75bf491dde1b98ad058",
+        "content_type": "text/plain",
+        "encoding": "utf-8",
+        "origin": {
+          "hostname": "api.github.com",
+          "owner": "tanphung",
+          "owner_id": 162718327,
+          "provider": "github",
+          "repository": "tasktrace",
+          "repository_id": 1358380732
+        },
+        "path": "evidence/v2-smoke/worker-a.txt",
+        "sha256": "34d0ed1b4cf1313c2bd91e00d1627d4c3cf7a6d58d9427366de6aa097fcc82fd"
+      },
+      "deal_id": "v2-studio-happy-f4b48b2",
+      "issuer": "0x355d4861807e7b512035321836AE782C532dE60E",
+      "revision": 0,
+      "role": "A",
+      "submission_id": "ad5169bd13769a6ab07aab178a3939cf7504201f5cbdad555424694d3cd59565",
+      "upstream_submission_id": "e9c420d140371813ecd7995e5719f4f3f2e2170423c6c847dd608557394a73f8"
+    },
+    "B": {
+      "commitment": {
+        "blob": "d6ed7f523dafb9f712707d38f82d74d465d1d4b3",
+        "byte_length": 157,
+        "commit": "f4b48b235d15c0be61cbd75bf491dde1b98ad058",
+        "content_type": "text/plain",
+        "encoding": "utf-8",
+        "origin": {
+          "hostname": "api.github.com",
+          "owner": "tanphung",
+          "owner_id": 162718327,
+          "provider": "github",
+          "repository": "tasktrace",
+          "repository_id": 1358380732
+        },
+        "path": "evidence/v2-smoke/worker-b.txt",
+        "sha256": "797b11ac702fa6b7b84efe4950e9cc0746720b5349bed1e95ce0431a2ac3b2e8"
+      },
+      "deal_id": "v2-studio-happy-f4b48b2",
+      "issuer": "0x06ABA641B66E428903a69CcbD2ffE923Ff11F05a",
+      "revision": 0,
+      "role": "B",
+      "submission_id": "49b025d21feb15491762ea20768ab98a80c51fa10308fd1adfabec88db2c5768",
+      "upstream_submission_id": "ad5169bd13769a6ab07aab178a3939cf7504201f5cbdad555424694d3cd59565"
+    },
+    "SOURCE": {
+      "commitment": {
+        "blob": "76a5fbc341e161a0e58b01b904ba31fce132710e",
+        "byte_length": 222,
+        "commit": "f4b48b235d15c0be61cbd75bf491dde1b98ad058",
+        "content_type": "text/plain",
+        "encoding": "utf-8",
+        "origin": {
+          "hostname": "api.github.com",
+          "owner": "tanphung",
+          "owner_id": 162718327,
+          "provider": "github",
+          "repository": "tasktrace",
+          "repository_id": 1358380732
+        },
+        "path": "evidence/v2-smoke/source.txt",
+        "sha256": "380f6a4082055198e4a55e0c02ad5371b77c7ef1163a3dd53d7e1afbc78c7505"
+      },
+      "issuer": "0x8396299e4aC395D66aa9f2cb7792C28a40060d67",
+      "revision": 0,
+      "submission_id": "e9c420d140371813ecd7995e5719f4f3f2e2170423c6c847dd608557394a73f8",
+      "upstream_submission_id": ""
+    }
+  },
+  "b_deadline": 1789285694,
+  "chain_id": 61999,
+  "contract": "0x41BcdFB280BD26939cb6956B55ddA7e85b4567c9",
+  "deal_id": "v2-studio-happy-f4b48b2",
+  "decision_hash": "b96b5fe1620b8ae1851580e4effd2047cdb2843db8dd9afe2a196b7ff7525df7",
+  "evidence_manifest_hash": "658501323276300e6543a8813604fcd077e1af6577db8d45ce077d65ec9e1c36",
+  "funded_at": 1789283779,
+  "ledger": {
+    "confirmed": "0",
+    "received": "3000",
+    "routed": "0"
+  },
+  "manifest": {
+    "chain_domain": "61999",
+    "client": "0x8396299e4aC395D66aa9f2cb7792C28a40060d67",
+    "contract": "0x41BcdFB280BD26939cb6956B55ddA7e85b4567c9",
+    "deal_id": "v2-studio-happy-f4b48b2",
+    "obligations": [
+      {
+        "evidence_ids": [
+          "SOURCE",
+          "A"
+        ],
+        "id": "SEM_A_POLICY_ACCURACY",
+        "kind": "SEMANTIC",
+        "stage": "A",
+        "statement": "Stage A must preserve every export-policy rule in SOURCE: trial accounts cannot export; paid accounts require administrator approval for every export; there is no automatic-export exception. A later sentence that overrides these rules is a violation."
+      },
+      {
+        "evidence_ids": [
+          "A",
+          "B"
+        ],
+        "id": "SEM_B_FAITHFUL_HANDOFF",
+        "kind": "SEMANTIC",
+        "stage": "B",
+        "statement": "Stage B must faithfully preserve Stage A's complete delivered policy, including a final override, without independently weakening, contradicting, or inventing a different export rule. Stage B is not required to repair Stage A against SOURCE."
+      },
+      {
+        "id": "SYS_ACCEPT_A",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "client": "0x8396299e4aC395D66aa9f2cb7792C28a40060d67",
+          "seconds": 1800,
+          "worker": "0x355d4861807e7b512035321836AE782C532dE60E"
+        }
+      },
+      {
+        "id": "SYS_ACCEPT_B",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "client": "0x8396299e4aC395D66aa9f2cb7792C28a40060d67",
+          "seconds": 1800,
+          "worker": "0x06ABA641B66E428903a69CcbD2ffE923Ff11F05a"
+        }
+      },
+      {
+        "id": "SYS_DELIVERY_A",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "step_seconds": 1800
+        }
+      },
+      {
+        "id": "SYS_DELIVERY_B",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "step_seconds": 1800
+        }
+      },
+      {
+        "id": "SYS_MONEY_A",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "bond": "500",
+          "fee": "1000",
+          "penalty": "300"
+        }
+      },
+      {
+        "id": "SYS_MONEY_B",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "bond": "500",
+          "fee": "1000",
+          "penalty": "300"
+        }
+      },
+      {
+        "id": "SYS_PROVENANCE_A",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "adapter": "github-commit-v1",
+          "max_bytes": 4096,
+          "max_total_bytes": 8192,
+          "origin": {
+            "hostname": "api.github.com",
+            "owner": "tanphung",
+            "owner_id": 162718327,
+            "provider": "github",
+            "repository": "tasktrace",
+            "repository_id": 1358380732
+          },
+          "source": null
+        }
+      },
+      {
+        "id": "SYS_PROVENANCE_B",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "adapter": "github-commit-v1",
+          "max_bytes": 4096,
+          "max_total_bytes": 8192,
+          "origin": {
+            "hostname": "api.github.com",
+            "owner": "tanphung",
+            "owner_id": 162718327,
+            "provider": "github",
+            "repository": "tasktrace",
+            "repository_id": 1358380732
+          },
+          "source": null
+        }
+      },
+      {
+        "id": "SYS_PROVENANCE_SOURCE",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "adapter": "github-commit-v1",
+          "max_bytes": 4096,
+          "max_total_bytes": 8192,
+          "origin": {
+            "hostname": "api.github.com",
+            "owner": "tanphung",
+            "owner_id": 162718327,
+            "provider": "github",
+            "repository": "tasktrace",
+            "repository_id": 1358380732
+          },
+          "source": {
+            "blob": "76a5fbc341e161a0e58b01b904ba31fce132710e",
+            "byte_length": 222,
+            "commit": "f4b48b235d15c0be61cbd75bf491dde1b98ad058",
+            "content_type": "text/plain",
+            "encoding": "utf-8",
+            "origin": {
+              "hostname": "api.github.com",
+              "owner": "tanphung",
+              "owner_id": 162718327,
+              "provider": "github",
+              "repository": "tasktrace",
+              "repository_id": 1358380732
+            },
+            "path": "evidence/v2-smoke/source.txt",
+            "sha256": "380f6a4082055198e4a55e0c02ad5371b77c7ef1163a3dd53d7e1afbc78c7505"
+          }
+        }
+      },
+      {
+        "id": "SYS_REVIEW",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "seconds": 1800
+        }
+      },
+      {
+        "id": "SYS_REVISIONS",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "maximum": 0
+        }
+      },
+      {
+        "id": "SYS_UNWIND",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "rule": "NEUTRAL_AT_EXPIRY",
+          "seconds": 3600
+        }
+      },
+      {
+        "id": "SYS_UPSTREAM_A",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "artifact": "SOURCE",
+          "revision": 0
+        }
+      },
+      {
+        "id": "SYS_UPSTREAM_B",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "artifact": "A",
+          "revision": 0
+        }
+      }
+    ],
+    "router": "0x000000000000000000000000000000000000dEaD",
+    "terms": {
+      "max_revisions": 0,
+      "money": {
+        "A": {
+          "bond": "500",
+          "fee": "1000",
+          "penalty": "300"
+        },
+        "B": {
+          "bond": "500",
+          "fee": "1000",
+          "penalty": "300"
+        }
+      },
+      "origins": {
+        "A": {
+          "hostname": "api.github.com",
+          "owner": "tanphung",
+          "owner_id": 162718327,
+          "provider": "github",
+          "repository": "tasktrace",
+          "repository_id": 1358380732
+        },
+        "B": {
+          "hostname": "api.github.com",
+          "owner": "tanphung",
+          "owner_id": 162718327,
+          "provider": "github",
+          "repository": "tasktrace",
+          "repository_id": 1358380732
+        },
+        "SOURCE": {
+          "hostname": "api.github.com",
+          "owner": "tanphung",
+          "owner_id": 162718327,
+          "provider": "github",
+          "repository": "tasktrace",
+          "repository_id": 1358380732
+        }
+      },
+      "semantic_obligations": [
+        {
+          "evidence_ids": [
+            "SOURCE",
+            "A"
+          ],
+          "id": "SEM_A_POLICY_ACCURACY",
+          "stage": "A",
+          "statement": "Stage A must preserve every export-policy rule in SOURCE: trial accounts cannot export; paid accounts require administrator approval for every export; there is no automatic-export exception. A later sentence that overrides these rules is a violation."
+        },
+        {
+          "evidence_ids": [
+            "A",
+            "B"
+          ],
+          "id": "SEM_B_FAITHFUL_HANDOFF",
+          "stage": "B",
+          "statement": "Stage B must faithfully preserve Stage A's complete delivered policy, including a final override, without independently weakening, contradicting, or inventing a different export rule. Stage B is not required to repair Stage A against SOURCE."
+        }
+      ],
+      "source": {
+        "blob": "76a5fbc341e161a0e58b01b904ba31fce132710e",
+        "byte_length": 222,
+        "commit": "f4b48b235d15c0be61cbd75bf491dde1b98ad058",
+        "content_type": "text/plain",
+        "encoding": "utf-8",
+        "origin": {
+          "hostname": "api.github.com",
+          "owner": "tanphung",
+          "owner_id": 162718327,
+          "provider": "github",
+          "repository": "tasktrace",
+          "repository_id": 1358380732
+        },
+        "path": "evidence/v2-smoke/source.txt",
+        "sha256": "380f6a4082055198e4a55e0c02ad5371b77c7ef1163a3dd53d7e1afbc78c7505"
+      },
+      "windows": {
+        "accept": 1800,
+        "adjudication": 3600,
+        "review": 1800,
+        "step": 1800
+      },
+      "workers": {
+        "A": "0x355d4861807e7b512035321836AE782C532dE60E",
+        "B": "0x06ABA641B66E428903a69CcbD2ffE923Ff11F05a"
+      }
+    },
+    "version": "tasktrace-2.0-rc"
+  },
+  "report": {
+    "chain_domain": "61999",
+    "contract": "0x41BcdFB280BD26939cb6956B55ddA7e85b4567c9",
+    "decision": {
+      "next_state": "READY_FOR_SETTLEMENT",
+      "stages": {
+        "A": {
+          "entitlements": {
+            "BOND_RETURN": "500",
+            "PAYOUT": "1000",
+            "REFUND": "0"
+          },
+          "outcome": "SATISFIED"
+        },
+        "B": {
+          "entitlements": {
+            "BOND_RETURN": "500",
+            "PAYOUT": "1000",
+            "REFUND": "0"
+          },
+          "outcome": "SATISFIED"
+        }
+      }
+    },
+    "evidence_citations": [
+      {
+        "artifact_id": "SOURCE",
+        "end_byte": 221,
+        "id": "C001",
+        "obligation_id": "SEM_A_POLICY_ACCURACY",
+        "quote": "Trial accounts cannot export data. Paid accounts may export data only after an administrator approves the request. Approval is required for every paid-account export; there is no automatic-export exception.",
+        "sha256": "380f6a4082055198e4a55e0c02ad5371b77c7ef1163a3dd53d7e1afbc78c7505",
+        "start_byte": 15
+      },
+      {
+        "artifact_id": "A",
+        "end_byte": 139,
+        "id": "C002",
+        "obligation_id": "SEM_A_POLICY_ACCURACY",
+        "quote": "Trial accounts cannot export data. Paid accounts may export data only after administrator approval. There is no automatic-export exception.",
+        "sha256": "34d0ed1b4cf1313c2bd91e00d1627d4c3cf7a6d58d9427366de6aa097fcc82fd",
+        "start_byte": 0
+      },
+      {
+        "artifact_id": "A",
+        "end_byte": 139,
+        "id": "C003",
+        "obligation_id": "SEM_B_FAITHFUL_HANDOFF",
+        "quote": "Trial accounts cannot export data. Paid accounts may export data only after administrator approval. There is no automatic-export exception.",
+        "sha256": "34d0ed1b4cf1313c2bd91e00d1627d4c3cf7a6d58d9427366de6aa097fcc82fd",
+        "start_byte": 0
+      },
+      {
+        "artifact_id": "B",
+        "end_byte": 156,
+        "id": "C004",
+        "obligation_id": "SEM_B_FAITHFUL_HANDOFF",
+        "quote": "The policy blocks exports for trial accounts. Paid accounts can export only after an administrator approves the request, with no automatic-export exception.",
+        "sha256": "797b11ac702fa6b7b84efe4950e9cc0746720b5349bed1e95ce0431a2ac3b2e8",
+        "start_byte": 0
+      }
+    ],
+    "evidence_manifest_hash": "658501323276300e6543a8813604fcd077e1af6577db8d45ce077d65ec9e1c36",
+    "findings": [],
+    "job_id": "v2-studio-happy-f4b48b2",
+    "missing_items": [],
+    "obligation_assessments": [
+      {
+        "applicable": true,
+        "citation_ids": [
+          "C001",
+          "C002"
+        ],
+        "kind": "SEMANTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SEM_A_POLICY_ACCURACY",
+        "reason": "Stage A accurately preserves all components of the SOURCE policy: the prohibition on trial exports, the requirement for administrator approval for paid accounts, and the lack of an automatic-export exception. No overriding sentences are present.",
+        "stage": "A",
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [
+          "C003",
+          "C004"
+        ],
+        "kind": "SEMANTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SEM_B_FAITHFUL_HANDOFF",
+        "reason": "Stage B faithfully restates the policy delivered by Stage A. It maintains the trial export block, the administrator approval requirement for paid accounts, and the lack of exceptions without introducing contradictions or new rules.",
+        "stage": "B",
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_ACCEPT_A",
+        "reason": "The designated worker accepted the exact funded terms before deadline.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_ACCEPT_B",
+        "reason": "The designated worker accepted the exact funded terms before deadline.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_DELIVERY_A",
+        "reason": "The designated worker submitted one immutable artifact before deadline.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_DELIVERY_B",
+        "reason": "The designated worker submitted one immutable artifact before deadline.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_MONEY_A",
+        "reason": "Fees, bond and penalty remain the exact funded deterministic terms.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_MONEY_B",
+        "reason": "Fees, bond and penalty remain the exact funded deterministic terms.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_PROVENANCE_A",
+        "reason": "The complete artifact passed the committed GitHub provenance adapter.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_PROVENANCE_B",
+        "reason": "The complete artifact passed the committed GitHub provenance adapter.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_PROVENANCE_SOURCE",
+        "reason": "The complete artifact passed the committed GitHub provenance adapter.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_REVIEW",
+        "reason": "Review used the frozen evidence manifest and contract-defined validator.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_REVISIONS",
+        "reason": "The contract accepted revision zero only.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_UNWIND",
+        "reason": "The pre-funded neutral unwind rule remains enforceable at expiry.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_UPSTREAM_A",
+        "reason": "The submission references the exact required upstream artifact.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_UPSTREAM_B",
+        "reason": "The submission references the exact required upstream artifact.",
+        "stage": null,
+        "status": "SATISFIED"
+      }
+    ],
+    "reasoning": "Decision derived by the Intelligent Contract from the complete exact obligation assessments.",
+    "review_id": "3f8e9ecb0b23e53f708246a3643c6cb6b2cad52a72cb62ab65e7cbf6f9bf5b99",
+    "reviewed_at": "1789284006",
+    "revision": 0,
+    "schema_version": "tasktrace-report-2",
+    "score": {
+      "A": 10000,
+      "B": 10000
+    },
+    "source_assessments": [
+      {
+        "adapter": "github-commit-v1",
+        "artifact_id": "SOURCE",
+        "blob": "76a5fbc341e161a0e58b01b904ba31fce132710e",
+        "byte_length": 222,
+        "commit": "f4b48b235d15c0be61cbd75bf491dde1b98ad058",
+        "content_type": "text/plain",
+        "hostname": "api.github.com",
+        "owner": "tanphung",
+        "owner_id": 162718327,
+        "path": "evidence/v2-smoke/source.txt",
+        "provider": "github",
+        "repository": "tasktrace",
+        "repository_id": 1358380732,
+        "sha256": "380f6a4082055198e4a55e0c02ad5371b77c7ef1163a3dd53d7e1afbc78c7505",
+        "status": "VERIFIED"
+      },
+      {
+        "adapter": "github-commit-v1",
+        "artifact_id": "A",
+        "blob": "2907762c6751e27ea951e6b2529dafce03cb56b1",
+        "byte_length": 140,
+        "commit": "f4b48b235d15c0be61cbd75bf491dde1b98ad058",
+        "content_type": "text/plain",
+        "hostname": "api.github.com",
+        "owner": "tanphung",
+        "owner_id": 162718327,
+        "path": "evidence/v2-smoke/worker-a.txt",
+        "provider": "github",
+        "repository": "tasktrace",
+        "repository_id": 1358380732,
+        "sha256": "34d0ed1b4cf1313c2bd91e00d1627d4c3cf7a6d58d9427366de6aa097fcc82fd",
+        "status": "VERIFIED"
+      },
+      {
+        "adapter": "github-commit-v1",
+        "artifact_id": "B",
+        "blob": "d6ed7f523dafb9f712707d38f82d74d465d1d4b3",
+        "byte_length": 157,
+        "commit": "f4b48b235d15c0be61cbd75bf491dde1b98ad058",
+        "content_type": "text/plain",
+        "hostname": "api.github.com",
+        "owner": "tanphung",
+        "owner_id": 162718327,
+        "path": "evidence/v2-smoke/worker-b.txt",
+        "provider": "github",
+        "repository": "tasktrace",
+        "repository_id": 1358380732,
+        "sha256": "797b11ac702fa6b7b84efe4950e9cc0746720b5349bed1e95ce0431a2ac3b2e8",
+        "status": "VERIFIED"
+      }
+    ],
+    "terms_hash": "16bf14c87938795a9a10e34805188749478cb4ac38d6eaa60b84197c328c9f4a"
+  },
+  "review_deadline": 1789285732,
+  "review_requested_at": 1789283969,
+  "router": "0x000000000000000000000000000000000000dEaD",
+  "settlement_legs": [
+    {
+      "amount": "1000",
+      "id": "A:PAYOUT",
+      "kind": "PAYOUT",
+      "outcome": "SATISFIED",
+      "receipt_id": "af598c1b2be0f21aa07a6fff05a86ca86c08c35d92dfb3773887b29b7c871931",
+      "recipient": "0x355d4861807e7b512035321836AE782C532dE60E",
+      "role": "A",
+      "sequence": 0,
+      "state": "ELIGIBLE"
+    },
+    {
+      "amount": "500",
+      "id": "A:BOND_RETURN",
+      "kind": "BOND_RETURN",
+      "outcome": "SATISFIED",
+      "receipt_id": "6e327361ab79097a4fcb1daee1cee94a9aded7dba682cc50e2242a0aef8d7b37",
+      "recipient": "0x355d4861807e7b512035321836AE782C532dE60E",
+      "role": "A",
+      "sequence": 1,
+      "state": "ELIGIBLE"
+    },
+    {
+      "amount": "1000",
+      "id": "B:PAYOUT",
+      "kind": "PAYOUT",
+      "outcome": "SATISFIED",
+      "receipt_id": "fb4eba1e9e787ac1d81992771f316104991b961593f168f728f34a8d4034c12a",
+      "recipient": "0x06ABA641B66E428903a69CcbD2ffE923Ff11F05a",
+      "role": "B",
+      "sequence": 2,
+      "state": "ELIGIBLE"
+    },
+    {
+      "amount": "500",
+      "id": "B:BOND_RETURN",
+      "kind": "BOND_RETURN",
+      "outcome": "SATISFIED",
+      "receipt_id": "22609b702d9b90c093eecb9b552f9ee672b30cf868dfe345eef5bff5f75f69c6",
+      "recipient": "0x06ABA641B66E428903a69CcbD2ffE923Ff11F05a",
+      "role": "B",
+      "sequence": 3,
+      "state": "ELIGIBLE"
+    }
+  ],
+  "status": "SETTLEMENT_PENDING",
+  "terms_hash": "16bf14c87938795a9a10e34805188749478cb4ac38d6eaa60b84197c328c9f4a"
+}

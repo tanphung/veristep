@@ -1,0 +1,117 @@
+{
+  "version": "tasktrace-v2-studionet-semantic-1",
+  "network": "studionet",
+  "chainId": 61999,
+  "sourceHash": "4dc363e6c7137f0fcc013a49aebb87b5f1cb919b056bab43089724585a79deea",
+  "evidenceCommit": "f4b48b235d15c0be61cbd75bf491dde1b98ad058",
+  "wallets": {
+    "client": "0x8396299e4aC395D66aa9f2cb7792C28a40060d67",
+    "A": "0x355d4861807e7b512035321836AE782C532dE60E",
+    "B": "0x06ABA641B66E428903a69CcbD2ffE923Ff11F05a"
+  },
+  "steps": {
+    "deploy": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T15:32:26.748Z",
+      "hash": "0x3081051c5e78a06db0e7153a34855a027312ab26ca614192ac6e501b04d13f2a",
+      "submittedAt": "2026-09-13T15:32:31.887Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xED9C922568f3799C1c60012fd2CE6612F94b07bd",
+      "finishedAt": "2026-09-13T15:33:09.599Z"
+    },
+    "happy-create": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T15:33:13.898Z",
+      "hash": "0x741e05f0bfd55194c7bec8eff981acd97c3c1aed006e6baf48051557d7319382",
+      "submittedAt": "2026-09-13T15:33:19.473Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xED9C922568f3799C1c60012fd2CE6612F94b07bd",
+      "finishedAt": "2026-09-13T15:34:00.155Z"
+    },
+    "happy-fund": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T15:34:02.628Z",
+      "hash": "0x55d3a46b7f72c713a4770d9b5d19a5a53c2612e64a9e9664b3f77ff374d0a9c9",
+      "submittedAt": "2026-09-13T15:34:07.092Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xED9C922568f3799C1c60012fd2CE6612F94b07bd",
+      "finishedAt": "2026-09-13T15:34:44.720Z"
+    },
+    "happy-accept-a": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T15:34:44.721Z",
+      "hash": "0x9135e35fa99f1722ed4c96647ec3122ba9a9f5e62369966c19160c8b3768aef2",
+      "submittedAt": "2026-09-13T15:34:51.751Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xED9C922568f3799C1c60012fd2CE6612F94b07bd",
+      "finishedAt": "2026-09-13T15:35:30.204Z"
+    },
+    "happy-accept-b": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T15:35:30.205Z",
+      "hash": "0x1f28ad388d916cd4e60b4ccb41a43e6812963c60e7a95e026f1467ac47b36df6",
+      "submittedAt": "2026-09-13T15:35:48.955Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xED9C922568f3799C1c60012fd2CE6612F94b07bd",
+      "finishedAt": "2026-09-13T15:36:22.048Z"
+    },
+    "happy-submit-a": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T15:36:23.561Z",
+      "hash": "0x516abd5133d48c2d01cf10728e6a7efda18a1ae98ac577cabc1f24d4cdb1365d",
+      "submittedAt": "2026-09-13T15:36:27.492Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xED9C922568f3799C1c60012fd2CE6612F94b07bd",
+      "finishedAt": "2026-09-13T15:37:01.346Z"
+    },
+    "happy-submit-b": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T15:37:03.166Z",
+      "hash": "0x6a4415361d1bb6de07cb8d604733e9cecd654a573132e9afb6da0c7edec0b17f",
+      "submittedAt": "2026-09-13T15:37:25.069Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xED9C922568f3799C1c60012fd2CE6612F94b07bd",
+      "finishedAt": "2026-09-13T15:37:45.519Z"
+    },
+    "happy-request-review": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T15:37:45.520Z",
+      "hash": "0xa3e062b7536a3fb64009187b56734691c7394ae7eb8b91d916763043a90c7dc4",
+      "submittedAt": "2026-09-13T15:37:53.257Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0xED9C922568f3799C1c60012fd2CE6612F94b07bd",
+      "finishedAt": "2026-09-13T15:38:29.945Z"
+    },
+    "happy-resolve-review": {
+      "phase": "PENDING",
+      "startedAt": "2026-09-14T10:46:37.204Z",
+      "hash": "0x731a45dd89e418d309826ad59287d2001cd498dfeb686cb92d65f3bc64e17837",
+      "submittedAt": "2026-09-14T10:46:40.048Z"
+    }
+  },
+  "cases": {},
+  "startedAt": "2026-09-13T15:32:25.759Z",
+  "limitations": [
+    "Semantic consensus only: the intentionally disabled router prevents this run from claiming settlement."
+  ],
+  "contract": "0xED9C922568f3799C1c60012fd2CE6612F94b07bd",
+  "schemaVerified": true,
+  "configVerified": true,
+  "failedAttempts": [
+    {
+      "step": "happy-resolve-review",
+      "hash": "0xc6573ccf97b649589385a9f46a4e7c2bc8ba1e25769bfa73f8efdc24cf0698f0",
+      "outcome": "UNDETERMINED",
+      "result": "HTTP_UNAVAILABLE",
+      "receipt": "happy-resolve-review.http-unavailable.receipt.json"
+    }
+  ]
+}

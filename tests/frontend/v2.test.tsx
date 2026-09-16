@@ -1,0 +1,41 @@
+import {fireEvent,render,screen} from "@testing-library/react";
+import {describe,expect,it,vi} from "vitest";
+import {contract,evidenceChainId,readClient} from "../../frontend/src/client";
+import {listV2Deals,validateV2Deal} from "../../frontend/src/v2-client";
+import {V2Report} from "../../frontend/src/V2Report";
+import {V2Worker} from "../../frontend/src/V2Worker";
+import {V2NewDeal} from "../../frontend/src/V2NewDeal";
+import {V2Actions} from "../../frontend/src/V2Actions";
+import type {V2Deal,V2Report as Report,V2SourceAssessment} from "../../frontend/src/v2-types";
+
+const hash="a".repeat(64),commit="b".repeat(40),router=`0x${"44".repeat(20)}`;
+const origin={provider:"github" as const,hostname:"api.github.com" as const,owner:"tanphung",owner_id:1,repository:"veristep",repository_id:2};
+const commitment={origin,commit,path:"evidence/a.txt",blob:"c".repeat(40),content_type:"text/plain" as const,encoding:"utf-8" as const,byte_length:10,sha256:hash};
+const obligations=[
+  {id:"SEM_A_TEST",kind:"SEMANTIC" as const,stage:"A" as const,statement:"A test",evidence_ids:["SOURCE","A"] as const},
+  {id:"SYS_REVIEW",kind:"DETERMINISTIC" as const,parameters:{seconds:60}},
+];
+function fixture():V2Deal{return {
+  deal_id:"deal-1",chain_id:Number(evidenceChainId),contract,router,status:"REVIEW_REQUESTED",terms_hash:hash,accepted:{A:true,B:true},
+  manifest:{version:"veristep-2.0-rc",chain_domain:evidenceChainId,contract,router,deal_id:"deal-1",client:`0x${"11".repeat(20)}`,
+    terms:{workers:{A:`0x${"22".repeat(20)}`,B:`0x${"33".repeat(20)}`},origins:{SOURCE:origin,A:origin,B:origin},source:commitment,money:{A:{fee:"10",bond:"5",penalty:"3"},B:{fee:"10",bond:"5",penalty:"3"}},windows:{accept:60,step:60,review:60,adjudication:60},max_revisions:0,semantic_obligations:[{id:"SEM_A_TEST",stage:"A",statement:"A test",evidence_ids:["SOURCE","A"]}]},
+    obligations:obligations.map(item=>({...item,evidence_ids:item.evidence_ids?[...item.evidence_ids]:undefined}))},
+  artifacts:{},ledger:{received:"30",routed:"0",confirmed:"0"},settlement_legs:[],
+};}
+function report():Report{
+  const sources=(["SOURCE","A","B"] as const).map((artifact_id):V2SourceAssessment=>({artifact_id,adapter:"github-commit-v1",...origin,commit,blob:commit,path:`evidence/${artifact_id}.txt`,content_type:"text/plain",byte_length:10,sha256:hash,status:"VERIFIED"}));
+  return {schema_version:"veristep-report-2",chain_domain:evidenceChainId,contract,job_id:"deal-1",review_id:hash,revision:0,terms_hash:hash,evidence_manifest_hash:hash,reviewed_at:"1",source_assessments:sources,
+    obligation_assessments:obligations.map(item=>({obligation_id:item.id,kind:item.kind,stage:item.stage??null,status:"SATISFIED",applicable:true,reason:"Verified",citation_ids:[],missing_evidence_ids:[]})),findings:[],reasoning:"Contract result",evidence_citations:[],missing_items:[],score:{A:10000,B:10000},decision:{stages:{A:{outcome:"SATISFIED",entitlements:{PAYOUT:"10",REFUND:"0",BOND_RETURN:"5"}},B:{outcome:"SATISFIED",entitlements:{PAYOUT:"10",REFUND:"0",BOND_RETURN:"5"}}},next_state:"READY_FOR_SETTLEMENT"}};
+}
+
+describe("VeriStep v2 finalized-state renderer",()=>{
+  it("does not invent a report while consensus is pending",()=>{render(<V2Report deal={fixture()}/>);expect(screen.getByText("No authoritative report yet")).toBeInTheDocument();expect(screen.queryByText("100%")).not.toBeInTheDocument();});
+  it("accepts a report only when it covers the exact frozen obligation set",()=>{const deal=fixture();deal.report=report();expect(validateV2Deal(deal,"deal-1")).toBe(deal);deal.report.obligation_assessments.pop();expect(()=>validateV2Deal(deal,"deal-1")).toThrow("exact obligation set");});
+  it("rejects a source assessment outside the canonical GitHub API host",()=>{const deal=fixture();deal.report=report();const source=deal.report.source_assessments[0];if(source.status!=="VERIFIED")throw new Error("fixture source must be verified");source.hostname="github.com" as "api.github.com";expect(()=>validateV2Deal(deal,"deal-1")).toThrow("source provenance");});
+  it("renders a timeout report without pretending unavailable sources were verified",()=>{const deal=fixture();const value=report();value.source_assessments=value.source_assessments.map((source)=>({artifact_id:source.artifact_id,status:"NOT_VERIFIED",commitment,reason_code:"ACCEPTANCE_TIMEOUT"}));deal.report=value;render(<V2Report deal={deal}/>);expect(screen.getByText("0/3 verified")).toBeInTheDocument();expect(screen.getAllByText("Not verified")).toHaveLength(3);expect(screen.getAllByText("Acceptance timeout")).toHaveLength(3);});
+  it("keeps the hosted agent path release-locked until a worker URL is configured",()=>{const deal=fixture();deal.status="FUNDED";render(<V2Worker deal={deal} account={deal.manifest.client as `0x${string}`}/>);expect(screen.getByText("RELEASE LOCKED")).toBeInTheDocument();expect(screen.getByRole("button",{name:/Start A\/B delivery/})).toBeDisabled();});
+  it("withholds an expired timeout action while no-broadcast simulation is before its deadline",()=>{const deal=fixture();deal.adjudication_deadline=1;render(<V2Actions deal={deal} account={deal.manifest.client as `0x${string}`} busy={false} onSubmitted={()=>undefined}/>);expect(screen.getByRole("status")).toHaveTextContent("Timeout signing is unavailable");expect(screen.queryByRole("button",{name:/Apply frozen timeout rule/})).not.toBeInTheDocument();});
+  it("offers the three immutable evidence templates from the dedicated public repository",()=>{render(<V2NewDeal account={`0x${"11".repeat(20)}`} onClose={()=>undefined} onSubmitted={()=>undefined}/>);fireEvent.change(screen.getByLabelText("Worker A wallet"),{target:{value:`0x${"22".repeat(20)}`}});fireEvent.change(screen.getByLabelText("Worker B wallet"),{target:{value:`0x${"33".repeat(20)}`}});fireEvent.click(screen.getByRole("button",{name:/Continue/}));expect(screen.getAllByRole("radio")).toHaveLength(3);expect(screen.getByLabelText("Source repository")).toHaveValue("veristep-evidence");expect(screen.getByLabelText("Source commit")).toHaveValue("5502b42323eb533306dbae2c82cf0e0f25b6cd8b");fireEvent.click(screen.getByRole("radio",{name:/Refund policy/}));expect(screen.getByLabelText("Source path")).toHaveValue("templates/refund-policy.md");});
+  it("paginates the complete finalized deal list",async()=>{const ids=Array.from({length:55},(_,index)=>`deal-${index}`),spy=vi.spyOn(readClient,"readContract");spy.mockResolvedValueOnce(JSON.stringify({total:55,ids:ids.slice(0,50)})).mockResolvedValueOnce(JSON.stringify({total:55,ids:ids.slice(50)}));await expect(listV2Deals()).resolves.toEqual(ids);expect(spy).toHaveBeenCalledTimes(2);spy.mockRestore();});
+  it("fails closed if pagination total changes between finalized reads",async()=>{const spy=vi.spyOn(readClient,"readContract");spy.mockResolvedValueOnce(JSON.stringify({total:51,ids:Array.from({length:50},(_,index)=>`deal-${index}`)})).mockResolvedValueOnce(JSON.stringify({total:52,ids:["deal-50"]}));await expect(listV2Deals()).rejects.toThrow("changed while paging");spy.mockRestore();});
+});

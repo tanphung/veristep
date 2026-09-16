@@ -1,8 +1,21 @@
-# TaskTrace — Evidence schema v0.2
+# VeriStep — Evidence schema v0.2
+
+## Release addendum — receipt lookup and worker provenance (13/09/2026)
+
+- Router lookup identity is `(source_contract, receipt_id)`. `source_contract` is an explicit argument for `release`, `receiptDigest` and `receiptState`, and must equal the source stored by `fund` from `msg.sender`.
+- Worker journal entries bind chain, IC, deal, role, revision, terms hash, model ID, prompt version, input hash, output hash, immutable GitHub commit/path/blob, transaction intent/hash and timestamps. This journal is operational evidence only; the Intelligent Contract independently fetches the committed artifact and stores the authoritative assessment.
+- OpenAI credentials, wallet private keys and GitHub write credentials are never fields in evidence, logs, frontend configuration or public reports.
+- The private operational cost journal stores integer nano-USD and request states `RESERVED`, `DISPATCHED`, `UNCERTAIN`, `SETTLED`. It is not contract evidence and cannot affect any obligation or settlement decision.
+
+## v2 design supersession — 09/09/2026
+
+The current proposed schema is defined in [IC-V2-ARCHITECTURE.md](IC-V2-ARCHITECTURE.md), sections 2–6. All older addenda below describe v1.1 history, not the new requirements.
+
+V2 stores the complete funded obligation manifest, including deterministic duties. Final reports contain source_assessments, obligation_assessments, findings, reasoning, evidence_citations, missing_items, IC-derived score and decision, all bound to job/terms/review identity. Multiset counts reject missing/duplicate/extra IDs. External commitments bind canonical provider origin, stable owner/repository identity, full immutable commit, exact file/tree/blob identity, supported content type, whole decoded byte length/SHA-256, issuer and upstream. GitHub is the first proposed adapter; CID/deployment inputs are rejected until validated adapters exist. No backend-provided provenance flag or report is authoritative.
 
 ## Addendum v0.4 — version-bound coverage policy
 
-New jobs bind `tasktrace-1.1` in immutable terms. Existing IDs and response schema remain unchanged; the A_COVERAGE/B_COVERAGE descriptions now require explicit answers or explicit unknowns. Timing alone cannot answer an independent prerequisite. Both derivation and grounding receive the same policy. This changes the rubric version, not artifact bytes, hash/chunk validation, money rules, or existing deployment state.
+New jobs bind `veristep-1.1` in immutable terms. Existing IDs and response schema remain unchanged; the A_COVERAGE/B_COVERAGE descriptions now require explicit answers or explicit unknowns. Timing alone cannot answer an independent prerequisite. Both derivation and grounding receive the same policy. This changes the rubric version, not artifact bytes, hash/chunk validation, money rules, or existing deployment state.
 
 ## Addendum v0.3 — schema thực thi cho regression citation
 

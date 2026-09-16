@@ -1,0 +1,25 @@
+{
+  "version": "veristep-live-incident-1",
+  "network": "studio-next",
+  "chainId": 61997,
+  "contract": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+  "dealId": "v2-hosted-agent-live-1",
+  "transaction": "0x03e4b526bcc69df0aaa59e4d3abb059a62e371cc684ef1a9ae7e4aa431918568",
+  "expected": "Published Agent A artifact is submitted before the frozen A delivery deadline and finalizes successfully.",
+  "actual": "FINALIZED + FINISHED_WITH_ERROR; leader rollback payload SUBMISSION_WINDOW_CLOSED; contract state remains ACTIVE_A without artifact A.",
+  "firstFailurePoint": "Deployed contract submit_artifact deadline predicate",
+  "evidence": {
+    "aDeadline": 1789567794,
+    "observedLatestBlockTimestamp": 1789571902,
+    "artifact": {
+      "commit": "c875720dcbeeeb6d9d5abd376d02faa68a5bf624",
+      "path": "jobs/v2-hosted-agent-live-1/a.md",
+      "blob": "6c46f8f93a0c4cbaafce9e38d858eadb3898c1c3",
+      "byteLength": 188,
+      "sha256": "fcfd786d615b531246121e5a80efece28531b2e260c2f36397640e67d641bd94"
+    }
+  },
+  "rootCause": "ROOT_CAUSE_CONFIRMED",
+  "rootCauseScope": "Credential and worker recovery consumed the delivery window. The final contract rejection is the expected frozen deadline rule, not evidence of a chain outage.",
+  "recoveryPolicy": "Do not resend this finalized hash and do not create a replacement hosted deal before the early Portal submission."
+}

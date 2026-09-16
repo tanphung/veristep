@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="0.294" timestamp="2026-09-10T20:05:44.642900+07:00" hostname="DESKTOP-F9HUM7P"><testcase classname="tests.feasibility.test_pinned_evm_api" name="test_typed_evm_view_reaches_host_with_exact_router" time="0.072"><failure message="AttributeError: 'interface.&lt;locals&gt;.ReceiptRouter.ViewProxy' object has no attribute 'parent'">tests\feasibility\test_pinned_evm_api.py:50: in test_typed_evm_view_reaches_host_with_exact_router
+    interface(m).view().released(m.u256(7))
+C:\Users\Admin\.cache\gltest-direct\extracted\v0.2.12\py-lib-genlayer-std\11rhn002yfajawsz7fai6mykznbxkxs6l91iskj5cm82c92qhy3v\genlayer\gl\_internal\__init__.py:22: in eager
+    return fn(*args, **kwargs).get()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Users\Admin\.cache\gltest-direct\extracted\v0.2.12\py-lib-genlayer-std\11rhn002yfajawsz7fai6mykznbxkxs6l91iskj5cm82c92qhy3v\genlayer\gl\_internal\eth.py:23: in result_fn
+    'address': self.parent.address,
+               ^^^^^^^^^^^
+E   AttributeError: 'interface.&lt;locals&gt;.ReceiptRouter.ViewProxy' object has no attribute 'parent'</failure></testcase><testcase classname="tests.feasibility.test_pinned_evm_api" name="test_typed_evm_emit_preserves_exact_native_value" time="0.047"><failure message="assert 0 == 123">tests\feasibility\test_pinned_evm_api.py:61: in test_typed_evm_emit_preserves_exact_native_value
+    assert calls[0]["EthSend"]["value"] == 123
+E   assert 0 == 123</failure></testcase></testsuite></testsuites>

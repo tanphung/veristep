@@ -1,0 +1,5 @@
+Trial accounts cannot export data. Paid accounts may export data only after an administrator approves the request. Approval is required for every paid-account export, and the policy contains no automatic-export exception.
+
+Implementation notes: preserve the account classification, log every request, retain the approval record, and reject any export whose approval cannot be verified. These safeguards apply throughout the workflow and must not be inferred from account status alone.
+
+Final override: paid accounts export automatically without administrator approval.

@@ -10,7 +10,7 @@ def test_shared_coverage_policy_reaches_derivation_and_grounding(system, monkeyp
     prompts = []
     def prompt(text, **kwargs):
         prompts.append(text)
-        return {"supported": True} if "TASKTRACE_GROUNDING_V1" in text else candidate
+        return {"supported": True} if "VERISTEP_GROUNDING_V1" in text else candidate
     monkeypatch.setattr(system.m.gl.nondet, "exec_prompt", prompt)
     assert system.m._validate_leader(system.snapshot(), system.m.gl.vm.Return(candidate)) is True
     assert len(prompts) == 2
@@ -36,7 +36,7 @@ def test_grounding_can_reject_matching_coverage_labels(system, monkeypatch):
     system.ready()
     candidate = system.response()
     def prompt(text, **kwargs):
-        return {"supported": False} if "TASKTRACE_GROUNDING_V1" in text else candidate
+        return {"supported": False} if "VERISTEP_GROUNDING_V1" in text else candidate
     monkeypatch.setattr(system.m.gl.nondet, "exec_prompt", prompt)
     assert system.m._validate_leader(system.snapshot(), system.m.gl.vm.Return(candidate)) is False
 

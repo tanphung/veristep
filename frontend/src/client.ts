@@ -1,15 +1,15 @@
 import {createClient} from 'genlayer-js';
-import {studionet,testnetBradbury} from 'genlayer-js/chains';
 import {TransactionHashVariant, type Address} from 'genlayer-js/types';
 import deployment from './deployment.json';
+import {studioNext} from './network';
 import type {Job,Obligation} from './types';
 import {canonical,digest,verifyArtifacts} from './evidence';
 
-export const chain = deployment.network === 'testnet-bradbury' ? testnetBradbury : studionet;
+export const chain = studioNext;
 if(chain.id!==deployment.chainId)throw new Error('Deployment RPC chain configuration mismatch');
 export const contract = deployment.contract as Address;
 export const evidenceChainId = deployment.contractChainId;
-export const writesEnabled = deployment.network === 'testnet-bradbury' && deployment.submissionReady;
+export const writesEnabled = deployment.network === 'studio-next' && deployment.releaseStatus === 'READY' && deployment.submissionReady;
 export const readClient = createClient({chain});
 export const explorer = (chain.blockExplorers?.default.url ?? '').replace(/\/$/,'');
 export const short = (value:string)=>`${value.slice(0,6)}…${value.slice(-4)}`;

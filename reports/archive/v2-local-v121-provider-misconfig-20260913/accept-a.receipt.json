@@ -1,0 +1,292 @@
+{
+  "hash": "0xf8b1b05825053350b5dc1ddd982a84bc61dc77087491558aeb787541bfad39bc",
+  "from_address": "0x51838D5d14cb755ca8D09e279006cBF5Fe65e02c",
+  "to_address": "0x07f317775a3f395cb8587E0B73c579f8740bfd6D",
+  "data": {
+    "calldata": {
+      "readable": "{\"args\":[\"v2-local-926821c5\",\"e3d04740355af9daa0cd9b1f615c0d2f7986ebc18f07fab20bd368b3318bc445\",]\"method\":\"accept_work\"}"
+    }
+  },
+  "value": "500",
+  "status": 7,
+  "result": 6,
+  "consensus_data": {
+    "votes": {
+      "0x1d039D1Aca1cEDe88006352eEf79837F19ca067a": "agree",
+      "0x47Cd6396cD0eDC630765F1F4Bf9517C48Add9158": "idle",
+      "0x52c15F00f5acb672Ab97f3A1Cb09a8Acc1EE13a0": "agree",
+      "0x7141645C062d42dF0c9596b90207dC96f04E58F4": "agree",
+      "0xa6d8E237cd72B12C324a42B1432D817982d30db9": "idle"
+    },
+    "leader_receipt": [
+      {
+        "execution_result": "SUCCESS",
+        "genvm_result": {
+          "stderr": "",
+          "stdout": "",
+          "raw_error": null,
+          "error_code": null,
+          "error_description": null
+        },
+        "mode": "leader",
+        "vote": null,
+        "node_config": {
+          "stake": 4,
+          "address": "0x7141645C062d42dF0c9596b90207dC96f04E58F4",
+          "primary_model": {
+            "model": "tasktrace-exact-v1",
+            "config": {
+              "max_tokens": 2000,
+              "temperature": 0
+            },
+            "plugin": "openai-compatible",
+            "provider": "tasktrace-fixture",
+            "plugin_config": {
+              "api_url": "http://host.docker.internal:18080",
+              "api_key_env_var": "OPENAIKEY"
+            },
+            "fallback_validator": null
+          },
+          "secondary_model": null
+        },
+        "calldata": {
+          "readable": "{\"args\":[\"v2-local-926821c5\",\"e3d04740355af9daa0cd9b1f615c0d2f7986ebc18f07fab20bd368b3318bc445\",]\"method\":\"accept_work\"}"
+        },
+        "eq_outputs": {},
+        "result": {
+          "status": "return",
+          "payload": {
+            "readable": "null"
+          }
+        }
+      },
+      {
+        "execution_result": "SUCCESS",
+        "genvm_result": {
+          "stderr": "",
+          "stdout": "",
+          "raw_error": null,
+          "error_code": null,
+          "error_description": null
+        },
+        "mode": "validator",
+        "vote": "agree",
+        "node_config": {
+          "stake": 4,
+          "address": "0x7141645C062d42dF0c9596b90207dC96f04E58F4",
+          "primary_model": {
+            "model": "tasktrace-exact-v1",
+            "config": {
+              "max_tokens": 2000,
+              "temperature": 0
+            },
+            "plugin": "openai-compatible",
+            "provider": "tasktrace-fixture",
+            "plugin_config": {
+              "api_url": "http://host.docker.internal:18080",
+              "api_key_env_var": "OPENAIKEY"
+            },
+            "fallback_validator": null
+          },
+          "secondary_model": null
+        },
+        "calldata": {
+          "readable": "{\"args\":[\"v2-local-926821c5\",\"e3d04740355af9daa0cd9b1f615c0d2f7986ebc18f07fab20bd368b3318bc445\",]\"method\":\"accept_work\"}"
+        },
+        "result": {
+          "status": "return",
+          "payload": {
+            "readable": "null"
+          }
+        }
+      }
+    ],
+    "validators": [
+      {
+        "execution_result": "ERROR",
+        "genvm_result": {
+          "stderr": "Validator execution cancelled after quorum",
+          "stdout": "",
+          "raw_error": {
+            "fatal": false,
+            "causes": [
+              "VALIDATOR_QUORUM_REACHED"
+            ]
+          },
+          "error_code": "CONSENSUS_VALIDATOR_QUORUM_REACHED"
+        },
+        "mode": "validator",
+        "vote": "idle",
+        "node_config": {
+          "id": 1,
+          "model": "tasktrace-exact-v1",
+          "stake": 1,
+          "config": {
+            "max_tokens": 2000,
+            "temperature": 0
+          },
+          "plugin": "openai-compatible",
+          "address": "0x47Cd6396cD0eDC630765F1F4Bf9517C48Add9158",
+          "provider": "tasktrace-fixture",
+          "plugin_config": {
+            "api_url": "http://host.docker.internal:18080",
+            "api_key_env_var": "OPENAIKEY"
+          },
+          "fallback_validator": null
+        }
+      },
+      {
+        "execution_result": "ERROR",
+        "genvm_result": {
+          "stderr": "Validator execution cancelled after quorum",
+          "stdout": "",
+          "raw_error": {
+            "fatal": false,
+            "causes": [
+              "VALIDATOR_QUORUM_REACHED"
+            ]
+          },
+          "error_code": "CONSENSUS_VALIDATOR_QUORUM_REACHED"
+        },
+        "mode": "validator",
+        "vote": "idle",
+        "node_config": {
+          "id": 3,
+          "model": "tasktrace-exact-v1",
+          "stake": 5,
+          "config": {
+            "max_tokens": 2000,
+            "temperature": 0
+          },
+          "plugin": "openai-compatible",
+          "address": "0xa6d8E237cd72B12C324a42B1432D817982d30db9",
+          "provider": "tasktrace-fixture",
+          "plugin_config": {
+            "api_url": "http://host.docker.internal:18080",
+            "api_key_env_var": "OPENAIKEY"
+          },
+          "fallback_validator": null
+        }
+      },
+      {
+        "execution_result": "SUCCESS",
+        "genvm_result": {
+          "stderr": "",
+          "stdout": "",
+          "raw_error": null,
+          "error_code": null,
+          "error_description": null
+        },
+        "mode": "validator",
+        "vote": "agree",
+        "node_config": {
+          "stake": 6,
+          "address": "0x1d039D1Aca1cEDe88006352eEf79837F19ca067a",
+          "primary_model": {
+            "model": "tasktrace-exact-v1",
+            "config": {
+              "max_tokens": 2000,
+              "temperature": 0
+            },
+            "plugin": "openai-compatible",
+            "provider": "tasktrace-fixture",
+            "plugin_config": {
+              "api_url": "http://host.docker.internal:18080",
+              "api_key_env_var": "OPENAIKEY"
+            },
+            "fallback_validator": null
+          },
+          "secondary_model": null
+        }
+      },
+      {
+        "execution_result": "SUCCESS",
+        "genvm_result": {
+          "stderr": "",
+          "stdout": "",
+          "raw_error": null,
+          "error_code": null,
+          "error_description": null
+        },
+        "mode": "validator",
+        "vote": "agree",
+        "node_config": {
+          "stake": 5,
+          "address": "0x52c15F00f5acb672Ab97f3A1Cb09a8Acc1EE13a0",
+          "primary_model": {
+            "model": "tasktrace-exact-v1",
+            "config": {
+              "max_tokens": 2000,
+              "temperature": 0
+            },
+            "plugin": "openai-compatible",
+            "provider": "tasktrace-fixture",
+            "plugin_config": {
+              "api_url": "http://host.docker.internal:18080",
+              "api_key_env_var": "OPENAIKEY"
+            },
+            "fallback_validator": null
+          },
+          "secondary_model": null
+        }
+      }
+    ]
+  },
+  "gaslimit": 0,
+  "created_at": "2026-09-13T03:01:19.829621+00:00",
+  "leader_only": false,
+  "execution_mode": "NORMAL",
+  "origin_address": "0x51838D5d14cb755ca8D09e279006cBF5Fe65e02c",
+  "triggered_on": null,
+  "appeal_validators_timeout": false,
+  "sim_config": {
+    "signed_rollup_transaction": "0xf901ab80808307a12094b7278a61aa25c888815afc32ad3cc52ff24fe5758201f4b9014427241a9900000000000000000000000051838d5d14cb755ca8d09e279006cbf5fe65e02c00000000000000000000000007f317775a3f395cb8587e0b73c579f8740bfd6d0000000000000000000000000000000000000000000000000000000000000005000000000000000000000000000000000000000000000000000000000000000300000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000074f872b86f160461726773158c0176322d6c6f63616c2d3932363832316335840465336430343734303335356166396461613063643962316636313563306432663739383665626331386630376661623230626433363862333331386263343435066d6574686f645c6163636570745f776f726b000000000000000000000000008301e482a05813678c0bd1107183abe5cde266c578794f135fd57f38b1f2fdd6ece217f3aca055f551a05ed67ed4e19243c3dadb7d204f948e46c9f7a8ec0c8f7cde26c78a34"
+  },
+  "value_credited": true,
+  "sender": "0x51838D5d14cb755ca8D09e279006cBF5Fe65e02c",
+  "recipient": "0x07f317775a3f395cb8587E0B73c579f8740bfd6D",
+  "tx_id": "0xf8b1b05825053350b5dc1ddd982a84bc61dc77087491558aeb787541bfad39bc",
+  "activator": "0x7141645C062d42dF0c9596b90207dC96f04E58F4",
+  "last_leader": "0x7141645C062d42dF0c9596b90207dC96f04E58F4",
+  "result_name": "MAJORITY_AGREE",
+  "num_of_rounds": "1",
+  "last_round": {
+    "round": "0",
+    "leader_index": "0",
+    "votes_committed": "5",
+    "votes_revealed": "5",
+    "appeal_bond": "0",
+    "rotations_left": "3",
+    "result": 6,
+    "round_validators": [
+      "0x7141645C062d42dF0c9596b90207dC96f04E58F4",
+      "0x47Cd6396cD0eDC630765F1F4Bf9517C48Add9158",
+      "0xa6d8E237cd72B12C324a42B1432D817982d30db9",
+      "0x1d039D1Aca1cEDe88006352eEf79837F19ca067a",
+      "0x52c15F00f5acb672Ab97f3A1Cb09a8Acc1EE13a0"
+    ],
+    "validator_votes_hash": [
+      "0x46b723b1ea7c307b740a0c2cf5829dc1d31337eed4c6e87fc23ba3b8ce6332c0",
+      "0xfd9ed49411a9ea207982a8e515886262ced32b2ef53f4bb61351be94a7a8e8ab",
+      "0xf668997670be351eaf25bf24af041a7686ab7c6d13b28d8108ce0816c745aaab",
+      "0xa9b29581c132dc540e46cf45d400eae418259e7c2b4864f1413ec74fab2db2e4",
+      "0x3af93ffc99d639b74e809bca203063a9182bc8c15eb67921fcdca3e16ddcad67"
+    ],
+    "validator_votes": [
+      1,
+      5,
+      5,
+      1,
+      1
+    ],
+    "validator_votes_name": [
+      "AGREE",
+      "IDLE",
+      "IDLE",
+      "AGREE",
+      "AGREE"
+    ]
+  },
+  "type": 2,
+  "status_name": "FINALIZED"
+}

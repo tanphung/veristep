@@ -1,4 +1,14 @@
-# TaskTrace — Chiến lược đọc đủ artifact v0.2
+# VeriStep — Chiến lược đọc đủ artifact v0.2
+
+## Release addendum — worker output boundary (13/09/2026)
+
+OpenAI worker generation does not change the review boundary. A and B outputs are published as complete immutable artifacts, then the leader and validators independently fetch and review exactly the complete decoded bytes whose length and SHA-256 are committed. Worker prompts, previews, summaries and operational logs cannot substitute for those bytes. Invalid, truncated or partial model output is not published as a completed submission.
+
+## v2 design supersession — 09/09/2026
+
+Follow [IC-V2-ARCHITECTURE.md](IC-V2-ARCHITECTURE.md), sections 3–5. Older addenda below describe the v1.1 on-chain snapshot path. V2 leader and protocol validators independently fetch and validate each external artifact through the same pinned adapter. Review exactly the complete decoded bytes whose SHA-256 was verified, with no trim/normalization/rendered substitute/prefix slicing.
+
+Initial proposed caps: 4 KiB/artifact, 8 KiB total across three artifacts; full-artifact semantic review without chunking. If chunking becomes necessary after measurement, require contiguous UTF-8 offsets, complete ordered chunk identities/digests, reconstruction hash and full cross-chunk review in both leader and validators. Partial/missing chunks never pass. Redirect-control and raw-response behavior on the pinned SDK must be proven before enabling external acquisition. Hash completeness alone does not prove semantic correctness; adversarial tests remain required.
 
 ## Addendum v0.4 — shared reviewer rubric
 

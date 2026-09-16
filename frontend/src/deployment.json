@@ -1,10 +1,18 @@
 {
-  "network": "testnet-bradbury",
-  "chainId": 4221,
-  "contractChainId": "1",
-  "contract": "0x3FC5dce3abadf149111A45ae9936eBdD7A67AA88",
-  "deploymentTransaction": "0xb98884870579ce28d933677f1fe1889f227c86c7b3c302c3c51aef9a1d7e44d2",
-  "sourceHash": "a5bc7d153af669d5a03dc4e68e89ed88159ad0d265f17c2064a1f07733235391",
-  "verifiedAt": "2026-09-09T12:02:24.719Z",
-  "submissionReady": true
+  "protocolVersion": "v2",
+  "network": "studio-next",
+  "chainId": 61997,
+  "contractChainId": "61997",
+  "contract": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+  "deploymentTransaction": "0x6200be8f09bb10d670ac7c3a1def9ba11893bc618ae4d4b2d261ffd2ab39494b",
+  "sourceHash": "baedb9762690220aa8620fc6a94065b993700cbccb5ded586b4560ee3fc4019b",
+  "verifiedAt": "2026-09-16T14:30:00.000Z",
+  "releaseStatus": "LIVE_GATES_PENDING",
+  "workerAvailable": false,
+  "limitations": [
+    "Studio Next cannot prove a native transfer receipt inside the Intelligent Contract.",
+    "The Studio Next web host has not proven that hidden redirects are observable or preventable.",
+    "The optional hosted A/B delivery path is not enabled for the early submission release."
+  ],
+  "submissionReady": false
 }

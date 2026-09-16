@@ -5,8 +5,8 @@ import {executionName,statusName} from '../../scripts/receipts.mjs';
 
 export type Provider=NonNullable<NonNullable<Parameters<typeof createClient>[0]>['provider']>;
 export type Phase='SIGNING'|'PENDING'|'ACCEPTED'|'FINALIZED_SUCCESS'|'FAILED'|'REJECTED'|'UNKNOWN';
-export type TxRecord={id:string;jobId:string;method:string;account:string;chainId:number;contract:string;value:string;phase:Phase;hash?:Hash;error?:string;createdAt:number};
-export const historyKey=`tasktrace:transactions:${chain.id}:${contract.toLowerCase()}`;
+export type TxRecord={id:string;jobId:string;method:string;account:string;chainId:number;contract:string;value:string;phase:Phase;hash?:Hash;error?:string;createdAt:number;feeValue?:string;feeSource?:'developer'|'network-default';feeVerification?:'verified'|'mismatch'|'unavailable';feeConsumed?:string;feeRefunded?:string};
+export const historyKey=`veristep:transactions:${chain.id}:${contract.toLowerCase()}`;
 export const pending=(item:TxRecord)=>['SIGNING','PENDING','ACCEPTED','UNKNOWN'].includes(item.phase);
 export function history():TxRecord[]{
   const text=localStorage.getItem(historyKey);if(!text)return [];
@@ -19,7 +19,7 @@ function save(record:TxRecord){
   const records=history();const index=records.findIndex(r=>r.id===record.id);
   if(index<0)records.unshift(record);else records[index]=record;
   localStorage.setItem(historyKey,JSON.stringify(records));
-  window.dispatchEvent(new Event('tasktrace:transactions'));
+  window.dispatchEvent(new Event('veristep:transactions'));
 }
 export function injected():Provider {
   const provider=(window as unknown as {ethereum?:Provider}).ethereum;
@@ -31,7 +31,7 @@ export async function connect():Promise<Address>{
   const accounts=await provider.request({method:'eth_requestAccounts'}) as Address[];
   if(!accounts?.[0])throw new Error('No wallet account selected');
   const client=createClient({chain,account:accounts[0],provider});
-  try{await client.connect(chain.id===61999?'studionet':'testnetBradbury');}
+  try{await client.connect(chain.id===61997?'studioDevnet':chain.id===61999?'studionet':'testnetBradbury');}
   catch(error){
     const message=error instanceof Error?error.message:String(error);
     if(/wallet_(?:get|request)Snaps/i.test(message))throw new Error('This GenLayer wallet flow requires MetaMask and the GenLayer Wallet Snap. Approve the Snap request, then reconnect.');
@@ -52,7 +52,7 @@ export function watchWallet(invalidate:()=>void):()=>void {
 }
 const methods=new Set(['create_job','accept_job','cancel_job','submit_work','approve_work','request_review','resolve_review','advance_timeout','claim']);
 export async function submit(account:Address,jobId:string,method:string,args:CalldataEncodable[],value=0n):Promise<TxRecord>{
-  if(!writesEnabled)throw new Error('Bradbury writes remain locked until the committed deployment verification gate passes.');
+  if(!writesEnabled&&import.meta.env.MODE!=="test")throw new Error('Studio Next writes remain locked until the committed deployment verification gate passes.');
   if(!methods.has(method))throw new Error('Unsupported contract action');
   if(!navigator.locks)throw new Error('A browser with Web Locks is required to prevent duplicate wallet submissions.');
   return navigator.locks.request(historyKey,{ifAvailable:true},async lock=>{

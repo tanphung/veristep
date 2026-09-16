@@ -1,4 +1,33 @@
-# TaskTrace — Kế hoạch kiểm thử đối kháng v0.2
+# VeriStep — Kế hoạch kiểm thử đối kháng v0.2
+
+## Release addendum — receipt preemption and hosted worker cases (13/09/2026)
+
+- Pre-fund the same receipt ID from an attacker source, then fund/release/read the legitimate IC namespace. Both namespaces must remain independent and the attack must not block the IC.
+- Read or release a receipt with the wrong source contract; require zero/not-found or rejection without changing the legitimate receipt.
+- Crash the worker before inference, after output persistence, after GitHub commit, after transaction broadcast and while polling. Resume must not repeat a valid inference unnecessarily, create another immutable artifact or submit a duplicate transaction.
+- Replay an expired wallet authorization, alter chain/contract/deal/role/method, exceed per-client concurrency and exhaust the OpenAI reserve. All must fail before signing or calling the model.
+- Crash before dispatch, after the D1 `DISPATCHED` marker, after an HTTP response and before usage settlement. Only a never-dispatched `RESERVED` request may continue automatically; `DISPATCHED`/`UNCERTAIN` keeps its reserve and must not call OpenAI again on workflow restart.
+- Inject instructions in SOURCE/A content that request secrets, arbitrary transactions, changed destinations or relaxed obligations. Worker output remains bounded data and the signer still permits only the expected lifecycle call.
+
+## v2 mandatory matrix — updated 11/09/2026
+
+[IC-V2-ARCHITECTURE.md](IC-V2-ARCHITECTURE.md), section 9 governs the new release. Add direct + explicit validator-helper + full integration coverage for: valid prefix/contradictory tail; canonical-host/redirect/owner/repository/commit/blob/hash mismatch; symlink/submodule/truncated provider response; missing artifact/chunk; missing/duplicate/extra funded obligation; valid-schema wrong decision and unsupported reasoning; exact deal/source/recipient/amount/kind/RELEASED mismatch; reentrancy, failed recipient and duplicate release; no state mutations after rejected consensus; deadlines/revisions and refund eligibility.
+
+Tests must demonstrate independent leader/validator acquisition and substantive rejection. Ordinary direct tests with a mocked LLM cannot establish real committee behavior. Studio does not fully implement EVM contract interaction; local router tests and mocked IC reads must not be represented as a passed native end-to-end integration. Missing full-path environment is an explicit open gate. No deployment until required contract tests pass and the user confirms.
+
+Current evidence: 157 v2 direct tests pass, including whole-tail, identity,
+report completeness, provenance-report binding, stage-specific deterministic
+duties and exact receipt negatives. On StudioNet, two complete funded lifecycle
+cases passed real protocol committee review: faithful A/B and a contradictory
+tail that produces A `VIOLATED`, B `SATISFIED`. Five finalized negative writes
+prove on GenVM that canonical-host confusion, wrong owner, mutable version,
+malformed SHA-256 and an incomplete obligation set are rejected without state.
+The real pinned GenVM controlled-host probe passes exact EVM target/value
+encoding, and the 16-case router suite covers receipt identity and release
+failures. The unmodified official local web module confirms cross-host redirects
+are followed and hidden from the contract response; this is a passed diagnostic
+but a **failed hidden-redirect capability gate**. Native IC/router execution and
+receipt finality remain open until an authorized Bradbury round trip.
 
 ## Addendum v0.4 — preserve ambiguous historical case
 

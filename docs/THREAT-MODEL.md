@@ -1,4 +1,20 @@
-# TaskTrace — Threat model v0.2
+# VeriStep — Threat model v0.2
+
+## Release addendum — receipt namespace and hosted workers (13/09/2026)
+
+- An attacker can pre-fund a predictable receipt ID before the Intelligent Contract if the router indexes receipts by receipt ID alone. The release candidate namespaces every receipt by `(sourceContract, receiptId)`, derives `sourceContract` from `msg.sender` during funding, and requires that source on every read and release. A receipt created by another caller cannot block or authenticate the IC receipt.
+- The hosted A/B worker and OpenAI output are untrusted producers. They cannot select a verdict, settlement amount, router target, arbitrary contract call, or mutable evidence URL. Their signing policy is limited to the configured chain, IC, deal, role and expected lifecycle method.
+- Worker API abuse is bounded by wallet authorization, replay-resistant nonces, per-client concurrency and a hard OpenAI budget ledger. Operational checkpoints do not replace contract state.
+- Every OpenAI request moves `RESERVED -> DISPATCHED -> SETTLED`. A crash or invalid/missing response after dispatch moves it to `UNCERTAIN`; restart cannot reuse that request ID and the full worst-case reserve remains charged until an explicit provider-backed reconciliation. This prevents a workflow restart from silently doubling inference spend.
+- Every GenLayer worker action writes a unique `(run, role, method)` `SIGNING` journal row before broadcast. A crash or throw without a saved hash becomes `UNKNOWN` and blocks automatic resend; a known hash is observed until finality. This chooses a recoverable pause over a possible duplicate transaction.
+
+## v2 design supersession — 09/09/2026
+
+The proposed authority boundary and failure policy in [IC-V2-ARCHITECTURE.md](IC-V2-ARCHITECTURE.md) supersede the historical v1.1-only assumptions below. All provenance, independent assessment, eligibility and receipt confirmation belong to IC execution. UI/backend/worker output is untrusted.
+
+New attack surfaces: canonical-host confusion and redirects; provider owner/repository transfer; mutable refs and symlink/submodule targets; API truncation/content-type confusion; valid prefix hiding contradictory tail; incomplete obligation lists; receipt replay across deals/contracts/chains/roles; reentrancy and release failure; forged or non-final receipt state. Require authoritative provider identity, complete immutable bytes and strict schema, independent validator fetch/derivation, pinned router/source identity and exact IC receipt confirmation. Unsupported providers fail closed. Provider availability/rate limits and SDK finality/redirect behavior are explicit feasibility gates. A wallet submission does not prove ownership of a GitHub account; a provider-bound document does not prove real-world truth.
+
+Failed/unknown transfer state cannot recreate spendable credits or trigger automatic resend. No automatic migration of v1.1 balances/claims and no v2 deployment from earlier permission.
 
 ## Addendum v0.4 — explicit coverage, 06/09/2026
 

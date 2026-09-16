@@ -1,0 +1,28 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "veristep-agent-worker",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "OPENAI_WORKER_MODEL": "gpt-5.6-luna",
+    "GENLAYER_RPC_URL": "https://studio-next.genlayer.com/api",
+    "VERISTEP_CHAIN_ID": "61997",
+    "VERISTEP_V2_CONTRACT": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+    "EVIDENCE_GITHUB_OWNER": "tanphung",
+    "EVIDENCE_GITHUB_REPOSITORY": "veristep-evidence",
+    "ALLOWED_ORIGIN": "https://veristep-genlayer.vercel.app"
+  },
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "veristep-worker-db",
+    "database_id": "be9d219c-857d-4624-aab4-8366e0399ab4",
+    "migrations_dir": "migrations"
+  }],
+  "workflows": [{
+    "binding": "VERISTEP_RUNNER",
+    "name": "veristep-agent-workflow",
+    "class_name": "VeriStepWorkflow"
+  }],
+  "observability": {"enabled": true, "head_sampling_rate": 1}
+}

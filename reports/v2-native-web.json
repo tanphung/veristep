@@ -1,0 +1,17 @@
+{
+  "scope": "REAL_GENVM_CONTROLLED_HOST_NOT_CHAIN_E2E",
+  "runner": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6",
+  "source_sha256": "16b6731364a4dcd668c13446b34e02424565a56156f59d6cf403758f97fbaa45",
+  "process_exit": 0,
+  "result_kind": "RETURN",
+  "reads": [],
+  "sends": [],
+  "stdout": "TASKTRACE_NATIVE_WEB_RESPONSE={\"body\": \"{\\\"fixture\\\": \\\"redirected-artifact\\\", \\\"complete\\\": true}\", \"has_history\": false, \"has_url\": false, \"status\": 200}\nexecuted with `Return(\"{\\\"body\\\": \\\"{\\\\\\\"fixture\\\\\\\": \\\\\\\"redirected-artifact\\\\\\\", \\\\\\\"complete\\\\\\\": true}\\\", \\\"has_history\\\": false, \\\"has_url\\\": false, \\\"status\\\": 200}\")`\n",
+  "stderr": "",
+  "nondet_results": [
+    {
+      "call_no": 0,
+      "bytes": 92
+    }
+  ]
+}

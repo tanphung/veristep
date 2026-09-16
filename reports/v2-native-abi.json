@@ -1,0 +1,23 @@
+{
+  "scope": "REAL_GENVM_CONTROLLED_HOST_NOT_CHAIN_E2E",
+  "runner": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6",
+  "source_sha256": "16b6731364a4dcd668c13446b34e02424565a56156f59d6cf403758f97fbaa45",
+  "process_exit": 0,
+  "result_kind": "RETURN",
+  "reads": [
+    {
+      "address": "4444444444444444444444444444444444444444",
+      "calldata": "a94d373b0000000000000000000000000000000000000000000000000000000000000007"
+    }
+  ],
+  "sends": [
+    {
+      "address": "4444444444444444444444444444444444444444",
+      "calldata": "ca1d209d0000000000000000000000000000000000000000000000000000000000000007",
+      "value": "0x7b"
+    }
+  ],
+  "stdout": "TASKTRACE_NATIVE_EVM_ABI_PROBE_OK\nexecuted with `Return(\"{\\\"external_review\\\":false,\\\"funding\\\":false,\\\"settlement\\\":false,\\\"status\\\":\\\"LOCAL_CORE_ONLY\\\",\\\"version\\\":\\\"tasktrace-2-core-draft\\\"}\")`\n",
+  "stderr": "",
+  "nondet_results": []
+}

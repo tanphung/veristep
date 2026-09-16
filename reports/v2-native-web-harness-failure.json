@@ -1,0 +1,17 @@
+{
+  "scope": "REAL_GENVM_CONTROLLED_HOST_NOT_CHAIN_E2E",
+  "runner": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6",
+  "source_sha256": "eb1b832244565097a3d8807460b29a5c62dcd51dc0bd56e52d511e524f09b111",
+  "process_exit": 0,
+  "result_kind": "VM_ERROR",
+  "reads": [],
+  "sends": [],
+  "stdout": "executed with `VMError(\"exit_code 1\")`\n",
+  "stderr": "Traceback (most recent call last):\n  File \"/py/libs/_genlayer_runner.py\", line 190, in <module>\n    runner = pickle.loads(message_raw['entry_data'])\n  File \"/contract.py\", line 513, in <module>\n    print(\"TASKTRACE_NATIVE_WEB_RESPONSE=\" + json.dumps(gl.eq_principle.strict_eq(_probe_request), sort_keys=True))\n                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^\n  File \"/py/libs/genlayer/gl/_internal/__init__.py\", line 22, in eager\n    return fn(*args, **kwargs).get()\n           ~~^^^^^^^^^^^^^^^^^\n  File \"/py/libs/genlayer/gl/eq_principle.py\", line 39, in strict_eq\n    return vm.run_nondet_unsafe.lazy(fn, validator_fn)\n           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^\n  File \"/py/libs/genlayer/gl/vm.py\", line 178, in run_nondet_unsafe\n    ret = gl_call.gl_call_generic(\n    \t{\n    ...<5 lines>...\n    \t_decode_sub_vm_result,\n    )\n  File \"/py/libs/genlayer/gl/_internal/gl_call.py\", line 30, in gl_call_generic\n    fd = _imp_raw(calldata.encode(data))\nSystemError: 6: forbidden\n",
+  "nondet_results": [
+    {
+      "call_no": 0,
+      "bytes": 12
+    }
+  ]
+}

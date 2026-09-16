@@ -3,7 +3,7 @@ import pytest
 
 
 def test_config_and_empty_list(system):
-    assert json.loads(system.c.get_config())["version"] == "tasktrace-1.1"
+    assert json.loads(system.c.get_config())["version"] == "veristep-1.1"
     assert json.loads(system.c.list_jobs(0, 20)) == {"total": 0, "ids": []}
 
 
@@ -85,7 +85,7 @@ def test_b_timeout_still_reviews_a(system):
     assert system.job()["b_missing"] is True
     response = system.response()
     assert len(response["assessments"]) == 2
-    system.vm.mock_llm("TASKTRACE_REVIEW_V1", json.dumps(response))
+    system.vm.mock_llm("VERISTEP_REVIEW_V1", json.dumps(response))
     system.c.resolve_review("demo-job")
     assert system.job()["outcomes"] == {"A": "SATISFIED", "B": "VIOLATED"}
 
@@ -102,7 +102,7 @@ def test_dispute_prevents_autoaccept_and_infrastructure_failure_unwinds(system):
     system.sender(system.client)
     system.c.request_review("demo-job")
     job = system.job()
-    system.vm.mock_llm("TASKTRACE_REVIEW_V1", '{"garbage":true}')
+    system.vm.mock_llm("VERISTEP_REVIEW_V1", '{"garbage":true}')
     with system.vm.expect_revert("Invalid review schema"):
         system.c.resolve_review("demo-job")
     assert system.job()["status"] == "REVIEW_REQUESTED"

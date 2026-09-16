@@ -1,513 +1,252 @@
-# GenLayer Bradbury dApp Build and Deploy Instructions
-
-Use this file as the project-level `AGENTS.md` when building or deploying GenLayer dApps to Testnet Bradbury. It is intentionally generic: do not assume the dApp domain, frontend stack, contract behavior, account, or deployment target until the user specifies it.
-
-Current reference date: 2026-07-08.
-
-## Source of Truth
-
-Prefer official GenLayer documentation over local notes, memory, old examples, or copied code:
-
-- GenLayer docs home: https://docs.genlayer.com/
-- Networks overview: https://docs.genlayer.com/developers/networks
-- Network configuration: https://docs.genlayer.com/developers/intelligent-contracts/deploying/network-configuration
-- CLI deployment: https://docs.genlayer.com/developers/intelligent-contracts/deploying/cli-deployment
-- GenLayer CLI reference: https://docs.genlayer.com/api-references/genlayer-cli
-- GenLayerJS reference: https://docs.genlayer.com/api-references/genlayer-js
-- GenLayerPY reference: https://docs.genlayer.com/api-references/genlayer-py
-- First contract guide: https://docs.genlayer.com/developers/intelligent-contracts/first-contract
-- Equivalence Principle: https://docs.genlayer.com/developers/intelligent-contracts/equivalence-principle
-- Development setup and skills: https://docs.genlayer.com/developers/intelligent-contracts/tooling-setup
-- GenLayer test reference: https://docs.genlayer.com/api-references/genlayer-test
-
-If this file conflicts with official docs, follow the official docs and report the conflict before continuing.
-
-Never invent GenLayer APIs, decorators, storage types, CLI flags, SDK imports, chain names, RPC methods, receipt fields, or transaction status names.
-
-Do not use `genlayernode` unless the user explicitly asks for validator node setup.
-
-## Required Codex Skills
-
-For GenLayer work, use these skills when available:
-
-- `genlayer-dapp`: generic GenLayer dApp workflow.
-- `genlayer-dev:write-contract`: write or review Python Intelligent Contracts.
-- `genlayer-dev:genvm-lint`: run and fix GenVM lint issues.
-- `genlayer-dev:direct-tests`: write and run direct-mode tests.
-- `genlayer-dev:integration-tests`: write and run integration tests.
-- `genlayer-dev:genlayer-cli`: deploy, inspect receipts, read schema/code, debug transactions.
-
-When unsure about a command or API, read official docs or use docs/MCP before coding.
-
-## Bradbury Network Rules
-
-Testnet Bradbury is the production-like testnet for real AI/LLM workloads.
-
-Use Bradbury only when the user has confirmed real testnet deployment or testing. Bradbury is persistent and transactions consume test GEN.
-
-Use the official CLI network selector:
-
-```powershell
-genlayer network testnet-bradbury
-genlayer config get network
-genlayer account
-```
-
-Expected Bradbury identifiers:
-
-- CLI network: `testnet-bradbury`
-- GenLayerJS chain: `testnetBradbury` from `genlayer-js/chains`
-- GenLayerPY chain: `testnet_bradbury`
-- Chain ID: `4221`
-- Currency: `GEN`
-- Explorer: https://explorer-bradbury.genlayer.com/
-- Faucet: https://testnet-faucet.genlayer.foundation/
-
-Before deploy or writes:
-
-- Verify the active CLI network is Bradbury.
-- Verify the deployer account and balance.
-- Verify the wallet is on chain ID `4221`.
-- Verify frontend contract addresses belong to Bradbury.
-- Do not silently fall back to Studionet, Localnet, Asimov, or a stale address.
-- Never put private keys in frontend env vars, `VITE_*`, source files, screenshots, logs, commits, or deployment artifacts.
-
-## Contract File Rules
-
-For deployable Python Intelligent Contracts:
-
-- The runner dependency header must be the first line of the file.
-- Use a pinned concrete runner version. Do not use `py-genlayer:test`, `py-genlayer:latest`, or unversioned `py-genlayer`.
-- Use `from genlayer import *` unless official docs or the installed GenLayer skill says otherwise.
-- Have exactly one deployable contract class in the file.
-- The contract class must extend `gl.Contract`.
-- Public read methods use `@gl.public.view`.
-- Public write methods use `@gl.public.write`.
-- Payable writes use `@gl.public.write.payable`.
-- `__init__` is not decorated as public.
-
-Recommended single-file header:
-
-```python
-# { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }
-
-from genlayer import *
-```
-
-Recommended class shape:
-
-```python
-class Contract(gl.Contract):
-    owner: Address
-
-    def __init__(self):
-        self.owner = gl.message.sender_address
-```
-
-Use the class name `Contract` when possible for maximum tooling compatibility, unless the existing repo has a working convention.
-
-## Storage and ABI Rules
-
-Persistent fields must be declared in the class body with type annotations. Fields created only by assigning `self.field = ...` without a class-level annotation are not persistent.
-
-Use GenLayer storage and numeric types:
-
-- `DynArray[T]` instead of Python `list[T]`.
-- `TreeMap[K, V]` instead of Python `dict[K, V]`.
-- `u8` through `u256` or `i8` through `i256` for sized integers.
-- `u256` for token amounts.
-- Integer basis points for percentages.
-- Atto-denominated GEN values for money: `1 GEN = 10**18 attoGEN`.
-
-Avoid in public ABI and persistent storage unless official docs confirm support:
-
-- Python `dict`
-- Python `list`
-- bare `TreeMap` or bare `DynArray`
-- `Optional[T]`
-- `Union[T]`
-- unsupported custom classes
-- floats for financial values
-
-Do not reassign persistent `TreeMap` or `DynArray` fields in `__init__`:
-
-```python
-# Wrong
-self.items = TreeMap()
-self.rows = DynArray()
-```
-
-GenVM initializes top-level storage collections. Set scalar initial values only.
-
-## Non-Deterministic and AI Logic
-
-GenLayer is valuable when validators must reach consensus on an external, subjective, AI-mediated, or web-derived decision that affects on-chain state, escrow, payout, access, reputation, or settlement.
-
-Do not use GenLayer as a generic AI backend if no validator-verifiable state transition is needed.
-
-Never call `gl.nondet.*` directly from deterministic code. Use the Equivalence Principle:
-
-- `gl.eq_principle.strict_eq(...)` for deterministic or canonicalized outputs.
-- `gl.vm.run_nondet_unsafe(leader_fn, validator_fn)` when validators need custom independent verification.
-- `gl.eq_principle.prompt_comparative(...)` or `prompt_non_comparative(...)` only when appropriate and documented.
-
-For LLM/web adjudication:
-
-- Return structured JSON with fixed fields.
-- Use enums and bounded scores.
-- Normalize casing, whitespace, ordering, and numeric ranges.
-- Compare material fields, not full free-form explanations.
-- Use score tolerance only when justified.
-- Treat web/API unavailability explicitly.
-- Do not let validators approve a leader result merely because it is well-formed JSON.
-
-The validator must verify substance. It should independently rerun, independently derive, or judge the leader output against the same evidence and rubric.
-
-No side effects inside leader or validator callbacks:
-
-- no storage writes;
-- no status changes;
-- no counter increments;
-- no GEN transfers;
-- no emitted contract messages;
-- no nested nondeterministic execution.
-
-Perform state changes only after consensus returns successfully.
-
-## Govora External-Evidence Security Gate
-
-Before changing any Intelligent Contract that consumes web evidence or external artifacts, first update and obtain review of all four design artifacts: threat model, evidence schema, full-artifact review strategy, and adversarial test plan. Do not start contract implementation before those documents exist.
-
-Every settlement-affecting commitment must have a unique obligation ID before constitutional review. Review results must contain exactly one assessment for every expected obligation ID. Missing, duplicate, or unexpected IDs are deterministic failures.
-
-Do not treat an allow-listed URL, hostname, path, or commit-shaped substring as provenance. Evidence must bind a canonical provider origin, project/repository identity, issuer/owner identity, immutable version, artifact identity, content type, exact byte length, and whole-artifact SHA-256 digest. Verify those fields through a documented authoritative API or signature flow. Construct provider URLs from validated identity fields; reject redirects, identity mismatches, unsupported content, and unavailable provenance.
-
-Semantic review must cover the same complete byte sequence that was hashed. Prefix slicing such as `text[:N]` is forbidden. Enforce an explicit maximum byte size and supported textual content types. Split the complete UTF-8 artifact into deterministic chunks, record each index and digest, and require leader and validators to independently refetch, hash, chunk, and assess every chunk. Findings must cite evidence and chunk IDs. Approval is impossible unless `reviewed_chunks == total_chunks`, the chunk sequence is complete and ordered, all digests match, provenance is valid, and the expected obligation-ID set is exact.
-
-Deadline, revision, timeout, refund, and settlement eligibility are deterministic contract rules. A payout or refund is only presented as complete after a finalized receipt with successful execution matches the exact obligation/deal, source contract, recipient, amount, settlement kind, emitted message, and finalized released/refunded state.
-
-The frontend is a renderer of contract state and verified receipt fields only. It must not invent validator reasoning, provenance conclusions, evidence findings, or settlement success.
-
-Bradbury deployment is prohibited until GenVM lint, direct tests, full integration tests, all mandatory adversarial tests, and the frontend test/build pipeline pass, and the user explicitly confirms deployment after reviewing those results.
-
-## Contract Error Handling
-
-Design contract methods so expected external failure paths produce controlled state, not VM crashes.
-
-For AI/web review flows:
-
-- If evidence cannot be rendered or parsed, prefer a controlled `REJECTED`/failure state with a reason when that matches the product logic.
-- Do not let malformed LLM output crash settlement if the app can safely reject or retry.
-- Sanitize and validate all LLM JSON.
-- Use explicit failure categories in prompts and validator logic.
-
-Do not mask real contract bugs. If a deterministic invariant fails, raise a clear user error and fix the bug.
-
-## Deployment Workflow
-
-Run this order before any Bradbury deploy:
-
-1. Inspect project structure and existing scripts.
-2. Read/update contract using current GenLayer patterns.
-3. Run GenVM lint:
-
-```powershell
-genvm-lint check contracts/<contract>.py --json
-```
-
-4. Run direct tests:
-
-```powershell
-pytest tests/direct/ -v
-```
-
-5. Run integration tests if configured:
-
-```powershell
-gltest tests/integration/ -v -s --network studionet
-```
-
-6. Build/typecheck frontend if contract integration changed:
-
-```powershell
-cd frontend
-npm test -- --run
-npm run build
-```
-
-7. Confirm Bradbury deployment intent with the user.
-8. Set and verify Bradbury:
-
-```powershell
-genlayer network testnet-bradbury
-genlayer config get network
-genlayer account
-```
-
-9. Verify the account has enough test GEN.
-10. Deploy:
-
-```powershell
-genlayer deploy --contract contracts/<contract>.py
-```
-
-If constructor args are needed:
-
-```powershell
-genlayer deploy --contract contracts/<contract>.py --args "arg1" 42
-```
-
-11. Capture the deployment transaction hash and contract address from the deployment output or receipt.
-12. Inspect receipt execution result. Do not treat lifecycle status alone as success.
-13. Verify deployed schema:
-
-```powershell
-genlayer schema <contract_address>
-```
-
-14. Verify deployed source if needed:
-
-```powershell
-genlayer code <contract_address>
-```
-
-15. Call a basic view:
-
-```powershell
-genlayer call <contract_address> <view_method>
-```
-
-16. Update frontend env/config only after the deploy transaction execution succeeded and schema/view calls work.
-
-## Transaction Success Rules
-
-On GenLayer, `ACCEPTED` or `FINALIZED` does not automatically mean contract execution succeeded. A transaction can finalize with execution error and no state changes.
-
-Always check execution result fields such as:
-
-- `tx_execution_result_name`
-- `txExecutionResultName`
-- `FINISHED_WITH_RETURN`
-- `FINISHED_WITH_ERROR`
-
-Treat success as:
+# VeriStep Studio Next Build and Release Instructions
+
+These instructions apply to the VeriStep Agent Tank dApp in this repository.
+They replace the legacy Bradbury release instructions.
+
+Current reference date: 2026-09-15.
+
+## Product and release scope
+
+- Build and finish VeriStep as a real GenLayer dApp for the Agent Tank hackathon.
+- The only active release target is **Studio Next**.
+- Do not deploy, configure, or present the current release as Bradbury.
+- Preserve old Bradbury reports as historical evidence, but never use them as the
+  current network, current demo, current contract, or proof of Studio Next behavior.
+- Do not use `genlayernode` unless the user explicitly requests validator setup.
+
+Current Studio Next identity:
+
+- RPC: `https://studio-next.genlayer.com/api`
+- chain ID: `61997`
+- SDK chain: `studioDevnet`
+- explorer: `https://explorer-studio-dev.genlayer.com/`
+- contract: `0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b`
+- deployment transaction:
+  `0x6200be8f09bb10d670ac7c3a1def9ba11893bc618ae4d4b2d261ffd2ab39494b`
+- deployed source SHA-256:
+  `baedb9762690220aa8620fc6a94065b993700cbccb5ded586b4560ee3fc4019b`
+
+The contract already reached `FINALIZED + FINISHED_WITH_RETURN` with five
+validators. Do not redeploy it. On 2026-09-16 the user explicitly selected the
+existing-contract recovery path after reviewing the E2E tradeoff. Do not propose
+a contract rewrite or replacement Studio Next deployment as the default response
+to validator, GitHub, HTTP, timeout, or consensus instability. Preserve this
+deployment and finish through bounded, manifest-guarded recovery.
+
+## Sources of truth
+
+Prefer, in order:
+
+1. explicit user instructions and the latest Agent Tank team announcement;
+2. current official GenLayer documentation;
+3. installed GenLayer skills;
+4. current source, tests, and verified release artifacts;
+5. historical notes and reports.
+
+Useful current references:
+
+- https://docs.genlayer.com/developers/consensus-v06-migration
+- https://docs.genlayer.com/developers/frontend/transaction-kit
+- https://docs.genlayer.com/developers/frontend/fee-profiling
+- https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/limitations
+- https://docs.genlayer.com/api-references/genlayer-js
+- https://docs.genlayer.com/api-references/genlayer-test
+
+Never invent GenLayer APIs, decorators, storage types, CLI flags, RPC methods,
+fee fields, receipt fields, or transaction status names. Look up uncertain APIs
+before coding.
+
+## Live-incident discipline
+
+Never default a live failure to Studio Next, a chain, or platform behavior.
+Investigate and record the first failing layer in this order:
+
+1. VeriStep input, configuration, and environment;
+2. frontend, worker, and runner scripts;
+3. deployed contract logic and finalized contract state;
+4. prompt, schema, and model response;
+5. evidence fetch and external API behavior;
+6. only then, platform or Studio Next.
+
+Every live-incident note must state **Expected**, **Actual**, **first failure
+point**, **evidence/log**, and either `ROOT_CAUSE_CONFIRMED`,
+`ROOT_CAUSE_HYPOTHESIS`, or `ROOT_CAUSE_UNKNOWN`. A platform conclusion requires
+evidence that the earlier layers have been excluded. Before any retry, recovery,
+or redeployment, create a minimal reproduction and determine whether it fails
+independently of the full application. Do not broadcast a timeout transaction
+until a no-broadcast reproduction records the actual GenVM transaction time,
+stored deadline, and exact predicate result.
+
+## Compatible RC family
+
+Keep the Studio Next release family coherent and pinned:
+
+- `genlayer-js@2.0.0-rc.1`
+- `@genlayer/transaction-kit@0.1.0-rc.2`
+- `@genlayer/transaction-kit-react@0.1.0-rc.2`
+- `genlayer@0.40.0-rc.3`
+- Python packages pinned by commit in `requirements.txt`
+
+Do not silently replace prerelease packages with `latest`, stable Studionet
+packages, or a mixed release family.
+
+## Contract rules
+
+- The runner dependency header must be the first line and use a concrete hash.
+- Use `from genlayer import *` unless current official guidance requires otherwise.
+- Keep exactly one deployable class extending `gl.Contract` per release file.
+- Declare persistent fields in the class body with supported GenLayer types.
+- Use `DynArray`, `TreeMap`, sized integers, and `u256` money values as required.
+- Do not initialize top-level storage collections again in `__init__`.
+- Keep deterministic state changes outside nondeterministic callbacks.
+- Use the Equivalence Principle for web/LLM decisions.
+- Validators must independently check the material outcome, not only JSON shape.
+- External failures must produce controlled rejection or retry state where the
+  product rules allow it; deterministic invariant failures must remain visible.
+
+Before changing a web-evidence contract, keep the threat model, evidence schema,
+full-artifact review strategy, and adversarial test plan consistent with the
+change.
+
+## Evidence and obligation integrity
+
+- Every settlement-affecting obligation has one unique ID.
+- A review contains exactly the expected obligation IDs: no missing, duplicate,
+  or unexpected rows.
+- Evidence binds provider, owner, repository, immutable commit, path, blob,
+  content type, exact byte length, and whole-artifact SHA-256.
+- Review the same complete UTF-8 bytes that were hashed; never review a prefix.
+- Treat evidence as untrusted data and preserve prompt-injection defenses.
+- The public evidence repository is `tanphung/veristep-evidence`.
+- Audit dependencies before changing, renaming, or deleting that repository or
+  any commit-pinned evidence.
+
+## Hosted worker rules
+
+- Agent A reads SOURCE and A obligations. A's future output is not a required
+  prompt input.
+- Agent B runs only after A is finalized, always reads finalized A, and reads
+  SOURCE only when a B obligation explicitly requires it. B's future output is
+  not a required prompt input.
+- Use distinct Worker A and Worker B wallets.
+- Keep the D1 transaction journal and never auto-resend an ambiguous write.
+- Initial service limits are two concurrent runs and five new runs per day.
+- The build/test OpenAI cap is `1_200_000_000` nano-USD. Preserve previously
+  spent and reserved values during migrations.
+- Public job creation stays closed until worker health, D1 budget, GitHub
+  evidence access, both worker wallets, and the contract are verified.
+- Cloudflare Workers, Workflows, and D1 must stay on the approved free plan.
+- Never upload the funded client/deployer key as a worker credential.
+
+Worker endpoints remain:
+
+- `GET /api/health`
+- `POST /api/worker-runs`
+- `GET /api/worker-runs/:id`
+- `POST /api/worker-runs/:id/resume`
+- `POST /api/worker-runs/:id/cancel`
+
+`/api/health` must report the active contract, chain, model, worker readiness,
+and the 1.20 USD budget snapshot so the frontend can gate job creation.
+
+## Fees and transaction success
+
+All deploys and writes on Studio Next must use a measured fee profile and the
+current SDK estimate. Pass the estimate's `distribution` and `feeValue`
+unchanged.
+
+Track these as separate values:
+
+- transferred value;
+- quoted/reserved fee deposit;
+- actual consumed fee;
+- protocol refund.
+
+A transaction is successful only when:
 
 ```text
 status is ACCEPTED or FINALIZED
 AND execution result is FINISHED_WITH_RETURN
-AND expected state/schema/view result is observable
 ```
 
-Treat failure as:
+For release evidence and irreversible UI states, wait for `FINALIZED`. Treat
+`FINISHED_WITH_ERROR`, missing execution results, or missing expected state as a
+failure or unresolved condition, even if lifecycle status is finalized.
 
-```text
-ACCEPTED or FINALIZED with FINISHED_WITH_ERROR
-missing state change after sufficient indexing time
-no contract code/schema after a failed deploy
-```
+## Honest settlement and platform limitations
 
-For debugging:
+Studio Next can dispatch native value transfers, but the current contract cannot
+prove the transfer receipt inside the Intelligent Contract.
 
-```powershell
-genlayer receipt <tx_hash> --stdout --stderr
-genlayer schema <contract_address>
-genlayer code <contract_address>
-genlayer call <contract_address> <view_method>
-```
+- Use `DISPATCHED_UNVERIFIED` for those settlement legs.
+- Do not call `confirm_settlement` on the Studio Next release.
+- Do not show `CONFIRMED`, `PAID`, `payment completed`, or equivalent copy unless
+  the exact claim is genuinely proven.
+- UI copy should state: "Native transfer dispatched; contract-side receipt
+  verification is unavailable on Studio Next."
+- Off-chain receipt or balance observation may be saved in a manifest but must
+  not be promoted to on-chain proof.
 
-If using GenLayerPY, official docs recommend checking `tx_execution_result_name` before reading state and using `debug_trace_transaction` for execution traces.
+The supported Studio Next web host has not proven that hidden redirects are
+observable or preventable. Preserve provenance and whole-byte hash checks, but
+do not claim hidden redirects are solved.
 
-## Value Transfers and Child Transactions
+## Wallets and secrets
 
-GEN transfers and cross-contract writes may create child transactions. A parent transaction may succeed while a child transfer or message fails.
+- `.env` and `.secrets/` are local-only and must never be committed or printed.
+- `PRIVATE_KEY` is the client wallet. Use named variables for Worker A, Worker B,
+  and outsider keys.
+- Print only public addresses and balances at the funding checkpoint.
+- Verify four distinct addresses before live E2E.
+- Try `sim_fundAccount` only as an explicitly verified Studio Next capability.
+  If it is unavailable, stop at the funding checkpoint for manual faucet action.
+- Never put private keys in `VITE_*`, frontend source, logs, reports, screenshots,
+  or deployment artifacts.
 
-When the product claims payout, compensation, or escrow movement:
+## Verification order
 
-- Track parent transaction hash.
-- Track child transaction IDs when available.
-- Check child transaction execution results.
-- Do not show "Payment completed" until the relevant child execution succeeds.
-- Make settlement idempotent.
-- Set settlement locks before emitting payments.
-- Prefer finalized execution for irreversible payout messages when the contract design requires finality.
+For substantial changes, run in this order:
 
-## Frontend Integration Rules
+1. inspect existing scripts, package files, and the dirty worktree;
+2. run GenVM lint on `contracts/veristep.py` and `contracts/veristep_release.py`;
+3. run all Python direct, adversarial, and feasibility tests in the repo-local
+   Python 3.12 virtualenv;
+4. run worker tests and worker TypeScript checking;
+5. run receipt and frontend tests plus TypeScript/Vite production build;
+6. run Wrangler dry-run, dependency audit, and secret scan;
+7. run Studio Next integration only when wallets, fees, and target config are
+   verified;
+8. deploy only after explicit user approval if source changes require it.
 
-For GenLayerJS frontends:
+Report exactly what ran, what failed, and what remains unverified. Do not replace
+live integration evidence with unit-test claims.
 
-- Import Bradbury from official SDK chain exports:
+## Current delivery priority
 
-```ts
-import { testnetBradbury } from "genlayer-js/chains";
-```
+1. finish and verify the Agent A/B artifact-dependency fix;
+2. normalize and check four wallets, then fund them or stop for manual faucet;
+3. deploy and verify the hosted worker;
+4. run three real Studio Next cases with predetermined outcomes;
+5. generate and integrate `fee-profile.json`;
+6. publish and verify the Vercel frontend without requiring a wallet to read;
+7. finish README, submission draft, and public evidence links;
+8. prepare early submission while leaving Portal account linking and final
+   submission actions to the user;
+9. continue non-critical polish after the first valid submission package.
 
-- Keep contract addresses in explicit config such as `.env`, but never private keys.
-- Use typed wrappers for read/write methods.
-- Use the same network and contract address in frontend, deploy scripts, and tests.
-- Display transaction links per user action.
-- Display contract links separately and clearly.
-- Do not show `Accepted` as final success unless execution result is successful.
-- If explorer/indexer is still loading, show a pending/indexing state instead of fake success.
-- Persist useful transaction history in local storage if the UI needs to survive reloads.
+Do not set `submissionReady=true` until the live gates above pass. Do not delete
+historical failure evidence.
 
-Recommended frontend env shape:
+## Hackathon release requirements
 
-```text
-VITE_SIGNALSTAKE_CONTRACT_ADDRESS=<bradbury_contract_address>
-VITE_SIGNALSTAKE_CHAIN=bradbury
-VITE_GENLAYER_EXPLORER=https://explorer-bradbury.genlayer.com
-```
-
-Never include:
-
-```text
-PRIVATE_KEY=...
-DEPLOYER_PRIVATE_KEY=...
-SIGNER_PRIVATE_KEY=...
-```
-
-in frontend env files or `VITE_*` variables.
-
-## Common Bradbury Problems to Avoid
-
-### Wrong network
-
-Symptoms:
-
-- deploy succeeds somewhere but frontend reads empty state;
-- schema not found;
-- wallet signs on a different chain;
-- Studionet or Asimov address is used on Bradbury.
-
-Fix:
-
-- Run `genlayer network testnet-bradbury`.
-- Run `genlayer config get network`.
-- Verify chain ID `4221` in wallet.
-- Verify explorer links point to `explorer-bradbury.genlayer.com`.
-
-### Dependency header not first
-
-Symptoms:
-
-- lint/deploy parser error;
-- runner not found;
-- unexpected VM/runtime error.
-
-Fix:
-
-- Put the `# { "Depends": ... }` header on line 1.
-- Remove BOM, blank line, license comment, or encoding comment before it.
-
-### Storage collection reassignment
-
-Symptoms:
-
-- storage type assertion errors;
-- `TreeMap <- TreeMap`;
-- collections lose data or fail validation.
-
-Fix:
-
-- Declare collections as class fields.
-- Do not call `TreeMap()` or `DynArray()` in `__init__`.
-
-### Public ABI uses unsupported types
-
-Symptoms:
-
-- schema extraction fails;
-- frontend encoding fails;
-- deploy or write transaction reverts/errors.
-
-Fix:
-
-- Use strings, booleans, bytes, Address, sized integers, and supported storage/return types.
-- Avoid Python `dict`, `list`, `Optional`, `Union`, bare generics, and floats for money.
-
-### LLM/web consensus disagreement
-
-Symptoms:
-
-- review transactions become accepted/finalized with errors;
-- consensus rotates repeatedly;
-- no state update after AI review.
-
-Fix:
-
-- Use structured JSON.
-- Compare stable decision fields.
-- Normalize variable data.
-- Avoid exact comparison of free-form reasoning.
-- Add controlled rejection for unavailable evidence.
-
-### Frontend reports fake success
-
-Symptoms:
-
-- dApp shows `Accepted` but explorer shows error;
-- spinner never stops;
-- state does not update after transaction.
-
-Fix:
-
-- Check execution result, not just lifecycle status.
-- Stop spinner on `FINISHED_WITH_ERROR`.
-- Show `Failed` with a transaction link.
-- Re-read state after success.
-- If state is not indexed yet, show "accepted, waiting for index/state" rather than final success.
-
-## Required Final Report After Deployment
-
-Never say "deployed successfully" unless all of these are available:
-
-- exact deployment command;
-- selected network;
-- deployer address;
-- deployment transaction hash;
-- transaction lifecycle status;
-- execution result, preferably `FINISHED_WITH_RETURN`;
-- decoded contract address;
-- successful `genlayer schema <address>` result;
-- successful basic view call result;
-- frontend config file updated with the real address, if applicable;
-- child transaction results if payout/messages were emitted;
-- explorer link.
-
-If any of these are missing, say:
-
-```text
-NOT FULLY VERIFIED - deployment/state still needs verification.
-```
-
-If no deployment was performed, say:
-
-```text
-NOT DEPLOYED - ready for user deployment.
-```
-
-## Minimal Bradbury Checklist
-
-- [ ] Used `genlayer-dapp` and relevant `genlayer-dev:*` skills.
-- [ ] Checked official docs for uncertain APIs/commands.
-- [ ] Contract dependency header is line 1.
-- [ ] Runner version is pinned.
-- [ ] Exactly one contract class extends `gl.Contract`.
-- [ ] Decorators are correct.
-- [ ] Persistent fields are class-level annotations.
-- [ ] No unsupported storage/public ABI types.
-- [ ] No collection reassignment in `__init__`.
-- [ ] Money uses `u256` attoGEN.
-- [ ] Nondeterministic calls use the Equivalence Principle.
-- [ ] Validator checks material fields, not only JSON shape.
-- [ ] No side effects inside nondeterministic callbacks.
-- [ ] LLM/web failure paths are controlled.
-- [ ] `genvm-lint check` passes.
-- [ ] Direct tests pass.
-- [ ] Integration tests pass or skipped with a clear reason.
-- [ ] Frontend tests/build pass if frontend changed.
-- [ ] CLI network is `testnet-bradbury`.
-- [ ] Deployer has test GEN.
-- [ ] Receipt execution result is checked.
-- [ ] Schema and view calls work after deploy.
-- [ ] Frontend uses the verified Bradbury contract address.
+- The dApp must call the real Studio Next contract and expose meaningful GenLayer
+  state and validator judgment.
+- The repository must build and the public frontend must explain how to verify a
+  result.
+- A demo video is mandatory even if the Portal form labels it optional, but the
+  user owns all video preparation and recording after the dApp is complete.
+- Do not spend implementation time on a script, storyboard, recording, or video
+  checklist unless the user explicitly asks for that work later.
+- Early submission is encouraged so reviewer "Action needed" requests can be
+  addressed during the build period.
+- Never claim acceptance, ranking, audit status, or guaranteed eligibility.

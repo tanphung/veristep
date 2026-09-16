@@ -1,6 +1,6 @@
 # Implementation decisions — 2026-09-05
 
-User approved TaskTrace. Four security design documents v0.2 self-reviewed before code. This is not an independent audit. Source, A and B are submitted on-chain; no external web oracle or LLM API key.
+User approved VeriStep. Four security design documents v0.2 self-reviewed before code. This is not an independent audit. Source, A and B are submitted on-chain; no external web oracle or LLM API key.
 
 Both workers accept all terms by hash before activation. Source plus A reserves 1024 bytes for B. UTF-8 whole-document and chunk hashes are independently checked.
 

@@ -16,15 +16,106 @@ TASK = "Explain whether trial and paid accounts can export, and whether approval
 
 @pytest.fixture(autouse=True)
 def windows_direct_stdin_compat(monkeypatch):
-    """Upstream unlinks its temporary stdin while it is open (valid POSIX, invalid Windows).
+    """Bridge current gltest direct mode to the legacy V1 SDK on Windows.
 
-    Defer only that WinError 32 cleanup until after VM teardown. No contract behavior
-    or validator result is mocked by this platform adapter.
+    gltest RC2 imports only the current ``genlayer`` package layout, while the
+    immutable V1 regression contract uses the v0.2 ``genlayer.py`` layout. Keep
+    both suites runnable and defer WinError 32 stdin cleanup until VM teardown.
+    No contract behavior or validator result is mocked by this adapter.
     """
     if os.name != "nt":
         yield
         return
     import gltest.direct.loader as loader
+    import gltest.direct.vm as direct_vm_module
+    import gltest.direct.wasi_mock as wasi_mock
+
+    def sdk_types():
+        try:
+            from genlayer import types
+        except ImportError:
+            from genlayer.py import types
+        return types
+
+    def import_calldata():
+        try:
+            from genlayer import calldata
+        except ImportError:
+            from genlayer.py import calldata
+        return calldata
+
+    monkeypatch.setattr(loader, "import_calldata", import_calldata)
+    monkeypatch.setattr(wasi_mock, "import_calldata", import_calldata)
+    monkeypatch.setattr(loader, "import_address", lambda: sdk_types().Address)
+    monkeypatch.setattr(loader, "import_lazy", lambda: sdk_types().Lazy)
+    monkeypatch.setattr(
+        direct_vm_module,
+        "import_address_u256",
+        lambda: (sdk_types().Address, sdk_types().u256),
+    )
+
+    original_refresh = direct_vm_module.VMContext._refresh_gl_message
+
+    def refresh_message(vm):
+        original_refresh(vm)
+        legacy_gl = sys.modules.get("genlayer.gl")
+        if legacy_gl is None or not hasattr(legacy_gl, "MessageType"):
+            return
+
+        Address, u256 = direct_vm_module.import_address_u256()
+
+        def address(value):
+            if value is None or isinstance(value, Address):
+                return value
+            if isinstance(value, bytes):
+                return Address(value)
+            if hasattr(value, "as_bytes"):
+                return Address(value.as_bytes)
+            return value
+
+        updates = {
+            "contract_address": address(vm._contract_address),
+            "sender_address": address(vm.sender),
+            "origin_address": address(vm.origin),
+            "value": vm._value,
+            "chain_id": vm._chain_id,
+        }
+        legacy_gl.message_raw.update(updates)
+        legacy_gl.message = legacy_gl.MessageType(
+            contract_address=updates["contract_address"],
+            sender_address=updates["sender_address"],
+            origin_address=updates["origin_address"],
+            value=u256(updates["value"]),
+            chain_id=u256(updates["chain_id"]),
+        )
+
+    monkeypatch.setattr(direct_vm_module.VMContext, "_refresh_gl_message", refresh_message)
+
+    original_allocate = loader._allocate_contract
+
+    def allocate_contract(contract_cls, vm, *args, **kwargs):
+        """Allocate v0.2 storage with its own descriptor API, not v0.3's."""
+        if "genlayer.py.storage" not in sys.modules:
+            return original_allocate(contract_cls, vm, *args, **kwargs)
+
+        from genlayer.py.storage import ROOT_SLOT_ID
+        from genlayer.py.storage._internal.generate import (
+            ORIGINAL_INIT_ATTR,
+            _storage_build,
+        )
+
+        descriptor = _storage_build(contract_cls, {})
+        instance = descriptor.get(vm._storage.get_store_slot(ROOT_SLOT_ID), 0)
+        init = getattr(getattr(descriptor, "cls", None), "__init__", None)
+        if init is None:
+            init = getattr(contract_cls, "__init__", None)
+        if init is not None:
+            init = getattr(init, ORIGINAL_INIT_ATTR, init)
+            init(instance, *args, **kwargs)
+        return instance
+
+    monkeypatch.setattr(loader, "_allocate_contract", allocate_contract)
+
     original = loader._inject_message_to_fd0
     pending = []
     def inject(vm):
@@ -44,8 +135,21 @@ def windows_direct_stdin_compat(monkeypatch):
 def system(direct_vm, direct_deploy, direct_alice, direct_bob, direct_charlie, direct_owner):
     direct_vm.warp("2026-09-05T12:00:00Z")
     direct_vm.sender = direct_alice
-    contract = direct_deploy("contracts/tasktrace.py", sdk_version="v0.2.12")
-    module = sys.modules["_contract_tasktrace"]
+    contract = direct_deploy("contracts/veristep_v1.py", sdk_version="v0.2.12")
+    module = sys.modules["_contract_veristep_v1"]
+
+    def run_nondet_unsafe(leader_fn, validator_fn, /, **kwargs):
+        direct_vm._in_nondet = True
+        try:
+            result = leader_fn()
+        finally:
+            direct_vm._in_nondet = False
+        direct_vm._captured_validators.append((result, leader_fn, validator_fn))
+        return result
+
+    # gltest RC2 patches the v0.3 nondeterminism API only. V1 remains a legacy
+    # regression target, so bind its equivalent call to the same direct VM.
+    module.gl.vm.run_nondet_unsafe = run_nondet_unsafe
 
     class System:
         vm = direct_vm
@@ -123,7 +227,7 @@ def system(direct_vm, direct_deploy, direct_alice, direct_bob, direct_charlie, d
         def resolve(self, a="SATISFIED", b="SATISFIED"):
             self.sender(self.client)
             self.c.request_review("demo-job")
-            self.vm.mock_llm("TASKTRACE_REVIEW_V1", json.dumps(self.response(a, b)))
+            self.vm.mock_llm("VERISTEP_REVIEW_V1", json.dumps(self.response(a, b)))
             self.c.resolve_review("demo-job")
             return self.job()
 

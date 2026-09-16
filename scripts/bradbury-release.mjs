@@ -9,7 +9,7 @@ import {CalldataAddress} from 'genlayer-js/types';
 import {createPublicClient, createWalletClient, formatEther, hexToBytes, http, keccak256, parseEther, stringToBytes} from 'viem';
 import {assertExecution, executionName, statusName} from './receipts.mjs';
 
-assert.equal(process.env.TASKTRACE_BRADBURY_CONFIRM, 'deploy-and-smoke-v1.1', 'Explicit Bradbury opt-in required');
+assert.equal(process.env.VERISTEP_BRADBURY_CONFIRM, 'deploy-and-smoke-v1.1', 'Explicit Bradbury opt-in required');
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const reportDir = resolve(root, 'reports', 'bradbury-release');
@@ -37,7 +37,7 @@ assert.match(normalizedPrivateKey, /^0x[0-9a-fA-F]{64}$/, 'PRIVATE_KEY format in
 const deployer = createAccount(normalizedPrivateKey);
 assert.equal(deployer.address.toLowerCase(), env.ADDRESS?.toLowerCase(), 'ADDRESS does not match PRIVATE_KEY');
 
-const code = await readFile(resolve(root, 'contracts', 'tasktrace.py'), 'utf8');
+const code = await readFile(resolve(root, 'contracts', 'veristep.py'), 'utf8');
 const sourceHash = createHash('sha256').update(code).digest('hex');
 assert.equal(sourceHash, 'a5bc7d153af669d5a03dc4e68e89ed88159ad0d265f17c2064a1f07733235391', 'Only the reviewed v1.1 source may be deployed');
 
@@ -221,7 +221,7 @@ assert.equal(createHash('sha256').update(deployedText).digest('hex'), sourceHash
 const config = await read('get_config');
 assert.match(String(config.chain_id), /^\d+$/, 'Contract evidence-domain chain id is invalid');
 assert.ok(Number(config.chain_id) > 0, 'Contract evidence-domain chain id must be positive');
-assert.equal(config.version, 'tasktrace-1.1');
+assert.equal(config.version, 'veristep-1.1');
 assert.equal(config.contract.toLowerCase(), address.toLowerCase());
 manifest.contractChainId = String(config.chain_id);
 manifest.contractVerified = true;

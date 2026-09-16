@@ -1,0 +1,39 @@
+{
+  "version": "veristep-live-incident-1",
+  "network": "studio-next",
+  "chainId": 61997,
+  "contract": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+  "dealId": "v2-studio-b-fault-r1-358323c",
+  "transaction": "0xfc0d1405e9561526f04ba1973225e2afd05f34b744585f0caae5505113760387",
+  "expected": {
+    "A": "SATISFIED",
+    "B": "VIOLATED",
+    "lifecycle": "FINALIZED",
+    "execution": "FINISHED_WITH_RETURN"
+  },
+  "actual": {
+    "lifecycle": "UNDETERMINED",
+    "execution": "FINISHED_WITH_ERROR",
+    "leaderResult": "HTTP_UNAVAILABLE",
+    "consensusResult": "MAJORITY_DISAGREE"
+  },
+  "firstFailurePoint": "resolve_review nondeterministic consensus after create, fund, both accepts, both artifact submissions, and request_review finalized successfully",
+  "evidence": [
+    "reports/studio-next-agent-tank/b-fault-recovery-1-resolve-review.receipt.json",
+    "reports/studio-next-agent-tank/resolve-simulation-diagnostic.json",
+    "reports/studio-next-agent-tank/manifest.json"
+  ],
+  "diagnosis": {
+    "receipt": "The leader returned HTTP_UNAVAILABLE; three validators voted disagree; four leader rotations ended UNDETERMINED.",
+    "postFailureNoBroadcastReproduction": "SDK simulateWriteContract and the identical raw sim_call both returned SUCCESS for this exact deal while it remained REVIEW_REQUESTED.",
+    "excluded": [
+      "client configuration and case input before resolve_review",
+      "runner sequencing through request_review",
+      "deployed contract source identity",
+      "persistent finalized deal state required by resolve_review"
+    ]
+  },
+  "rootCause": "ROOT_CAUSE_UNKNOWN",
+  "rootCauseScope": "The finalized receipt proves an HTTP_UNAVAILABLE leader failure during live consensus, but the immediate post-failure simulation succeeds. Available evidence does not distinguish transient evidence HTTP, model HTTP, validator runtime, or another nondeterministic consensus-layer condition.",
+  "recoveryPolicy": "Do not resend this finalized hash and do not create b-fault recovery 2 without a new explicit decision."
+}

@@ -10,6 +10,8 @@
 .gltest_cache/
 node_modules/
 dist/
+artifacts/
+cache/
 __pycache__/
 .pytest_cache/
 *.pyc
@@ -20,3 +22,5 @@ coverage/
 *.log
 .openai/*
 !.openai/hosting.json
+.vercel/
+.wrangler/

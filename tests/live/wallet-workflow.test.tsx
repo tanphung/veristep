@@ -19,7 +19,7 @@ let writes=0;
 const wait=()=>new Promise(resolve=>setTimeout(resolve,6000));
 
 beforeAll(async()=>{
-  if(process.env.TASKTRACE_LIVE_WALLET_TEST!=='studionet-only')throw new Error('Explicit StudioNet opt-in required');
+  if(process.env.VERISTEP_LIVE_WALLET_TEST!=='studionet-only')throw new Error('Explicit StudioNet opt-in required');
   expect(chain.id).toBe(61999);
   const deployment=JSON.parse(readFileSync(resolve(root,'reports/studionet-sep07probe/manifest.json'),'utf8'));
   expect(deployment.contract.toLowerCase()).toBe(contract.toLowerCase());

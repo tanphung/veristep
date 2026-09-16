@@ -1,12 +1,29 @@
 {
-  "name": "tasktrace",
+  "name": "veristep",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
     "check:secrets": "node scripts/check-secrets.mjs",
-    "release:bradbury": "node scripts/bradbury-release.mjs",
+    "release:studio-next": "node scripts/studio-next-release.mjs",
+    "prepare:studio-wallets": "node scripts/prepare-studio-next-wallets.mjs",
+    "check:studio-wallets": "node scripts/studio-next-wallet-check.mjs",
     "test:integration": "node scripts/integration.mjs",
+    "test:v2:local": "node scripts/integration-v2-local.mjs",
+    "test:v2:studionet": "node scripts/integration-v2-studionet.mjs",
+    "test:v2:studio-next": "node scripts/integration-v2-studionet.mjs",
+    "audit:studio-next": "node scripts/audit-studio-next-manifest.mjs",
+    "generate:fee-profile": "node scripts/generate-fee-profile.mjs",
+    "check:fee-profile": "node scripts/generate-fee-profile.mjs --check",
+    "diagnose:studio-next-timeout": "node scripts/diagnose-studio-next-timeout.mjs",
+    "probe:studio-next-time": "node scripts/probe-studio-next-time.mjs",
+    "diagnose:studio-next-resolve": "node scripts/diagnose-studio-next-resolve.mjs",
+    "test:hosted-agent-live": "node scripts/hosted-agent-live.mjs",
+    "test:router": "node scripts/test-receipt-router.mjs",
+    "test:worker": "vitest run --config vitest.worker.config.ts",
+    "test:openai-smoke": "node scripts/worker-openai-smoke.mjs",
+    "build:worker": "tsc -p worker/tsconfig.json --noEmit",
+    "worker:deploy:dry": "wrangler deploy --dry-run --config worker/wrangler.jsonc",
     "test:live-wallet": "vitest run --config vitest.live.config.ts --reporter=verbose",
     "test:types": "tsc -p tsconfig.tests.json",
     "dev": "vite",
@@ -15,21 +32,29 @@
     "test:frontend": "vitest run --config vitest.config.ts"
   },
   "dependencies": {
-    "genlayer-js": "1.1.8",
+    "@genlayer/transaction-kit": "0.1.0-rc.2",
+    "@genlayer/transaction-kit-react": "0.1.0-rc.2",
+    "genlayer-js": "2.0.0-rc.1",
     "lucide-react": "0.468.0",
     "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react-dom": "19.2.0",
+    "viem": "2.56.3"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "5.20260911.1",
+    "@nomicfoundation/hardhat-viem": "^3.0.9",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.0",
     "@types/node": "^24.11.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "5.1.4",
+    "genlayer": "0.40.0-rc.3",
+    "hardhat": "^3.16.0",
     "jsdom": "26.1.0",
     "typescript": "5.9.3",
     "vite": "7.3.6",
-    "vitest": "3.2.7"
+    "vitest": "5.0.0",
+    "wrangler": "4.131.1"
   }
 }

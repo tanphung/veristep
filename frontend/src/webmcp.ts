@@ -5,10 +5,10 @@ type Context={registerTool(tool:{name:string;title:string;description:string;inp
 export function registerWorkTools(context:Context|undefined,openCreation:()=>void):()=>void {
   if(!context?.registerTool)return()=>{};
   const lifecycle=new AbortController();
-  const report=()=>console.warn('TaskTrace structured browser tools are unavailable; the normal interface still works.');
+  const report=()=>console.warn('VeriStep structured browser tools are unavailable; the normal interface still works.');
   const tools=[{
     name:'read_work_record',title:'Read finalized work record',
-    description:'Read a TaskTrace job after artifact and review-integrity checks. Payment verification is true only for the exact committed Bradbury finalization receipt and recipient balance delta. No signing or transaction.',
+    description:'Read a VeriStep job after artifact and review-integrity checks. Payment verification is true only for the exact committed Bradbury finalization receipt and recipient balance delta. No signing or transaction.',
     inputSchema:{type:'object',properties:{jobId:{type:'string',pattern:'^[a-z0-9][a-z0-9-]{2,63}$'}},required:['jobId'],additionalProperties:false},
     annotations:{readOnlyHint:true,untrustedContentHint:true},
     async execute(input:unknown){

@@ -1,0 +1,135 @@
+name: tasktrace-local-v121
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: genlayer_state
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d genlayer_state"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - tasktrace_postgres_v121:/var/lib/postgresql/data
+
+  redis:
+    image: redis:8-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  webdriver:
+    image: yeagerai/genlayer-genvm-webdriver:0.0.9
+    shm_size: 2gb
+    environment:
+      PORT: "5001"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:5001/ | grep -q 'Puppeteer webdriver server'"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  database-migration:
+    image: yeagerai/simulator-database-migration:v0.121.23
+    environment: &database
+      DBUSER: postgres
+      DBPASSWORD: postgres
+      DBHOST: postgres
+      DBPORT: "5432"
+      DBNAME: genlayer_state
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  hardhat:
+    # v0.79.1 is the newest published Hardhat image and its ConsensusMain ABI
+    # contains the v2 vote/accepted/finalized events consumed by Studio v0.121.
+    image: yeagerai/simulator-hardhat:v0.79.1
+    ports:
+      - "8545:8545"
+    volumes:
+      - tasktrace_hardhat_artifacts_v79:/app/artifacts
+      - tasktrace_hardhat_deployments_v79:/app/deployments
+      - tasktrace_hardhat_cache_v79:/app/cache
+      - tasktrace_hardhat_snapshots_v79:/app/snapshots
+
+  jsonrpc:
+    image: yeagerai/simulator-jsonrpc:v0.121.23
+    ports:
+      - "4000:4000"
+    environment: &runtime
+      <<: *database
+      PYTHONUNBUFFERED: "1"
+      RPCPORT: "4000"
+      WEBDRIVERHOST: webdriver
+      WEBDRIVERPORT: "5001"
+      WEBDRIVER_TIMEOUT_MS: "60000"
+      REDIS_URL: redis://redis:6379/0
+      JSONRPC_SERVER_URL: http://jsonrpc:4000
+      GENVMROOT: /genvm
+      GENLAYER_CHAIN_ID: "61999"
+      HARDHAT_URL: http://hardhat
+      HARDHAT_PORT: "8545"
+      HARDHAT_PRIVATE_KEY: "${VERISTEP_LOCAL_HARDHAT_PRIVATE_KEY:?set a disposable local Hardhat key}"
+      DEFAULT_NUM_INITIAL_VALIDATORS: "0"
+      DEFAULT_CONSENSUS_MAX_ROTATIONS: "3"
+      VITE_FINALITY_WINDOW: "1"
+      VITE_FINALITY_WINDOW_APPEAL_FAILED_REDUCTION: "0.2"
+      LOG_LEVEL: info
+      SHOW_VALIDATOR_PRIVATE_KEYS_IN_LOGS: "false"
+      SHOW_VALIDATOR_PRIVATE_KEYS_IN_RPC: "false"
+      OPENAIKEY: "<local-fixture-no-secret>"
+      RATE_LIMIT_ENABLED: "false"
+    volumes:
+      - tasktrace_hardhat_artifacts_v79:/app/hardhat/artifacts
+      - tasktrace_hardhat_deployments_v79:/app/hardhat/deployments
+    depends_on:
+      database-migration:
+        condition: service_completed_successfully
+      hardhat:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      webdriver:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 45s
+
+  consensus-worker:
+    image: yeagerai/simulator-consensus-worker:v0.121.23
+    environment:
+      <<: *runtime
+      WORKER_PORT: "4001"
+      WORKER_POLL_INTERVAL: "1"
+      TRANSACTION_TIMEOUT_MINUTES: "30"
+      MAX_PARALLEL_TXS_PER_WORKER: "1"
+      CONSENSUS_VALIDATOR_MAX_CONCURRENT: "8"
+    volumes:
+      - tasktrace_hardhat_artifacts_v79:/app/hardhat/artifacts
+      - tasktrace_hardhat_deployments_v79:/app/hardhat/deployments
+    depends_on:
+      jsonrpc:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 45s
+
+volumes:
+  tasktrace_postgres_v121:
+  tasktrace_hardhat_artifacts_v79:
+  tasktrace_hardhat_deployments_v79:
+  tasktrace_hardhat_cache_v79:
+  tasktrace_hardhat_snapshots_v79:

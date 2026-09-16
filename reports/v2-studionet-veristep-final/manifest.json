@@ -1,0 +1,312 @@
+{
+  "version": "veristep-v2-studionet-semantic-1",
+  "network": "studionet",
+  "chainId": 61999,
+  "sourceHash": "a851a47461ff70a38a2f4c6ea88af95ad1636d4bb818acbaa590bd2cc6a4597e",
+  "evidenceCommit": "f4b48b235d15c0be61cbd75bf491dde1b98ad058",
+  "wallets": {
+    "client": "0x8396299e4aC395D66aa9f2cb7792C28a40060d67",
+    "A": "0x355d4861807e7b512035321836AE782C532dE60E",
+    "B": "0x06ABA641B66E428903a69CcbD2ffE923Ff11F05a"
+  },
+  "steps": {
+    "deploy": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-14T11:18:16.535Z",
+      "hash": "0x1f522d690e6dc75d95e0e5e299165e4e1f419c2d8174f9ba267f39e95f90bc35",
+      "submittedAt": "2026-09-14T11:18:19.509Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x57caFcF457A41c03E94b5c7d21cBF4171B386a96",
+      "finishedAt": "2026-09-14T11:18:58.814Z"
+    },
+    "happy-create": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-14T11:19:01.533Z",
+      "hash": "0x33093dc16593aa7ee179e931e6f6261045e08723547d746efa3656172509c49c",
+      "submittedAt": "2026-09-14T11:19:04.635Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x57caFcF457A41c03E94b5c7d21cBF4171B386a96",
+      "finishedAt": "2026-09-14T11:19:46.179Z"
+    },
+    "happy-fund": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-14T11:19:47.558Z",
+      "hash": "0x82ff6727f1ac38a67d44a63975cc2562981cc223abb7eeee548dd3b557befc31",
+      "submittedAt": "2026-09-14T11:19:49.656Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x57caFcF457A41c03E94b5c7d21cBF4171B386a96",
+      "finishedAt": "2026-09-14T11:20:26.375Z"
+    },
+    "happy-accept-a": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-14T11:20:26.375Z",
+      "hash": "0x76e0a553d0eee1f6828f0a8d29b3556295822177715701c0a7a0e31e1378a228",
+      "submittedAt": "2026-09-14T11:20:28.564Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x57caFcF457A41c03E94b5c7d21cBF4171B386a96",
+      "finishedAt": "2026-09-14T11:21:02.601Z"
+    },
+    "happy-accept-b": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-14T11:21:02.601Z",
+      "hash": "0x632028fe36943991ad0a55a678e34dc41f3f7601cc8485f9a59d443d72265f2c",
+      "submittedAt": "2026-09-14T11:21:05.425Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x57caFcF457A41c03E94b5c7d21cBF4171B386a96",
+      "finishedAt": "2026-09-14T11:21:45.556Z"
+    },
+    "happy-submit-a": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-14T11:21:46.930Z",
+      "hash": "0xccd528ef20e6a031fa4658b547d9c1d71073be360d9a9e02b70d799d69941dd3",
+      "submittedAt": "2026-09-14T11:21:49.155Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x57caFcF457A41c03E94b5c7d21cBF4171B386a96",
+      "finishedAt": "2026-09-14T11:22:29.177Z"
+    },
+    "happy-submit-b": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-14T11:22:30.567Z",
+      "hash": "0x79a71f4b1a0baa0f4f136cfbad1bf475f0cd583e79f9bb8e168b5acf352f3a93",
+      "submittedAt": "2026-09-14T11:22:33.045Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x57caFcF457A41c03E94b5c7d21cBF4171B386a96",
+      "finishedAt": "2026-09-14T11:23:12.023Z"
+    },
+    "happy-request-review": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-14T11:23:12.023Z",
+      "hash": "0x4b935e988b5b52c6bd255eeb1fb9379ff68fcf957d5bdcac1a8c7683fe79ede9",
+      "submittedAt": "2026-09-14T11:23:15.433Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x57caFcF457A41c03E94b5c7d21cBF4171B386a96",
+      "finishedAt": "2026-09-14T11:23:54.224Z"
+    },
+    "happy-resolve-review": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-14T11:23:54.225Z",
+      "hash": "0x633146d0cac0c25ceae8d7f185074d796d94ded58f737f8602cb9cfa95079caa",
+      "submittedAt": "2026-09-14T11:23:56.199Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x57caFcF457A41c03E94b5c7d21cBF4171B386a96",
+      "finishedAt": "2026-09-14T11:25:10.146Z"
+    },
+    "tail-contradiction-create": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-14T11:25:11.661Z",
+      "hash": "0xf04ee746b45504d385b132b3d032652764fd463ea69e7e70c2380579a872bf2b",
+      "submittedAt": "2026-09-14T11:25:14.730Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x57caFcF457A41c03E94b5c7d21cBF4171B386a96",
+      "finishedAt": "2026-09-14T11:25:49.154Z"
+    },
+    "tail-contradiction-fund": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-14T11:25:50.539Z",
+      "hash": "0x89fd6d57fca76a1e36791096f1c06c9af3114b3b27111a7a3aa3cc68e904df66",
+      "submittedAt": "2026-09-14T11:25:53.572Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x57caFcF457A41c03E94b5c7d21cBF4171B386a96",
+      "finishedAt": "2026-09-14T11:26:29.519Z"
+    },
+    "tail-contradiction-accept-a": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-14T11:26:29.520Z",
+      "hash": "0xcc63432d7fb275f3299e8cd7190656f022ec7f7796ce56f3575ffcacab26eb5d",
+      "submittedAt": "2026-09-14T11:26:32.286Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x57caFcF457A41c03E94b5c7d21cBF4171B386a96",
+      "finishedAt": "2026-09-14T11:27:06.006Z"
+    },
+    "tail-contradiction-accept-b": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-14T11:27:06.008Z",
+      "hash": "0xc2f930254c97c83a01be691d3673f80c558908e2e792983e3cd2338570933acd",
+      "submittedAt": "2026-09-14T11:27:08.020Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x57caFcF457A41c03E94b5c7d21cBF4171B386a96",
+      "finishedAt": "2026-09-14T11:27:48.302Z"
+    },
+    "tail-contradiction-submit-a": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-14T11:27:49.786Z",
+      "hash": "0xffda3a36ce279437773311e760cbbb16d51448db153be52802e09fbcde8aede0",
+      "submittedAt": "2026-09-14T11:27:52.998Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x57caFcF457A41c03E94b5c7d21cBF4171B386a96",
+      "finishedAt": "2026-09-14T11:28:28.806Z"
+    },
+    "tail-contradiction-submit-b": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-14T11:28:30.224Z",
+      "hash": "0xc353a62c4f2edddd50a2db9d0bbdfad4fc3c9d1398e6da9d4fd01a890e742d99",
+      "submittedAt": "2026-09-14T11:28:33.263Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x57caFcF457A41c03E94b5c7d21cBF4171B386a96",
+      "finishedAt": "2026-09-14T11:29:07.786Z"
+    },
+    "tail-contradiction-request-review": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-14T11:29:07.787Z",
+      "hash": "0x68030cdd476f28d4474cbfbcf030bc89a247756fa69456df74b94e2b91387ea5",
+      "submittedAt": "2026-09-14T11:29:09.817Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x57caFcF457A41c03E94b5c7d21cBF4171B386a96",
+      "finishedAt": "2026-09-14T11:29:48.764Z"
+    },
+    "tail-contradiction-resolve-review": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-14T11:29:48.765Z",
+      "hash": "0x35835a4281b79a7b08f59fa93d9e303c16e5ef693a024cf9b40a76e4480f3524",
+      "submittedAt": "2026-09-14T11:29:50.951Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x57caFcF457A41c03E94b5c7d21cBF4171B386a96",
+      "finishedAt": "2026-09-14T11:31:05.472Z"
+    },
+    "reject-bad-hostname": {
+      "phase": "FINALIZED_EXPECTED_REJECTION",
+      "expectedError": "ORIGIN_HOST",
+      "startedAt": "2026-09-14T11:31:06.894Z",
+      "hash": "0xb10951de7c05b77c96dd3a88f04f6f064262fdcf8ffd2592b6ceb5ff1442e7e1",
+      "submittedAt": "2026-09-14T11:31:08.964Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_ERROR",
+      "finishedAt": "2026-09-14T11:31:46.977Z"
+    },
+    "reject-wrong-owner-isolated": {
+      "phase": "FINALIZED_EXPECTED_REJECTION",
+      "expectedError": "ORIGIN_MISMATCH",
+      "startedAt": "2026-09-14T11:31:48.613Z",
+      "hash": "0x716927884532e59f077001c4adc7fa05042493531ef80182e80a14d9330cf6aa",
+      "submittedAt": "2026-09-14T11:31:51.679Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_ERROR",
+      "finishedAt": "2026-09-14T11:32:33.717Z"
+    },
+    "reject-mutable-version": {
+      "phase": "FINALIZED_EXPECTED_REJECTION",
+      "expectedError": "IMMUTABLE_COMMIT",
+      "startedAt": "2026-09-14T11:32:35.209Z",
+      "hash": "0xc3e6098ff12adb7322dd494b52026d523a6e82f9650d60b891da67961bcc6635",
+      "submittedAt": "2026-09-14T11:32:37.474Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_ERROR",
+      "finishedAt": "2026-09-14T11:33:11.604Z"
+    },
+    "reject-malformed-sha256": {
+      "phase": "FINALIZED_EXPECTED_REJECTION",
+      "expectedError": "ARTIFACT_HASH",
+      "startedAt": "2026-09-14T11:33:13.022Z",
+      "hash": "0x77889702fe1cdfef6d8508e184dfdb73ed3f1b333e0185c5c4ad024ce4a3928b",
+      "submittedAt": "2026-09-14T11:33:15.498Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_ERROR",
+      "finishedAt": "2026-09-14T11:33:54.806Z"
+    },
+    "reject-missing-stage-obligation": {
+      "phase": "FINALIZED_EXPECTED_REJECTION",
+      "expectedError": "SEMANTIC_COUNT",
+      "startedAt": "2026-09-14T11:33:56.200Z",
+      "hash": "0x700dda7f366eb1ee8e10c44fe5b74344cf6d9f927d4c16346dd6c25ea27a02be",
+      "submittedAt": "2026-09-14T11:33:58.775Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_ERROR",
+      "finishedAt": "2026-09-14T11:34:38.352Z"
+    }
+  },
+  "cases": {
+    "happy": {
+      "dealId": "v2-studio-happy-f4b48b2",
+      "expected": {
+        "A": "SATISFIED",
+        "B": "SATISFIED"
+      },
+      "actual": {
+        "A": "SATISFIED",
+        "B": "SATISFIED"
+      },
+      "status": "SETTLEMENT_PENDING",
+      "passed": true
+    },
+    "tail-contradiction": {
+      "dealId": "v2-studio-tail-contradiction-f4b48b2",
+      "expected": {
+        "A": "VIOLATED",
+        "B": "SATISFIED"
+      },
+      "actual": {
+        "A": "VIOLATED",
+        "B": "SATISFIED"
+      },
+      "status": "SETTLEMENT_PENDING",
+      "passed": true
+    },
+    "reject-bad-hostname": {
+      "dealId": "v2-studio-reject-bad-hostname-f4b48b2",
+      "expectedError": "ORIGIN_HOST",
+      "execution": "FINISHED_WITH_ERROR",
+      "statePersisted": false,
+      "passed": true
+    },
+    "reject-wrong-owner-isolated": {
+      "dealId": "v2-studio-reject-wrong-owner-isolated-f4b48b2",
+      "expectedError": "ORIGIN_MISMATCH",
+      "execution": "FINISHED_WITH_ERROR",
+      "statePersisted": false,
+      "passed": true
+    },
+    "reject-mutable-version": {
+      "dealId": "v2-studio-reject-mutable-version-f4b48b2",
+      "expectedError": "IMMUTABLE_COMMIT",
+      "execution": "FINISHED_WITH_ERROR",
+      "statePersisted": false,
+      "passed": true
+    },
+    "reject-malformed-sha256": {
+      "dealId": "v2-studio-reject-malformed-sha256-f4b48b2",
+      "expectedError": "ARTIFACT_HASH",
+      "execution": "FINISHED_WITH_ERROR",
+      "statePersisted": false,
+      "passed": true
+    },
+    "reject-missing-stage-obligation": {
+      "dealId": "v2-studio-reject-missing-stage-obligation-f4b48b2",
+      "expectedError": "SEMANTIC_COUNT",
+      "execution": "FINISHED_WITH_ERROR",
+      "statePersisted": false,
+      "passed": true
+    }
+  },
+  "startedAt": "2026-09-14T11:18:15.575Z",
+  "limitations": [
+    "Semantic consensus only: the intentionally disabled router prevents this run from claiming settlement."
+  ],
+  "contract": "0x57caFcF457A41c03E94b5c7d21cBF4171B386a96",
+  "schemaVerified": true,
+  "configVerified": true,
+  "completedAt": "2026-09-14T11:34:39.825Z",
+  "result": {
+    "passed": true,
+    "semanticCases": 2,
+    "rejectionCases": 5,
+    "cases": 7,
+    "contract": "0x57caFcF457A41c03E94b5c7d21cBF4171B386a96"
+  }
+}

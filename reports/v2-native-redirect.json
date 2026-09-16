@@ -1,0 +1,17 @@
+{
+  "scope": "LOCAL_OFFICIAL_WEB_MODULE_CAPABILITY_NOT_BRADBURY",
+  "requests": [
+    {
+      "host": "127.0.0.1:36647",
+      "path": "/start"
+    },
+    {
+      "host": "localhost:36647",
+      "path": "/final"
+    }
+  ],
+  "exit": 0,
+  "stdout": "PASS: real GenVM web observation captured; no provenance approval implied.\n",
+  "stderr": "",
+  "module_log": "{\"level\":\"info\",\"target\":\"genvm_common\",\"message\":\"logging initialized\",\"version\":\"v0.2.12-x86_64-linux-release\",\"file\":\"/build/source/executor/common/src/lib.rs:111\",\"ts\":\"1789141381015\"}\n{\"level\":\"info\",\"target\":\"genvm_modules::common\",\"message\":\"trying to bind\",\"address\":\"127.0.0.1:41817\",\"file\":\"src/common/mod.rs:344\",\"ts\":\"1789141381251\"}\n{\"level\":\"info\",\"target\":\"genvm_modules::common\",\"message\":\"loop started\",\"address\":\"127.0.0.1:41817\",\"local_address\":\"Ok(127.0.0.1:41817)\",\"file\":\"src/common/mod.rs:348\",\"ts\":\"1789141381251\"}\n{\"level\":\"error\",\"target\":\"genvm_modules::common\",\"message\":\"accept failed\",\"error\":{\"causes\":[\"WebSocket protocol error: Handshake not finished\",\"Handshake not finished\"]},\"file\":\"src/common/mod.rs:305\",\"ts\":\"1789141381357\"}\n{\"level\":\"info\",\"target\":\"genvm_modules::scripting::ctx::dflt\",\"message\":\"script_log: <none>\",\"log\":{\"always_allow_hosts\":[\"localhost\",\"127.0.0.1\"],\"host\":\"127.0.0.1\"},\"genvm_id\":15568563739692520245,\"file\":\"src/scripting/ctx/dflt.rs:60\",\"ts\":\"1789141394848\"}\n"
+}

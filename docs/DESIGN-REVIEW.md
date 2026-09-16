@@ -1,4 +1,4 @@
-# TaskTrace — Review thiết kế và điểm còn mở v0.2
+# VeriStep — Review thiết kế và điểm còn mở v0.2
 
 ## Review addendum v0.3 — 06/09/2026, trước thay contract
 
@@ -31,7 +31,7 @@ Ngày 05/09/2026. Người rà soát: trợ lý lập kế hoạch. Đây là t�
 | Neutral-timeout incentives | Điều khoản UI/README và acceptance upfront | Thiết kế nêu rõ; chưa thử người dùng |
 | GitHub của portal khớp tanphung | Kiểm tra đúng phiên portal/ví | Chưa xác minh |
 | Hosting public và RPC CORS | Deploy static + anonymous access | Chưa triển khai |
-| Tên TaskTrace và rename thư mục | Kiểm tra đích, review tên trước publish | Chưa tạo |
+| Tên VeriStep và rename thư mục | Kiểm tra đích, review tên trước publish | Chưa tạo |
 
 ## Quan hệ với chỉ dẫn dự án
 

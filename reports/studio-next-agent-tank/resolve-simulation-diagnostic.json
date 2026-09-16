@@ -1,0 +1,84 @@
+{
+  "mode": "READ_AND_SIMULATE_ONLY_NO_BROADCAST",
+  "contract": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+  "chainId": 61997,
+  "rpcLatestBlock": {
+    "timestampUnixSeconds": 1789563185
+  },
+  "cases": [
+    {
+      "dealId": "v2-studio-a-fault-r2-358323c",
+      "state": "REVIEW_REQUESTED",
+      "expected": "REVIEW_REQUESTED resolves to the fixture's predetermined semantic outcome without emitting a transaction during this reproduction.",
+      "actual": "Simulation returned.",
+      "firstFailurePoint": null,
+      "evidence": {
+        "sourceIdentityVerified": true,
+        "sdk": {
+          "outcome": "RETURNED",
+          "receiptExecution": "SUCCESS"
+        },
+        "rawSimCall": {
+          "attempted": true,
+          "httpStatus": 200,
+          "rpcCode": null,
+          "errorCodes": [],
+          "hasResult": true
+        },
+        "noBroadcast": true
+      },
+      "rootCause": "ROOT_CAUSE_HYPOTHESIS",
+      "rootCauseScope": "The contract path is simulatable; a future recovery still requires a bounded decision about a new transaction after checking all existing manifest hashes."
+    },
+    {
+      "dealId": "v2-studio-b-fault-358323c",
+      "state": "REVIEW_REQUESTED",
+      "expected": "REVIEW_REQUESTED resolves to the fixture's predetermined semantic outcome without emitting a transaction during this reproduction.",
+      "actual": "Simulation returned.",
+      "firstFailurePoint": null,
+      "evidence": {
+        "sourceIdentityVerified": true,
+        "sdk": {
+          "outcome": "RETURNED",
+          "receiptExecution": "SUCCESS"
+        },
+        "rawSimCall": {
+          "attempted": true,
+          "httpStatus": 200,
+          "rpcCode": null,
+          "errorCodes": [],
+          "hasResult": true
+        },
+        "noBroadcast": true
+      },
+      "rootCause": "ROOT_CAUSE_HYPOTHESIS",
+      "rootCauseScope": "The contract path is simulatable; a future recovery still requires a bounded decision about a new transaction after checking all existing manifest hashes."
+    },
+    {
+      "dealId": "v2-studio-b-fault-r1-358323c",
+      "state": "REVIEW_REQUESTED",
+      "expected": "REVIEW_REQUESTED resolves to the fixture's predetermined semantic outcome without emitting a transaction during this reproduction.",
+      "actual": "Simulation returned.",
+      "firstFailurePoint": null,
+      "evidence": {
+        "sourceIdentityVerified": true,
+        "sdk": {
+          "outcome": "RETURNED",
+          "receiptExecution": "SUCCESS"
+        },
+        "rawSimCall": {
+          "attempted": true,
+          "httpStatus": 200,
+          "rpcCode": null,
+          "errorCodes": [],
+          "hasResult": true
+        },
+        "noBroadcast": true
+      },
+      "rootCause": "ROOT_CAUSE_HYPOTHESIS",
+      "rootCauseScope": "The contract path is simulatable; a future recovery still requires a bounded decision about a new transaction after checking all existing manifest hashes."
+    }
+  ],
+  "startedAt": "2026-09-16T12:53:05.341Z",
+  "finishedAt": "2026-09-16T12:55:11.718Z"
+}

@@ -1,0 +1,28 @@
+import {ArrowUpRight,CheckCircle2,FileCheck2,Landmark,ShieldCheck,TriangleAlert} from "lucide-react";
+import {short} from "./client";
+import type {V2Deal,V2Outcome} from "./v2-types";
+
+const title=(value:string)=>value.toLowerCase().replaceAll("_"," ").replace(/^\w/,letter=>letter.toUpperCase());
+const score=(value:number|null)=>value===null?"—":`${(value/100).toFixed(0)}%`;
+const statusClass=(value:V2Outcome)=>value.toLowerCase();
+const github=(owner:string,repo:string,commit:string,path:string)=>`https://github.com/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/blob/${commit}/${path.split("/").map(encodeURIComponent).join("/")}`;
+
+export function V2Report({deal}:{deal:V2Deal}){
+  const report=deal.report;
+  if(!report)return <section className="v2-empty-review"><ShieldCheck/><div><span className="eyebrow">CONSENSUS REVIEW</span><h3>No authoritative report yet</h3><p>The interface will not infer a verdict. Only the structured report stored by the Intelligent Contract appears here.</p></div></section>;
+  const citations=new Map(report.evidence_citations.map(item=>[item.id,item]));
+  return <>
+    <section className="v2-decision" aria-labelledby="decision-title">
+      <div><span className="eyebrow">CONTRACT DECISION</span><h2 id="decision-title">Independent evidence verdict</h2><p>{report.reasoning}</p></div>
+      {(["A","B"] as const).map(role=><article key={role}><span>Worker {role}</span><strong>{score(report.score[role])}</strong><em className={`verdict ${statusClass(report.decision.stages[role].outcome)}`}>{title(report.decision.stages[role].outcome)}</em></article>)}
+    </section>
+    <section className="v2-section" id="provenance"><header><div><span className="eyebrow">PROVENANCE</span><h2>Three artifacts, independently re-fetched</h2></div><span className="count-pill">{report.source_assessments.filter(item=>item.status==="VERIFIED").length}/3 verified</span></header><div className="v2-source-grid">
+      {report.source_assessments.map(source=>source.status==="VERIFIED"?<article key={source.artifact_id}><div className="source-top"><span className="artifact-role">{source.artifact_id}</span><span className="verified"><CheckCircle2 size={14}/> Verified</span></div><strong>{source.path}</strong><p>{source.owner}/{source.repository}</p><dl><div><dt>Commit</dt><dd><code>{short(source.commit)}</code></dd></div><div><dt>Blob</dt><dd><code>{short(source.blob)}</code></dd></div><div><dt>SHA-256</dt><dd><code>{short(source.sha256)}</code></dd></div><div><dt>Bytes</dt><dd>{source.byte_length.toLocaleString()}</dd></div></dl><a href={github(source.owner,source.repository,source.commit,source.path)} target="_blank" rel="noreferrer">Open immutable artifact <ArrowUpRight size={13}/></a></article>:<article key={source.artifact_id}><div className="source-top"><span className="artifact-role">{source.artifact_id}</span><span className="verdict unassessable">{title(source.status)}</span></div><strong>{source.commitment?.path??"Artifact unavailable"}</strong><p>{title(source.reason_code)}</p><dl>{source.commitment&&<><div><dt>Commit</dt><dd><code>{short(source.commitment.commit)}</code></dd></div><div><dt>SHA-256</dt><dd><code>{short(source.commitment.sha256)}</code></dd></div><div><dt>Bytes</dt><dd>{source.commitment.byte_length.toLocaleString()}</dd></div></>}</dl></article>)}
+    </div></section>
+    <section className="v2-section" id="obligations"><header><div><span className="eyebrow">EXACT OBLIGATION SET</span><h2>Every promise accounted for</h2></div><span className="count-pill">{report.obligation_assessments.length} assessed</span></header><div className="obligation-list">
+      {report.obligation_assessments.map(item=><article key={item.obligation_id}><div className="obligation-main"><span className={`verdict ${statusClass(item.status)}`}>{title(item.status)}</span><div><strong>{item.obligation_id}</strong><small>{item.kind}{item.stage?` · Stage ${item.stage}`:""}{!item.applicable?" · Not applicable":""}</small></div></div><p>{item.reason}</p>{item.citation_ids.map(id=>{const citation=citations.get(id);return citation?<blockquote key={id}><span>{id} · {citation.artifact_id} · bytes {citation.start_byte}–{citation.end_byte}</span>“{citation.quote}”</blockquote>:null})}</article>)}
+    </div></section>
+    {(report.findings.length>0||report.missing_items.length>0)&&<section className="v2-alert-grid">{report.findings.map(item=><article className="material" key={item.id}><TriangleAlert/><div><span>{item.id} · MATERIAL</span><strong>{item.obligation_id}</strong><p>{item.summary}</p></div></article>)}{report.missing_items.map((item,index)=><article key={`${item.obligation_id}-${item.evidence_id}-${index}`}><FileCheck2/><div><span>MISSING EVIDENCE</span><strong>{item.obligation_id} / {item.evidence_id}</strong><p>{title(item.reason_code)}</p></div></article>)}</section>}
+    <section className="v2-section" id="settlement"><header><div><span className="eyebrow">RECEIPT-BOUND SETTLEMENT</span><h2>Outcome and payment remain separate proofs</h2></div><Landmark/></header><div className="receipt-list">{deal.settlement_legs.length?deal.settlement_legs.map(leg=><article key={leg.id}><span className={`receipt-state ${leg.state.toLowerCase()}`}>{title(leg.state)}</span><div><strong>{title(leg.kind)} · Worker {leg.role}</strong><small>Recipient {short(leg.recipient)}</small></div><div className="receipt-amount"><strong>{leg.amount}</strong><small>attoGEN</small></div><code title={leg.receipt_id}>{short(leg.receipt_id)}</code></article>):<p>No settlement leg exists before a contract decision.</p>}</div></section>
+  </>;
+}

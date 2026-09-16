@@ -1,0 +1,325 @@
+{
+  "version": "tasktrace-v2-studionet-semantic-1",
+  "network": "studionet",
+  "chainId": 61999,
+  "sourceHash": "3133e10bf159d16a9fa49a1ec93f70cd02d1396e6f37983ed75534c5b2c3768e",
+  "evidenceCommit": "f4b48b235d15c0be61cbd75bf491dde1b98ad058",
+  "wallets": {
+    "client": "0x8396299e4aC395D66aa9f2cb7792C28a40060d67",
+    "A": "0x355d4861807e7b512035321836AE782C532dE60E",
+    "B": "0x06ABA641B66E428903a69CcbD2ffE923Ff11F05a"
+  },
+  "steps": {
+    "deploy": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T05:51:35.609Z",
+      "hash": "0xea5700856225a70267eb8d4dce92e0b9c1ddb2223d35685a4e971b449a4f2cef",
+      "submittedAt": "2026-09-13T05:51:38.691Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x41BcdFB280BD26939cb6956B55ddA7e85b4567c9",
+      "finishedAt": "2026-09-13T05:52:19.479Z"
+    },
+    "happy-create": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T07:15:34.721Z",
+      "hash": "0x5c0689d530df785a52b706fffaab61be76280862bdca17d43da9028655279b90",
+      "submittedAt": "2026-09-13T07:15:37.113Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x41BcdFB280BD26939cb6956B55ddA7e85b4567c9",
+      "finishedAt": "2026-09-13T07:16:16.742Z"
+    },
+    "happy-fund": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T07:16:18.105Z",
+      "hash": "0x850c120a314381c3a34451e21a9c36bad8cbdd8d0a7fe9fc08be3a94d12df324",
+      "submittedAt": "2026-09-13T07:16:20.040Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x41BcdFB280BD26939cb6956B55ddA7e85b4567c9",
+      "finishedAt": "2026-09-13T07:16:55.444Z"
+    },
+    "happy-accept-a": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T07:16:55.445Z",
+      "hash": "0xa5619b2b2a0334b869bbc1fc328547efaf732a25f80015ab4b094f0b68358929",
+      "submittedAt": "2026-09-13T07:16:59.228Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x41BcdFB280BD26939cb6956B55ddA7e85b4567c9",
+      "finishedAt": "2026-09-13T07:17:33.828Z"
+    },
+    "happy-accept-b": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T07:17:33.829Z",
+      "hash": "0x1623ca3e78ae1337494297774c2c2d32fde231e5ec74f144dfa7909cda10b516",
+      "submittedAt": "2026-09-13T07:17:36.463Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x41BcdFB280BD26939cb6956B55ddA7e85b4567c9",
+      "finishedAt": "2026-09-13T07:18:12.022Z"
+    },
+    "happy-submit-a": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T07:18:13.405Z",
+      "hash": "0xc1804bfe942c637234129f54a776ab4bb23b0eacc51c4b693c01faf6e40db445",
+      "submittedAt": "2026-09-13T07:18:15.468Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x41BcdFB280BD26939cb6956B55ddA7e85b4567c9",
+      "finishedAt": "2026-09-13T07:18:50.055Z"
+    },
+    "happy-submit-b": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T07:18:51.620Z",
+      "hash": "0x1f079a4c9ec9f53e0d06818d4bdd5b4c6274c7861adf6d604a93e08a81061f2e",
+      "submittedAt": "2026-09-13T07:18:53.297Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x41BcdFB280BD26939cb6956B55ddA7e85b4567c9",
+      "finishedAt": "2026-09-13T07:19:27.913Z"
+    },
+    "happy-request-review": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T07:19:27.914Z",
+      "hash": "0x0fa8d458314392f7a5aeb8ba5b2a302cea9aed2f1b0179c434d489d3664938f7",
+      "submittedAt": "2026-09-13T07:19:30.054Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x41BcdFB280BD26939cb6956B55ddA7e85b4567c9",
+      "finishedAt": "2026-09-13T07:20:05.289Z"
+    },
+    "happy-resolve-review": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T07:20:05.290Z",
+      "hash": "0xd23bd324906384e45b73edaf6c3294721e956ce4982c02b61e7b3167294f2b48",
+      "submittedAt": "2026-09-13T07:20:07.312Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x41BcdFB280BD26939cb6956B55ddA7e85b4567c9",
+      "finishedAt": "2026-09-13T07:21:18.711Z"
+    },
+    "tail-contradiction-create": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T07:21:20.251Z",
+      "hash": "0x2d90a5b2fb5792b14e5db074ffd55731669a9d8449bfa5576f3c8626c071bfc0",
+      "submittedAt": "2026-09-13T07:21:22.870Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x41BcdFB280BD26939cb6956B55ddA7e85b4567c9",
+      "finishedAt": "2026-09-13T07:21:56.409Z"
+    },
+    "tail-contradiction-fund": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T07:21:57.898Z",
+      "hash": "0x6224d7c56e2e36aef5337271b9678ae9080239c552455bac1c5aae6dcd3e5cbc",
+      "submittedAt": "2026-09-13T07:22:00.478Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x41BcdFB280BD26939cb6956B55ddA7e85b4567c9",
+      "finishedAt": "2026-09-13T07:22:36.586Z"
+    },
+    "tail-contradiction-accept-a": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T07:22:36.587Z",
+      "hash": "0x56498d28ae437da152f1df1764e22f9bde71012e98fc030cc9b79645fc253543",
+      "submittedAt": "2026-09-13T07:22:39.455Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x41BcdFB280BD26939cb6956B55ddA7e85b4567c9",
+      "finishedAt": "2026-09-13T07:23:15.077Z"
+    },
+    "tail-contradiction-accept-b": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T07:23:15.078Z",
+      "hash": "0x300f9281f0d6aba733c9e4a7e850f31ff935e79f6960eef6c90c0cf34cd675ae",
+      "submittedAt": "2026-09-13T07:23:17.455Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x41BcdFB280BD26939cb6956B55ddA7e85b4567c9",
+      "finishedAt": "2026-09-13T07:23:56.674Z"
+    },
+    "tail-contradiction-submit-a": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T07:23:58.027Z",
+      "hash": "0xb994e3ff20ea7c074d42f1423bb7131d7f6e2285e07e3abc9ea1c8c2addfb7cc",
+      "submittedAt": "2026-09-13T07:24:00.059Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x41BcdFB280BD26939cb6956B55ddA7e85b4567c9",
+      "finishedAt": "2026-09-13T07:24:34.021Z"
+    },
+    "tail-contradiction-submit-b": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T07:24:35.777Z",
+      "hash": "0x6bc15d078377a9fa11bfaaa320b6026050c380d7cdb1b03560423e9ad51bacb8",
+      "submittedAt": "2026-09-13T07:24:38.231Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x41BcdFB280BD26939cb6956B55ddA7e85b4567c9",
+      "finishedAt": "2026-09-13T07:25:12.349Z"
+    },
+    "tail-contradiction-request-review": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T07:25:12.350Z",
+      "hash": "0xc850adcd0ead0191dae3b8c4b183205a19977d92ae53bb8ff9883e3f2e38057a",
+      "submittedAt": "2026-09-13T07:25:14.087Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x41BcdFB280BD26939cb6956B55ddA7e85b4567c9",
+      "finishedAt": "2026-09-13T07:25:49.155Z"
+    },
+    "tail-contradiction-resolve-review": {
+      "phase": "FINALIZED_SUCCESS",
+      "startedAt": "2026-09-13T07:25:49.156Z",
+      "hash": "0xeee6594058fc49b4ef952688431675de2ffb1a2a96abba2e01ce57238a2cf28a",
+      "submittedAt": "2026-09-13T07:25:51.466Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_RETURN",
+      "to": "0x41BcdFB280BD26939cb6956B55ddA7e85b4567c9",
+      "finishedAt": "2026-09-13T07:27:35.551Z"
+    },
+    "reject-bad-hostname": {
+      "phase": "FINALIZED_EXPECTED_REJECTION",
+      "expectedError": "ORIGIN_HOST",
+      "startedAt": "2026-09-13T07:35:38.472Z",
+      "hash": "0xd6f46dd349d41ff9e524a04a2412c46f6539a1ecdbe3a7c5bef6be87e57de8cc",
+      "submittedAt": "2026-09-13T07:35:40.304Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_ERROR",
+      "finishedAt": "2026-09-13T07:36:16.484Z"
+    },
+    "reject-wrong-owner": {
+      "phase": "FINALIZED_HARNESS_REJECTION",
+      "expectedError": "ORIGIN_MISMATCH",
+      "startedAt": "2026-09-13T07:36:18.104Z",
+      "hash": "0xce6fd593c93f8874894f66d25d65d82278d08445c26fd4cadde386d93d4a09be",
+      "submittedAt": "2026-09-13T07:36:20.145Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_ERROR",
+      "observedError": "ORIGIN_HOST",
+      "passed": false,
+      "note": "Archived harness isolation failure; replaced by reject-wrong-owner-isolated.",
+      "finishedAt": "2026-09-13T07:38:18.276Z"
+    },
+    "reject-wrong-owner-isolated": {
+      "phase": "FINALIZED_EXPECTED_REJECTION",
+      "expectedError": "ORIGIN_MISMATCH",
+      "startedAt": "2026-09-13T07:38:36.343Z",
+      "hash": "0xc510f71afed76daf0fd0b22ae0685189d49b9e72cbd8f88c8e76d793c33ff210",
+      "submittedAt": "2026-09-13T07:38:38.938Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_ERROR",
+      "finishedAt": "2026-09-13T07:39:15.513Z"
+    },
+    "reject-mutable-version": {
+      "phase": "FINALIZED_EXPECTED_REJECTION",
+      "expectedError": "IMMUTABLE_COMMIT",
+      "startedAt": "2026-09-13T07:39:17.221Z",
+      "hash": "0x1263d9de9154574c50c4836c8d61ca51007b1fb95a161939c6105e4ddc160dee",
+      "submittedAt": "2026-09-13T07:39:18.943Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_ERROR",
+      "finishedAt": "2026-09-13T07:39:53.978Z"
+    },
+    "reject-malformed-sha256": {
+      "phase": "FINALIZED_EXPECTED_REJECTION",
+      "expectedError": "ARTIFACT_HASH",
+      "startedAt": "2026-09-13T07:40:00.244Z",
+      "hash": "0x1acb741307e5edccb31389d806dcfa15f81240a57b3b850f1920dcc9d476397b",
+      "submittedAt": "2026-09-13T07:40:02.532Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_ERROR",
+      "finishedAt": "2026-09-13T07:40:38.298Z"
+    },
+    "reject-missing-stage-obligation": {
+      "phase": "FINALIZED_EXPECTED_REJECTION",
+      "expectedError": "SEMANTIC_COUNT",
+      "startedAt": "2026-09-13T07:40:40.281Z",
+      "hash": "0x5f2877c960dc7ae06404c8f4702f5c00acd7cc5f3a6d8906647096203ac81fb7",
+      "submittedAt": "2026-09-13T07:40:42.329Z",
+      "finalized": true,
+      "execution": "FINISHED_WITH_ERROR",
+      "finishedAt": "2026-09-13T07:41:22.431Z"
+    }
+  },
+  "cases": {
+    "happy": {
+      "dealId": "v2-studio-happy-f4b48b2",
+      "expected": {
+        "A": "SATISFIED",
+        "B": "SATISFIED"
+      },
+      "actual": {
+        "A": "SATISFIED",
+        "B": "SATISFIED"
+      },
+      "status": "SETTLEMENT_PENDING",
+      "passed": true
+    },
+    "tail-contradiction": {
+      "dealId": "v2-studio-tail-contradiction-f4b48b2",
+      "expected": {
+        "A": "VIOLATED",
+        "B": "SATISFIED"
+      },
+      "actual": {
+        "A": "VIOLATED",
+        "B": "SATISFIED"
+      },
+      "status": "SETTLEMENT_PENDING",
+      "passed": true
+    },
+    "reject-bad-hostname": {
+      "dealId": "v2-studio-reject-bad-hostname-f4b48b2",
+      "expectedError": "ORIGIN_HOST",
+      "execution": "FINISHED_WITH_ERROR",
+      "statePersisted": false,
+      "passed": true
+    },
+    "reject-wrong-owner-isolated": {
+      "dealId": "v2-studio-reject-wrong-owner-isolated-f4b48b2",
+      "expectedError": "ORIGIN_MISMATCH",
+      "execution": "FINISHED_WITH_ERROR",
+      "statePersisted": false,
+      "passed": true
+    },
+    "reject-mutable-version": {
+      "dealId": "v2-studio-reject-mutable-version-f4b48b2",
+      "expectedError": "IMMUTABLE_COMMIT",
+      "execution": "FINISHED_WITH_ERROR",
+      "statePersisted": false,
+      "passed": true
+    },
+    "reject-malformed-sha256": {
+      "dealId": "v2-studio-reject-malformed-sha256-f4b48b2",
+      "expectedError": "ARTIFACT_HASH",
+      "execution": "FINISHED_WITH_ERROR",
+      "statePersisted": false,
+      "passed": true
+    },
+    "reject-missing-stage-obligation": {
+      "dealId": "v2-studio-reject-missing-stage-obligation-f4b48b2",
+      "expectedError": "SEMANTIC_COUNT",
+      "execution": "FINISHED_WITH_ERROR",
+      "statePersisted": false,
+      "passed": true
+    }
+  },
+  "startedAt": "2026-09-13T05:51:34.282Z",
+  "limitations": [
+    "Semantic consensus only: the intentionally disabled router prevents this run from claiming settlement."
+  ],
+  "contract": "0x41BcdFB280BD26939cb6956B55ddA7e85b4567c9",
+  "schemaVerified": true,
+  "configVerified": true,
+  "completedAt": "2026-09-13T07:41:23.918Z",
+  "result": {
+    "passed": true,
+    "semanticCases": 2,
+    "rejectionCases": 5,
+    "cases": 7,
+    "contract": "0x41BcdFB280BD26939cb6956B55ddA7e85b4567c9"
+  }
+}

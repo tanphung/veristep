@@ -1,0 +1,292 @@
+{
+  "hash": "0xe1c757e775b20504cad7109209d9f1599275bd63e185f476378b4c868e6e3bcb",
+  "from_address": "0xc3A6308920A5f3152a7E76e87F2F807610a76757",
+  "to_address": "0x07f317775a3f395cb8587E0B73c579f8740bfd6D",
+  "data": {
+    "calldata": {
+      "readable": "{\"args\":[\"v2-local-926821c5\",\"{\\\"workers\\\":{\\\"A\\\":\\\"0x51838D5d14cb755ca8D09e279006cBF5Fe65e02c\\\",\\\"B\\\":\\\"0x7F949126f5F8FD2465A67C5A21436eb8D3DaF924\\\"},\\\"origins\\\":{\\\"SOURCE\\\":{\\\"provider\\\":\\\"github\\\",\\\"hostname\\\":\\\"api.github.com\\\",\\\"owner\\\":\\\"tanphung\\\",\\\"owner_id\\\":162718327,\\\"repository\\\":\\\"tasktrace\\\",\\\"repository_id\\\":1358380732},\\\"A\\\":{\\\"provider\\\":\\\"github\\\",\\\"hostname\\\":\\\"api.github.com\\\",\\\"owner\\\":\\\"tanphung\\\",\\\"owner_id\\\":162718327,\\\"repository\\\":\\\"tasktrace\\\",\\\"repository_id\\\":1358380732},\\\"B\\\":{\\\"provider\\\":\\\"github\\\",\\\"hostname\\\":\\\"api.github.com\\\",\\\"owner\\\":\\\"tanphung\\\",\\\"owner_id\\\":162718327,\\\"repository\\\":\\\"tasktrace\\\",\\\"repository_id\\\":1358380732}},\\\"source\\\":{\\\"origin\\\":{\\\"provider\\\":\\\"github\\\",\\\"hostname\\\":\\\"api.github.com\\\",\\\"owner\\\":\\\"tanphung\\\",\\\"owner_id\\\":162718327,\\\"repository\\\":\\\"tasktrace\\\",\\\"repository_id\\\":1358380732},\\\"commit\\\":\\\"926821c5c48c6c91fc7f11d3c5d654f1180f3e87\\\",\\\"path\\\":\\\"evidence/v2-smoke/source.txt\\\",\\\"blob\\\":\\\"76a5fbc341e161a0e58b01b904ba31fce132710e\\\",\\\"content_type\\\":\\\"text/plain\\\",\\\"encoding\\\":\\\"utf-8\\\",\\\"byte_length\\\":222,\\\"sha256\\\":\\\"380f6a4082055198e4a55e0c02ad5371b77c7ef1163a3dd53d7e1afbc78c7505\\\"},\\\"money\\\":{\\\"A\\\":{\\\"fee\\\":\\\"1000\\\",\\\"bond\\\":\\\"500\\\",\\\"penalty\\\":\\\"300\\\"},\\\"B\\\":{\\\"fee\\\":\\\"1000\\\",\\\"bond\\\":\\\"500\\\",\\\"penalty\\\":\\\"300\\\"}},\\\"windows\\\":{\\\"accept\\\":600,\\\"step\\\":600,\\\"review\\\":600,\\\"adjudication\\\":900},\\\"max_revisions\\\":0,\\\"semantic_obligations\\\":[{\\\"id\\\":\\\"SEM_A_POLICY_ACCURACY\\\",\\\"stage\\\":\\\"A\\\",\\\"statement\\\":\\\"Stage A must preserve every export-policy rule in SOURCE: trial accounts cannot export; paid accounts require administrator approval for every export; there is no automatic-export exception.\\\",\\\"evidence_ids\\\":[\\\"SOURCE\\\",\\\"A\\\"]},{\\\"id\\\":\\\"SEM_B_FAITHFUL_HANDOFF\\\",\\\"stage\\\":\\\"B\\\",\\\"statement\\\":\\\"Stage B must faithfully preserve Stage A's complete policy without weakening, contradicting, or inventing an export exception.\\\",\\\"evidence_ids\\\":[\\\"A\\\",\\\"B\\\"]}]}\",]\"method\":\"create_terms\"}"
+    }
+  },
+  "status": 7,
+  "result": 6,
+  "consensus_data": {
+    "votes": {
+      "0x1d039D1Aca1cEDe88006352eEf79837F19ca067a": "idle",
+      "0x47Cd6396cD0eDC630765F1F4Bf9517C48Add9158": "agree",
+      "0x52c15F00f5acb672Ab97f3A1Cb09a8Acc1EE13a0": "agree",
+      "0x7141645C062d42dF0c9596b90207dC96f04E58F4": "agree",
+      "0xa6d8E237cd72B12C324a42B1432D817982d30db9": "idle"
+    },
+    "leader_receipt": [
+      {
+        "execution_result": "SUCCESS",
+        "genvm_result": {
+          "stderr": "",
+          "stdout": "",
+          "raw_error": null,
+          "error_code": null,
+          "error_description": null
+        },
+        "mode": "leader",
+        "vote": null,
+        "node_config": {
+          "stake": 5,
+          "address": "0x52c15F00f5acb672Ab97f3A1Cb09a8Acc1EE13a0",
+          "primary_model": {
+            "model": "tasktrace-exact-v1",
+            "config": {
+              "max_tokens": 2000,
+              "temperature": 0
+            },
+            "plugin": "openai-compatible",
+            "provider": "tasktrace-fixture",
+            "plugin_config": {
+              "api_url": "http://host.docker.internal:18080",
+              "api_key_env_var": "OPENAIKEY"
+            },
+            "fallback_validator": null
+          },
+          "secondary_model": null
+        },
+        "calldata": {
+          "readable": "{\"args\":[\"v2-local-926821c5\",\"{\\\"workers\\\":{\\\"A\\\":\\\"0x51838D5d14cb755ca8D09e279006cBF5Fe65e02c\\\",\\\"B\\\":\\\"0x7F949126f5F8FD2465A67C5A21436eb8D3DaF924\\\"},\\\"origins\\\":{\\\"SOURCE\\\":{\\\"provider\\\":\\\"github\\\",\\\"hostname\\\":\\\"api.github.com\\\",\\\"owner\\\":\\\"tanphung\\\",\\\"owner_id\\\":162718327,\\\"repository\\\":\\\"tasktrace\\\",\\\"repository_id\\\":1358380732},\\\"A\\\":{\\\"provider\\\":\\\"github\\\",\\\"hostname\\\":\\\"api.github.com\\\",\\\"owner\\\":\\\"tanphung\\\",\\\"owner_id\\\":162718327,\\\"repository\\\":\\\"tasktrace\\\",\\\"repository_id\\\":1358380732},\\\"B\\\":{\\\"provider\\\":\\\"github\\\",\\\"hostname\\\":\\\"api.github.com\\\",\\\"owner\\\":\\\"tanphung\\\",\\\"owner_id\\\":162718327,\\\"repository\\\":\\\"tasktrace\\\",\\\"repository_id\\\":1358380732}},\\\"source\\\":{\\\"origin\\\":{\\\"provider\\\":\\\"github\\\",\\\"hostname\\\":\\\"api.github.com\\\",\\\"owner\\\":\\\"tanphung\\\",\\\"owner_id\\\":162718327,\\\"repository\\\":\\\"tasktrace\\\",\\\"repository_id\\\":1358380732},\\\"commit\\\":\\\"926821c5c48c6c91fc7f11d3c5d654f1180f3e87\\\",\\\"path\\\":\\\"evidence/v2-smoke/source.txt\\\",\\\"blob\\\":\\\"76a5fbc341e161a0e58b01b904ba31fce132710e\\\",\\\"content_type\\\":\\\"text/plain\\\",\\\"encoding\\\":\\\"utf-8\\\",\\\"byte_length\\\":222,\\\"sha256\\\":\\\"380f6a4082055198e4a55e0c02ad5371b77c7ef1163a3dd53d7e1afbc78c7505\\\"},\\\"money\\\":{\\\"A\\\":{\\\"fee\\\":\\\"1000\\\",\\\"bond\\\":\\\"500\\\",\\\"penalty\\\":\\\"300\\\"},\\\"B\\\":{\\\"fee\\\":\\\"1000\\\",\\\"bond\\\":\\\"500\\\",\\\"penalty\\\":\\\"300\\\"}},\\\"windows\\\":{\\\"accept\\\":600,\\\"step\\\":600,\\\"review\\\":600,\\\"adjudication\\\":900},\\\"max_revisions\\\":0,\\\"semantic_obligations\\\":[{\\\"id\\\":\\\"SEM_A_POLICY_ACCURACY\\\",\\\"stage\\\":\\\"A\\\",\\\"statement\\\":\\\"Stage A must preserve every export-policy rule in SOURCE: trial accounts cannot export; paid accounts require administrator approval for every export; there is no automatic-export exception.\\\",\\\"evidence_ids\\\":[\\\"SOURCE\\\",\\\"A\\\"]},{\\\"id\\\":\\\"SEM_B_FAITHFUL_HANDOFF\\\",\\\"stage\\\":\\\"B\\\",\\\"statement\\\":\\\"Stage B must faithfully preserve Stage A's complete policy without weakening, contradicting, or inventing an export exception.\\\",\\\"evidence_ids\\\":[\\\"A\\\",\\\"B\\\"]}]}\",]\"method\":\"create_terms\"}"
+        },
+        "eq_outputs": {},
+        "result": {
+          "status": "return",
+          "payload": {
+            "readable": "null"
+          }
+        }
+      },
+      {
+        "execution_result": "SUCCESS",
+        "genvm_result": {
+          "stderr": "",
+          "stdout": "",
+          "raw_error": null,
+          "error_code": null,
+          "error_description": null
+        },
+        "mode": "validator",
+        "vote": "agree",
+        "node_config": {
+          "stake": 5,
+          "address": "0x52c15F00f5acb672Ab97f3A1Cb09a8Acc1EE13a0",
+          "primary_model": {
+            "model": "tasktrace-exact-v1",
+            "config": {
+              "max_tokens": 2000,
+              "temperature": 0
+            },
+            "plugin": "openai-compatible",
+            "provider": "tasktrace-fixture",
+            "plugin_config": {
+              "api_url": "http://host.docker.internal:18080",
+              "api_key_env_var": "OPENAIKEY"
+            },
+            "fallback_validator": null
+          },
+          "secondary_model": null
+        },
+        "calldata": {
+          "readable": "{\"args\":[\"v2-local-926821c5\",\"{\\\"workers\\\":{\\\"A\\\":\\\"0x51838D5d14cb755ca8D09e279006cBF5Fe65e02c\\\",\\\"B\\\":\\\"0x7F949126f5F8FD2465A67C5A21436eb8D3DaF924\\\"},\\\"origins\\\":{\\\"SOURCE\\\":{\\\"provider\\\":\\\"github\\\",\\\"hostname\\\":\\\"api.github.com\\\",\\\"owner\\\":\\\"tanphung\\\",\\\"owner_id\\\":162718327,\\\"repository\\\":\\\"tasktrace\\\",\\\"repository_id\\\":1358380732},\\\"A\\\":{\\\"provider\\\":\\\"github\\\",\\\"hostname\\\":\\\"api.github.com\\\",\\\"owner\\\":\\\"tanphung\\\",\\\"owner_id\\\":162718327,\\\"repository\\\":\\\"tasktrace\\\",\\\"repository_id\\\":1358380732},\\\"B\\\":{\\\"provider\\\":\\\"github\\\",\\\"hostname\\\":\\\"api.github.com\\\",\\\"owner\\\":\\\"tanphung\\\",\\\"owner_id\\\":162718327,\\\"repository\\\":\\\"tasktrace\\\",\\\"repository_id\\\":1358380732}},\\\"source\\\":{\\\"origin\\\":{\\\"provider\\\":\\\"github\\\",\\\"hostname\\\":\\\"api.github.com\\\",\\\"owner\\\":\\\"tanphung\\\",\\\"owner_id\\\":162718327,\\\"repository\\\":\\\"tasktrace\\\",\\\"repository_id\\\":1358380732},\\\"commit\\\":\\\"926821c5c48c6c91fc7f11d3c5d654f1180f3e87\\\",\\\"path\\\":\\\"evidence/v2-smoke/source.txt\\\",\\\"blob\\\":\\\"76a5fbc341e161a0e58b01b904ba31fce132710e\\\",\\\"content_type\\\":\\\"text/plain\\\",\\\"encoding\\\":\\\"utf-8\\\",\\\"byte_length\\\":222,\\\"sha256\\\":\\\"380f6a4082055198e4a55e0c02ad5371b77c7ef1163a3dd53d7e1afbc78c7505\\\"},\\\"money\\\":{\\\"A\\\":{\\\"fee\\\":\\\"1000\\\",\\\"bond\\\":\\\"500\\\",\\\"penalty\\\":\\\"300\\\"},\\\"B\\\":{\\\"fee\\\":\\\"1000\\\",\\\"bond\\\":\\\"500\\\",\\\"penalty\\\":\\\"300\\\"}},\\\"windows\\\":{\\\"accept\\\":600,\\\"step\\\":600,\\\"review\\\":600,\\\"adjudication\\\":900},\\\"max_revisions\\\":0,\\\"semantic_obligations\\\":[{\\\"id\\\":\\\"SEM_A_POLICY_ACCURACY\\\",\\\"stage\\\":\\\"A\\\",\\\"statement\\\":\\\"Stage A must preserve every export-policy rule in SOURCE: trial accounts cannot export; paid accounts require administrator approval for every export; there is no automatic-export exception.\\\",\\\"evidence_ids\\\":[\\\"SOURCE\\\",\\\"A\\\"]},{\\\"id\\\":\\\"SEM_B_FAITHFUL_HANDOFF\\\",\\\"stage\\\":\\\"B\\\",\\\"statement\\\":\\\"Stage B must faithfully preserve Stage A's complete policy without weakening, contradicting, or inventing an export exception.\\\",\\\"evidence_ids\\\":[\\\"A\\\",\\\"B\\\"]}]}\",]\"method\":\"create_terms\"}"
+        },
+        "result": {
+          "status": "return",
+          "payload": {
+            "readable": "null"
+          }
+        }
+      }
+    ],
+    "validators": [
+      {
+        "execution_result": "ERROR",
+        "genvm_result": {
+          "stderr": "Validator execution cancelled after quorum",
+          "stdout": "",
+          "raw_error": {
+            "fatal": false,
+            "causes": [
+              "VALIDATOR_QUORUM_REACHED"
+            ]
+          },
+          "error_code": "CONSENSUS_VALIDATOR_QUORUM_REACHED"
+        },
+        "mode": "validator",
+        "vote": "idle",
+        "node_config": {
+          "id": 3,
+          "model": "tasktrace-exact-v1",
+          "stake": 5,
+          "config": {
+            "max_tokens": 2000,
+            "temperature": 0
+          },
+          "plugin": "openai-compatible",
+          "address": "0xa6d8E237cd72B12C324a42B1432D817982d30db9",
+          "provider": "tasktrace-fixture",
+          "plugin_config": {
+            "api_url": "http://host.docker.internal:18080",
+            "api_key_env_var": "OPENAIKEY"
+          },
+          "fallback_validator": null
+        }
+      },
+      {
+        "execution_result": "ERROR",
+        "genvm_result": {
+          "stderr": "Validator execution cancelled after quorum",
+          "stdout": "",
+          "raw_error": {
+            "fatal": false,
+            "causes": [
+              "VALIDATOR_QUORUM_REACHED"
+            ]
+          },
+          "error_code": "CONSENSUS_VALIDATOR_QUORUM_REACHED"
+        },
+        "mode": "validator",
+        "vote": "idle",
+        "node_config": {
+          "id": 5,
+          "model": "tasktrace-exact-v1",
+          "stake": 6,
+          "config": {
+            "max_tokens": 2000,
+            "temperature": 0
+          },
+          "plugin": "openai-compatible",
+          "address": "0x1d039D1Aca1cEDe88006352eEf79837F19ca067a",
+          "provider": "tasktrace-fixture",
+          "plugin_config": {
+            "api_url": "http://host.docker.internal:18080",
+            "api_key_env_var": "OPENAIKEY"
+          },
+          "fallback_validator": null
+        }
+      },
+      {
+        "execution_result": "SUCCESS",
+        "genvm_result": {
+          "stderr": "",
+          "stdout": "",
+          "raw_error": null,
+          "error_code": null,
+          "error_description": null
+        },
+        "mode": "validator",
+        "vote": "agree",
+        "node_config": {
+          "stake": 4,
+          "address": "0x7141645C062d42dF0c9596b90207dC96f04E58F4",
+          "primary_model": {
+            "model": "tasktrace-exact-v1",
+            "config": {
+              "max_tokens": 2000,
+              "temperature": 0
+            },
+            "plugin": "openai-compatible",
+            "provider": "tasktrace-fixture",
+            "plugin_config": {
+              "api_url": "http://host.docker.internal:18080",
+              "api_key_env_var": "OPENAIKEY"
+            },
+            "fallback_validator": null
+          },
+          "secondary_model": null
+        }
+      },
+      {
+        "execution_result": "SUCCESS",
+        "genvm_result": {
+          "stderr": "",
+          "stdout": "",
+          "raw_error": null,
+          "error_code": null,
+          "error_description": null
+        },
+        "mode": "validator",
+        "vote": "agree",
+        "node_config": {
+          "stake": 1,
+          "address": "0x47Cd6396cD0eDC630765F1F4Bf9517C48Add9158",
+          "primary_model": {
+            "model": "tasktrace-exact-v1",
+            "config": {
+              "max_tokens": 2000,
+              "temperature": 0
+            },
+            "plugin": "openai-compatible",
+            "provider": "tasktrace-fixture",
+            "plugin_config": {
+              "api_url": "http://host.docker.internal:18080",
+              "api_key_env_var": "OPENAIKEY"
+            },
+            "fallback_validator": null
+          },
+          "secondary_model": null
+        }
+      }
+    ]
+  },
+  "gaslimit": 1,
+  "nonce": 1,
+  "created_at": "2026-09-13T03:01:06.400716+00:00",
+  "leader_only": false,
+  "execution_mode": "NORMAL",
+  "origin_address": "0xc3A6308920A5f3152a7E76e87F2F807610a76757",
+  "triggered_on": null,
+  "appeal_validators_timeout": false,
+  "sim_config": {
+    "signed_rollup_transaction": "0xf9082901808307a12094b7278a61aa25c888815afc32ad3cc52ff24fe57580b907c427241a99000000000000000000000000c3a6308920a5f3152a7e76e87f2f807610a7675700000000000000000000000007f317775a3f395cb8587e0b73c579f8740bfd6d0000000000000000000000000000000000000000000000000000000000000005000000000000000000000000000000000000000000000000000000000000000300000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000006e9f906e6b906e2160461726773158c0176322d6c6f63616c2d3932363832316335946b7b22776f726b657273223a7b2241223a22307835313833384435643134636237353563613844303965323739303036634246354665363565303263222c2242223a22307837463934393132366635463846443234363541363743354132313433366562384433446146393234227d2c226f726967696e73223a7b22534f55524345223a7b2270726f7669646572223a22676974687562222c22686f73746e616d65223a226170692e6769746875622e636f6d222c226f776e6572223a2274616e7068756e67222c226f776e65725f6964223a3136323731383332372c227265706f7369746f7279223a227461736b7472616365222c227265706f7369746f72795f6964223a313335383338303733327d2c2241223a7b2270726f7669646572223a22676974687562222c22686f73746e616d65223a226170692e6769746875622e636f6d222c226f776e6572223a2274616e7068756e67222c226f776e65725f6964223a3136323731383332372c227265706f7369746f7279223a227461736b7472616365222c227265706f7369746f72795f6964223a313335383338303733327d2c2242223a7b2270726f7669646572223a22676974687562222c22686f73746e616d65223a226170692e6769746875622e636f6d222c226f776e6572223a2274616e7068756e67222c226f776e65725f6964223a3136323731383332372c227265706f7369746f7279223a227461736b7472616365222c227265706f7369746f72795f6964223a313335383338303733327d7d2c22736f75726365223a7b226f726967696e223a7b2270726f7669646572223a22676974687562222c22686f73746e616d65223a226170692e6769746875622e636f6d222c226f776e6572223a2274616e7068756e67222c226f776e65725f6964223a3136323731383332372c227265706f7369746f7279223a227461736b7472616365222c227265706f7369746f72795f6964223a313335383338303733327d2c22636f6d6d6974223a2239323638323163356334386336633931666337663131643363356436353466313138306633653837222c2270617468223a2265766964656e63652f76322d736d6f6b652f736f757263652e747874222c22626c6f62223a2237366135666263333431653136316130653538623031623930346261333166636531333237313065222c22636f6e74656e745f74797065223a22746578742f706c61696e222c22656e636f64696e67223a227574662d38222c22627974655f6c656e677468223a3232322c22736861323536223a2233383066366134303832303535313938653461353565306330326164353337316237376337656631313633613364643533643765316166626337386337353035227d2c226d6f6e6579223a7b2241223a7b22666565223a2231303030222c22626f6e64223a22353030222c2270656e616c7479223a22333030227d2c2242223a7b22666565223a2231303030222c22626f6e64223a22353030222c2270656e616c7479223a22333030227d7d2c2277696e646f7773223a7b22616363657074223a3630302c2273746570223a3630302c22726576696577223a3630302c2261646a756469636174696f6e223a3930307d2c226d61785f7265766973696f6e73223a302c2273656d616e7469635f6f626c69676174696f6e73223a5b7b226964223a2253454d5f415f504f4c4943595f4143435552414359222c227374616765223a2241222c2273746174656d656e74223a2253746167652041206d757374207072657365727665206576657279206578706f72742d706f6c6963792072756c6520696e20534f555243453a20747269616c206163636f756e74732063616e6e6f74206578706f72743b2070616964206163636f756e747320726571756972652061646d696e6973747261746f7220617070726f76616c20666f72206576657279206578706f72743b207468657265206973206e6f206175746f6d617469632d6578706f727420657863657074696f6e2e222c2265766964656e63655f696473223a5b22534f55524345222c2241225d7d2c7b226964223a2253454d5f425f464149544846554c5f48414e444f4646222c227374616765223a2242222c2273746174656d656e74223a2253746167652042206d75737420666169746866756c6c792070726573657276652053746167652041277320636f6d706c65746520706f6c69637920776974686f7574207765616b656e696e672c20636f6e74726164696374696e672c206f7220696e76656e74696e6720616e206578706f727420657863657074696f6e2e222c2265766964656e63655f696473223a5b2241222c2242225d7d5d7d066d6574686f64646372656174655f7465726d730000000000000000000000000000000000000000000000008301e482a07adb6971d50329174c3b9533f2775e8653d43fbe2176188a0c9351463273505fa02684cfca579b0ac44da02eb8bd2beccf46393bf3b264cc8edcace8f862b8a643"
+  },
+  "value_credited": false,
+  "sender": "0xc3A6308920A5f3152a7E76e87F2F807610a76757",
+  "recipient": "0x07f317775a3f395cb8587E0B73c579f8740bfd6D",
+  "tx_id": "0xe1c757e775b20504cad7109209d9f1599275bd63e185f476378b4c868e6e3bcb",
+  "activator": "0x52c15F00f5acb672Ab97f3A1Cb09a8Acc1EE13a0",
+  "last_leader": "0x52c15F00f5acb672Ab97f3A1Cb09a8Acc1EE13a0",
+  "result_name": "MAJORITY_AGREE",
+  "num_of_rounds": "1",
+  "last_round": {
+    "round": "0",
+    "leader_index": "0",
+    "votes_committed": "5",
+    "votes_revealed": "5",
+    "appeal_bond": "0",
+    "rotations_left": "3",
+    "result": 6,
+    "round_validators": [
+      "0x52c15F00f5acb672Ab97f3A1Cb09a8Acc1EE13a0",
+      "0xa6d8E237cd72B12C324a42B1432D817982d30db9",
+      "0x1d039D1Aca1cEDe88006352eEf79837F19ca067a",
+      "0x7141645C062d42dF0c9596b90207dC96f04E58F4",
+      "0x47Cd6396cD0eDC630765F1F4Bf9517C48Add9158"
+    ],
+    "validator_votes_hash": [
+      "0x3f54fe88069b607c38b833e2e21e5dfd8613ec81dceaf44fe886a0f30b606cc1",
+      "0x2964caa8e86f60dc40a021c4836836508765fd10cd1c119f747b3d86f6fd095f",
+      "0x1ee4b12c80d922476e918b3d92a55bcf6fd90a43ee254473646dbcaf41bb7dda",
+      "0xba71085af735060b64fd4c9d4549b6f2251c5fb064c8bb3ff2707939307f5b36",
+      "0x3eadf89524bfa3ac0e15922675ce3b0ea179339553158270cd2e2d54081a520a"
+    ],
+    "validator_votes": [
+      1,
+      5,
+      5,
+      1,
+      1
+    ],
+    "validator_votes_name": [
+      "AGREE",
+      "IDLE",
+      "IDLE",
+      "AGREE",
+      "AGREE"
+    ]
+  },
+  "type": 2,
+  "status_name": "FINALIZED"
+}
