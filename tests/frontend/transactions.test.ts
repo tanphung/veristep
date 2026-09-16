@@ -1,6 +1,6 @@
 import {beforeEach,describe,it,expect,vi} from 'vitest';
 import {chain,contract,readClient} from '../../frontend/src/client';
-import {connect,history,historyKey,observe,pending,receiptPhase,submit,assertReceiptMatches,recoverHash,watchWallet,type TxRecord} from '../../frontend/src/transactions';
+import {connect,history,historyKey,observe,pending,receiptPhase,submit,assertReceiptMatches,recoverHash,walletChanged,watchWallet,type TxRecord} from '../../frontend/src/transactions';
 import {abi} from 'genlayer-js';
 import * as clientModule from '../../frontend/src/client';
 import {jobFixture} from './fixtures';
@@ -17,12 +17,19 @@ beforeEach(()=>{
   Object.defineProperty(navigator,'locks',{value:{request:async(_name:unknown,_opts:unknown,callback:(lock:object)=>unknown)=>callback({name:'test-lock'})},configurable:true});
 });
 describe('transaction safety',()=>{
-  it('invalidates wallet state on account, chain and disconnect events and removes listeners',()=>{
-    const listeners=new Map<string,()=>void>();const invalidate=vi.fn();
-    Object.defineProperty(window,'ethereum',{value:{request:mocks.request,on:(event:string,fn:()=>void)=>listeners.set(event,fn),removeListener:(event:string,fn:()=>void)=>{if(listeners.get(event)===fn)listeners.delete(event);}},configurable:true});
-    const cleanup=watchWallet(invalidate);expect(listeners.size).toBe(3);
-    for(const event of ['accountsChanged','chainChanged','disconnect'])listeners.get(event)!();
-    expect(invalidate).toHaveBeenCalledTimes(3);cleanup();expect(listeners.size).toBe(0);
+  it('forwards wallet event payloads and removes listeners',()=>{
+    const listeners=new Map<string,(...args:unknown[])=>void>();const onChange=vi.fn();
+    Object.defineProperty(window,'ethereum',{value:{request:mocks.request,on:(event:string,fn:(...args:unknown[])=>void)=>listeners.set(event,fn),removeListener:(event:string,fn:(...args:unknown[])=>void)=>{if(listeners.get(event)===fn)listeners.delete(event);}},configurable:true});
+    const cleanup=watchWallet(onChange);expect(listeners.size).toBe(3);
+    listeners.get('accountsChanged')!([account]);listeners.get('chainChanged')!(`0x${chain.id.toString(16)}`);listeners.get('disconnect')!();
+    expect(onChange).toHaveBeenNthCalledWith(1,{type:'accountsChanged',accounts:[account]});expect(onChange).toHaveBeenNthCalledWith(2,{type:'chainChanged',chainId:`0x${chain.id.toString(16)}`});expect(onChange).toHaveBeenNthCalledWith(3,{type:'disconnect'});cleanup();expect(listeners.size).toBe(0);
+  });
+  it('keeps the connected UI state for matching account and network events',()=>{
+    expect(walletChanged(account,{type:'accountsChanged',accounts:[account.toUpperCase()]})).toBe(false);
+    expect(walletChanged(account,{type:'chainChanged',chainId:`0x${chain.id.toString(16)}`})).toBe(false);
+    expect(walletChanged(account,{type:'accountsChanged',accounts:[]})).toBe(true);
+    expect(walletChanged(account,{type:'chainChanged',chainId:'0x1'})).toBe(true);
+    expect(walletChanged(account,{type:'disconnect'})).toBe(true);
   });
   it('rejects accounts changed during the connect flow',async()=>{
     mocks.request.mockImplementation(async({method}:{method:string})=>method==='eth_chainId'?`0x${chain.id.toString(16)}`:method==='eth_requestAccounts'?[account]:['0x3333333333333333333333333333333333333333']);

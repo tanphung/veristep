@@ -4,6 +4,7 @@ import {chain,contract,readClient,readJob,writesEnabled} from './client';
 import {executionName,statusName} from '../../scripts/receipts.mjs';
 
 export type Provider=NonNullable<NonNullable<Parameters<typeof createClient>[0]>['provider']>;
+export type WalletChange={type:'accountsChanged';accounts?:string[]}|{type:'chainChanged';chainId?:unknown}|{type:'disconnect'};
 export type Phase='SIGNING'|'PENDING'|'ACCEPTED'|'FINALIZED_SUCCESS'|'FAILED'|'REJECTED'|'UNKNOWN';
 export type TxRecord={id:string;jobId:string;method:string;account:string;chainId:number;contract:string;value:string;phase:Phase;hash?:Hash;error?:string;createdAt:number;feeValue?:string;feeSource?:'developer'|'network-default';feeVerification?:'verified'|'mismatch'|'unavailable';feeConsumed?:string;feeRefunded?:string};
 export const historyKey=`veristep:transactions:${chain.id}:${contract.toLowerCase()}`;
@@ -43,12 +44,22 @@ export async function connect():Promise<Address>{
   if(current?.[0]?.toLowerCase()!==accounts[0].toLowerCase())throw new Error('Wallet account changed during connection. Connect again.');
   return accounts[0];
 }
-export function watchWallet(invalidate:()=>void):()=>void {
-  const provider=injected() as Provider & {on?:(event:string,listener:()=>void)=>unknown;removeListener?:(event:string,listener:()=>void)=>unknown};
+export function walletChanged(account:Address,change:WalletChange):boolean {
+  if(change.type==='disconnect')return true;
+  if(change.type==='accountsChanged')return !Array.isArray(change.accounts)||change.accounts[0]?.toLowerCase()!==account.toLowerCase();
+  const chainId=typeof change.chainId==='number'?change.chainId:typeof change.chainId==='string'?Number(change.chainId):NaN;
+  return !Number.isSafeInteger(chainId)||chainId!==chain.id;
+}
+export function watchWallet(onChange:(change:WalletChange)=>void):()=>void {
+  const provider=injected() as Provider & {on?:(event:string,listener:(...args:unknown[])=>void)=>unknown;removeListener?:(event:string,listener:(...args:unknown[])=>void)=>unknown};
   if(!provider.on||!provider.removeListener)return ()=>{};
-  const events=['accountsChanged','chainChanged','disconnect'];
-  for(const event of events)provider.on(event,invalidate);
-  return ()=>{for(const event of events)provider.removeListener?.(event,invalidate);};
+  const listeners={
+    accountsChanged:(...args:unknown[])=>onChange({type:'accountsChanged',accounts:Array.isArray(args[0])?args[0].filter((item):item is string=>typeof item==='string'):undefined}),
+    chainChanged:(...args:unknown[])=>onChange({type:'chainChanged',chainId:args[0]}),
+    disconnect:()=>onChange({type:'disconnect'}),
+  };
+  for(const [event,listener] of Object.entries(listeners))provider.on(event,listener);
+  return ()=>{for(const [event,listener] of Object.entries(listeners))provider.removeListener?.(event,listener);};
 }
 const methods=new Set(['create_job','accept_job','cancel_job','submit_work','approve_work','request_review','resolve_review','advance_timeout','claim']);
 export async function submit(account:Address,jobId:string,method:string,args:CalldataEncodable[],value=0n):Promise<TxRecord>{

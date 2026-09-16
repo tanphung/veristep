@@ -2,7 +2,7 @@ import {useCallback,useEffect,useRef,useState} from "react";
 import {ArrowLeftRight,ArrowRight,ArrowUpRight,CheckCircle2,FileKey2,Gavel,Github,Plus,RefreshCw,Route,ShieldCheck,Wallet} from "lucide-react";
 import type {Address} from "genlayer-js/types";
 import {chain,contract,explorer,jobHref,short,writesEnabled} from "./client";
-import {connect,watchWallet} from "./transactions";
+import {connect,walletChanged,watchWallet} from "./transactions";
 import {listV2Deals,readV2Deal} from "./v2-client";
 import {V2Report} from "./V2Report";
 import {V2Actions} from "./V2Actions";
@@ -29,7 +29,7 @@ export default function VeriStepApp(){
   const refresh=useCallback(async()=>{const turn=++generation.current;setLoading(true);setError("");try{const found=await listV2Deals();if(turn!==generation.current)return;setIds(found);if(view==="compare"){setDeal(undefined);return;}const id=selected||found[0];if(!id){setDeal(undefined);return;}const value=await readV2Deal(id);if(turn!==generation.current)return;setDeal(value);if(!selected){location.hash=jobHref(id);setSelected(id);}}catch(cause){if(turn===generation.current){setDeal(undefined);setError(friendlyError(cause,"Unable to read finalized VeriStep contract state"));}}finally{if(turn===generation.current)setLoading(false);}},[selected,view]);
   useEffect(()=>{void refresh();return()=>{generation.current++;};},[refresh]);
   useEffect(()=>{const change=()=>{const id=selectedFromUrl(),nextView=viewFromUrl();if(id===selected&&nextView===view)return;setSelected(id);setView(nextView);setDeal(undefined);setCreating(false);};window.addEventListener("hashchange",change);return()=>window.removeEventListener("hashchange",change);},[selected,view]);
-  useEffect(()=>{if(!account)return;return watchWallet(()=>{setAccount(undefined);setWalletError("Wallet or network changed. Reconnect before signing.");});},[account]);
+  useEffect(()=>{if(!account)return;return watchWallet(change=>{if(!walletChanged(account,change))return;setAccount(undefined);setWalletError("Wallet or network changed. Reconnect before signing.");});},[account]);
   const loadHistory=useCallback(()=>{try{setRecords(v2History());setHistoryError("");}catch(cause){setHistoryError(friendlyError(cause,"VeriStep transaction tracking unavailable"));}},[]);
   useEffect(()=>{loadHistory();window.addEventListener("veristep:v2-transactions",loadHistory);return()=>window.removeEventListener("veristep:v2-transactions",loadHistory);},[loadHistory]);
   const checkTransactions=useCallback(async()=>{if(observing.current)return;observing.current=true;try{for(const record of v2History().filter(v2Pending)){const result=await observeV2(record);if(result.phase==="FINALIZED_SUCCESS")await refresh();}}catch(cause){setHistoryError(friendlyError(cause,"Could not observe the existing VeriStep transaction"));}finally{observing.current=false;}},[refresh]);
