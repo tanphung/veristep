@@ -494,6 +494,14 @@
       "finalized": true,
       "execution": "FINISHED_WITH_ERROR",
       "finishedAt": "2026-09-15T16:47:32.472Z"
+    },
+    "a-fault-advance-timeout": {
+      "phase": "REJECTED_BEFORE_HASH",
+      "startedAt": "2026-09-16T11:14:06.792Z",
+      "error": "RPC_SUBMISSION_REJECTED",
+      "nonceBefore": "43",
+      "nonceAfter": "43",
+      "finishedAt": "2026-09-16T11:14:08.737Z"
     }
   },
   "cases": {
@@ -1418,5 +1426,14 @@
       },
       "fallbackCandidate": "b-fault-resolve-review"
     }
+  },
+  "result": {
+    "passed": false,
+    "partial": true,
+    "semanticCases": 1,
+    "expectedSemanticCases": 3,
+    "rejectionCases": 0,
+    "cases": 1,
+    "contract": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b"
   }
 }

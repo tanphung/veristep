@@ -2,8 +2,26 @@ import {createAccount, createClient} from "genlayer-js";
 import {TransactionHashVariant, type Address, type TransactionHash} from "genlayer-js/types";
 import type {AgentRole, Commitment, Env, RunParams, WorkerDeal} from "./types";
 import {STUDIO_NEXT_CHAIN_ID,studioNext} from "./network";
+import feeProfile from "../../fee-profile.json";
 
 type Client = ReturnType<typeof createClient>;
+
+function assertMeasuredProfile(action: "accept_work" | "submit_artifact", contract: string): void {
+  if (feeProfile.network !== "studio-next" || feeProfile.chainId !== STUDIO_NEXT_CHAIN_ID || feeProfile.provenance.contract.toLowerCase() !== contract.toLowerCase()) throw new Error("Measured Studio Next fee profile does not match hosted worker deployment");
+  if (!Object.hasOwn(feeProfile.methods, action)) throw new Error("Hosted worker action has no shared fee profile");
+}
+
+function estimateFromProfile(client: Client, action: "accept_work" | "submit_artifact") {
+  const profile = feeProfile.methods[action];
+  return client.estimateTransactionFees({
+    leaderTimeunitsAllocation: BigInt(profile.leaderTimeunitsAllocation),
+    validatorTimeunitsAllocation: BigInt(profile.validatorTimeunitsAllocation),
+    executionBudgetPerRound: BigInt(profile.executionBudgetPerRound),
+    totalMessageFees: BigInt(profile.totalMessageFees),
+    appealRounds: 0n,
+    rotations: [BigInt(profile.rotationsPerRound)],
+  });
+}
 
 function asAddress(value: string, label: string): Address {
   if (!/^0x[0-9a-fA-F]{40}$/.test(value)) throw new Error(`Invalid ${label} address`);
@@ -56,10 +74,11 @@ export async function readFinalDeal(env: Env, params: RunParams): Promise<Worker
 }
 
 export async function writeAgentAction(env: Env, params: RunParams, role: AgentRole, action: "accept_work" | "submit_artifact", args: unknown[], value: bigint): Promise<string> {
+  assertMeasuredProfile(action, params.contract);
   const clients = agentClients(env);
   return journaledTransaction(env.DB, params.runId, `${role}:${action}`, async () => {
     const write={address:asAddress(params.contract,"contract"),functionName:action,args:args as never[],value};
-    const estimate=await clients[role].client.estimateTransactionFeesForWrite(write);
+    const estimate=await estimateFromProfile(clients[role].client, action);
     return clients[role].client.writeContract({
       ...write,
       fees:{distribution:estimate.distribution,...(estimate.messageAllocations?{messageAllocations:estimate.messageAllocations}:{}),feeValue:estimate.feeValue},

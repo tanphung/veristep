@@ -1,4 +1,44 @@
-# Mốc tiếp tục VeriStep — cập nhật 15/09/2026
+# Mốc tiếp tục VeriStep — cập nhật 16/09/2026
+
+## Checkpoint mới nhất — không lặp giao dịch (16/09/2026)
+
+- Không redeploy và không tạo lại bất kỳ case/hashi cũ nào. Audit đọc trực tiếp
+  Studio Next đã đối chiếu **48 hash** trong
+  `reports/studio-next-agent-tank/manifest.json`: không hash trùng, không hash
+  pending và cả 48 đều `FINALIZED` (41 `FINISHED_WITH_RETURN`, 7
+  `FINISHED_WITH_ERROR`). Hai record không có hash là `REJECTED_BEFORE_HASH`:
+  `a-fault-resolve-review-retry-1` cũ và `a-fault-advance-timeout`; chúng không
+  được broadcast.
+- E2E `no-fault` đã được resume lại với
+  `VERISTEP_STUDIO_NEXT_REPORT=studio-next-agent-tank` và
+  `VERISTEP_STUDIO_NEXT_CASES=no-fault`. Nó xác nhận lại A/B `SATISFIED`, deal
+  `SETTLEMENT_PENDING`, và bốn leg `DISPATCHED_UNVERIFIED`; runner no-op toàn bộ
+  hash cũ. Kết quả tổng vẫn `partial` vì A-fault/B-fault chưa có consensus pass.
+- Đã thử cleanup timeout bằng script manifest-guarded. Studio Next từ chối tại
+  `sim_estimateTransactionFees` trước khi ký vì transaction datetime mô phỏng
+  vẫn trước deadline contract. Nonce client giữ `43 → 43`; **không có hash hay
+  giao dịch timeout mới**. Không bypass estimate và không tạo A-r3/B-recovery
+  chỉ để lặp lại outage.
+- `fee-profile.json` giờ đúng schema `version`/`methods` của GenLayer: được tái
+  tạo có kiểm tra từ 48 quote live, lấy maximum theo method và headroom 25%.
+  Frontend dùng Transaction Kit với `suggestions`; worker dùng profile +
+  `estimateTransactionFees` theo policy hiện hành, không simulate một write cho
+  mỗi thao tác. `route_settlement` giữ recipient-specific message allocation
+  đã được đo; `advance_timeout` cố ý không có profile và browser block signing
+  cho đến khi Studio trả estimate thành công.
+- Đã thêm `npm run audit:studio-next`, `npm run generate:fee-profile` và
+  `npm run check:fee-profile`. Các runner không ghi raw RPC error vào manifest/
+  console để tránh rò bí mật của hạ tầng validator.
+- Các gate local sau thay đổi đạt: GenVM lint hai contract, Python suite,
+  worker TypeScript + 16 tests, frontend TypeScript + 77 tests, production
+  Vite build và `check:fee-profile`. Còn chạy secret scan, audit dependency,
+  Wrangler dry-run và commit/push checkpoint sau khi review staged diff.
+- Blocker thực tế còn lại: `GITHUB_EVIDENCE_TOKEN` **repo-scoped** cho
+  `tanphung/veristep-evidence` chưa được cài làm Worker secret, khiến health
+  `ready=false` và không thể chạy hosted A/B case; timeout estimate Studio Next
+  hiện chưa đạt. Không dùng broad personal GitHub token và không tự tạo/đoán
+  token. Không deploy Vercel current release hoặc bật `submissionReady` trước
+  khi hai blocker và ba live gate được giải quyết.
 
 ## Safe stop trước khi người dùng nghỉ
 

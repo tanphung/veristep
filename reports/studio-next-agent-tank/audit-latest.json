@@ -1,0 +1,318 @@
+{
+  "auditedAt": "2026-09-16T11:16:32.084Z",
+  "contract": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+  "sourceHash": "baedb9762690220aa8620fc6a94065b993700cbccb5ded586b4560ee3fc4019b",
+  "steps": 50,
+  "storedHashes": 48,
+  "duplicateHashes": 0,
+  "nonTerminalReceipts": 0,
+  "noHash": [
+    {
+      "name": "a-fault-resolve-review-retry-1",
+      "phase": "REJECTED_BEFORE_HASH",
+      "error": "execution failed"
+    },
+    {
+      "name": "a-fault-advance-timeout",
+      "phase": "REJECTED_BEFORE_HASH",
+      "error": "RPC_SUBMISSION_REJECTED"
+    }
+  ],
+  "lifecycleCounts": {
+    "FINALIZED": 48
+  },
+  "executionCounts": {
+    "FINISHED_WITH_RETURN": 41,
+    "FINISHED_WITH_ERROR": 7
+  },
+  "receipts": [
+    {
+      "name": "no-fault-create",
+      "hash": "0xb9cd8e27c78d53a3cafde2ca0584ded045756f07ab00cc91785c0c5ce69b3909",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "no-fault-fund",
+      "hash": "0xc90fca8c694ef2f57a76069537ec9e583ea2f1b088443f1d092160867a7f83b0",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "no-fault-accept-a",
+      "hash": "0xbcd27d526a4fda341a8d2eff1284036376e383c4544241f934f7bfdfd77c2920",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "no-fault-accept-b",
+      "hash": "0xb72e11cd373975b7a0596e9bff09472709df4e1fc6fe2d316faff2a0ef582955",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "no-fault-submit-a",
+      "hash": "0x08e8bda52eb1d092358011ce6fe66588fb62f32c511fa03d8c228cbed363a943",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "no-fault-submit-b",
+      "hash": "0x381871adf14474419788f403f2cb2a2e8d3d90ed23de6210510aacc24cacfcbd",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "no-fault-request-review",
+      "hash": "0xc4d6afa464a81d98fea3c56dccafd09a9a39adc2b3b10aefa20b5a5cb6b91fab",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "no-fault-resolve-review",
+      "hash": "0x79b6271e34dc4f8a122757936fbeb12f32896abab25460b1c0f62185103de1e5",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "no-fault-route-a-payout",
+      "hash": "0x3ef45717be138fff1938cbf8fc45b2c402f319eb9db117f177a242b7e919c78c",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_ERROR"
+    },
+    {
+      "name": "no-fault-route-a-payout-allocated",
+      "hash": "0x7453551caef14b18732b7476f88d4fbbb6139966475be4fddd0c2bee9b2b1dd1",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "no-fault-route-a-bond-return",
+      "hash": "0x9419eaccd1214f9ebb2e04a0644c5e499b65968eb70656df0996190e3b8cedae",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "no-fault-route-b-payout",
+      "hash": "0xd840e3776a6a4e6b856c8e8e9b0411a392a491070c9ea7a291d2411f22d2f210",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "no-fault-route-b-bond-return",
+      "hash": "0x41360d47b006149b3e2b452b904cdfc0962ef956ee6712ea7d7f741edad85a0f",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "a-fault-create",
+      "hash": "0xa9c8b1d5beba3fa1f771e003ec5b7ad91d52778c99bc61589c0e32ce60d17a5e",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "a-fault-fund",
+      "hash": "0x37c8880902e858ca96c258547fe39e699b962b36ec4aae47a699f0fda05818cb",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "a-fault-accept-a",
+      "hash": "0x89bf0cb7f78e6c3d74b62e17c3c501f1f8fd9689b6ac9552eea8ffeeb509c9a8",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "a-fault-accept-b",
+      "hash": "0x8340ba441d20a5bc795bceb8db72ad838a62f1c23b53b2e96422ba74bd43d09b",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "a-fault-submit-a",
+      "hash": "0x42a91bb78164f9607a4efe156870103c2f63db857fd1b60c4c18728c8a976abf",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "a-fault-submit-b",
+      "hash": "0x0d6a66bf754a929985155edbe8cd97316428a25ade485fc4900b08cb61c2e966",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "a-fault-request-review",
+      "hash": "0xc81f601c23b0b9177ca02a9896ef28ec5d12528b8b8f6387b330d789d60ee8ae",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "a-fault-resolve-review",
+      "hash": "0x878e79c309a1485fab7dbb284fd159d7ae5de5424867fe6f5ed6c4f84c715bfa",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_ERROR"
+    },
+    {
+      "name": "a-fault-recovery-1-create",
+      "hash": "0xc5c5c465d0fc21dd2512971c3b1c19fac162e33afcb0801a602721bf4c44d91b",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "a-fault-recovery-1-fund",
+      "hash": "0x33f59baf717eed09bbe9c6efaa7c25ff937ce7ddf3e39940b132fca03271ea86",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "a-fault-recovery-1-accept-a",
+      "hash": "0x15df5284187991a578bfa520960870c52f2da6b1898c762975369ed6753ecfdd",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "a-fault-recovery-1-accept-b",
+      "hash": "0x30485c89cf692520653e2dc28eceea193ca23d7c2a570bdd9852f33a3ca94f9f",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "a-fault-recovery-1-submit-a",
+      "hash": "0xdce9ed9377f72c474cbdab96e3bc60183eba2ecbaf36faf527455615061e5597",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "a-fault-recovery-1-submit-b",
+      "hash": "0x1374f2bfddb26c1fccc2f4a2c3e486393c31f95215c423bb5e03606b1a201652",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "a-fault-recovery-1-request-review",
+      "hash": "0xbd52a746c7925a778bdfae3ac71ee21f2b64cab7dd1ac0d80af82471e340e235",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "a-fault-recovery-1-resolve-review",
+      "hash": "0xd7931338bd1eb88bae1bc1ca3c8586deea32aa973c484cc86a96113242e10455",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_ERROR"
+    },
+    {
+      "name": "a-fault-recovery-1-resolve-review-retry-1",
+      "hash": "0x6eead5fc87398d8e0fae8106cf0cf7995a6520d6f2a2bf715ccb578020e14e4a",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_ERROR"
+    },
+    {
+      "name": "a-fault-recovery-2-create",
+      "hash": "0xe88734a14fcd66359f90182af24c81be19e288af62e1e8c234563d78cf6a1542",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "a-fault-recovery-2-fund",
+      "hash": "0xcb1d1bd2c6969bfbf951d115af98d05c4b5b39de37be8156d9d51502cc5727e7",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "a-fault-recovery-2-accept-a",
+      "hash": "0xaae6a830824efccb5fd0509b271e064d36d1ee15e25d7e517655d2f2ec69bacc",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "a-fault-recovery-2-accept-b",
+      "hash": "0xc0a5097c58051c8724765ea536e9d7b551bae422ecc0cc1af6f6c8eaaf4902c3",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "a-fault-recovery-2-submit-a",
+      "hash": "0x9e0ab1ad73c92523c41e3351574dea48b416a2a0f0b03f16cc40e51bf380d80e",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "a-fault-recovery-2-submit-b",
+      "hash": "0x37b5161eb51c3564d20c00367a53f68f6e18b369b7267b8afcc1249b5dbbe7e9",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "a-fault-recovery-2-request-review",
+      "hash": "0xb7692a8279fb9ad62f39d2373a78cb4d4a43de98219b3cba119f7dbb112a708d",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "a-fault-recovery-2-resolve-review",
+      "hash": "0xfa6074f7c2b632699ec0832b99e404efc34abb7506ddb4221e151d7792620951",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "a-fault-recovery-2-resolve-review-retry-1",
+      "hash": "0x61f3a90ef96f4f2dee5cb4de905c6b6a0e888bc1f14a0221005780e3ba00bfd2",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_ERROR"
+    },
+    {
+      "name": "b-fault-create",
+      "hash": "0xb455fe1fc3bbb5fd8f4b41e782e1125ad10392b1440dc09700b42d08a6979484",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "b-fault-fund",
+      "hash": "0x5b95ee165924e65404dc0e861febe85e266a938b360e7da624841f3709fa7c3b",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "b-fault-accept-a",
+      "hash": "0xf5120d38330c56699d5cc677bbd0a8c694bbdaff31537b901cce53ca680777a1",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "b-fault-accept-b",
+      "hash": "0xfde0d7ea6552eb0ef47000f1bc36253200a729d2d03067dd2230a137e6feb3d7",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "b-fault-submit-a",
+      "hash": "0x7dc087c3d0c86e7b3c5a9198773aaee9ae57b48e14d04018b7ccf7657f9ab8a7",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "b-fault-submit-b",
+      "hash": "0x8e3c0255066b1612087b5a8d6a38b2f393bd8fc5e04a346e9b01c7fe33dd7efe",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "b-fault-request-review",
+      "hash": "0x24056ac5e9d7e6b00343dbea2b2271f0559f431405c748ae921ec4bf257dee3d",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN"
+    },
+    {
+      "name": "b-fault-resolve-review",
+      "hash": "0xbf303857a029bbe1c55d0861b1913f49e24319a898e02e997ba892766b4f6c58",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_ERROR"
+    },
+    {
+      "name": "b-fault-resolve-review-retry-1",
+      "hash": "0xd44b5a1229426af1634f54b4729388461281c27271f4ecc9cbb6d9356434259e",
+      "lifecycle": "FINALIZED",
+      "execution": "FINISHED_WITH_ERROR"
+    }
+  ]
+}

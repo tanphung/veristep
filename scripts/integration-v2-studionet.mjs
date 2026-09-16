@@ -85,6 +85,12 @@ assert.equal(activeFixtures.length, requestedCaseIds.length || fixtures.length, 
 const exists = (path) => access(path).then(() => true, () => false);
 const stringify = (value) => JSON.stringify(value, (_, item) => typeof item === "bigint" ? item.toString() : item, 2);
 const sleep = (milliseconds) => new Promise((done) => setTimeout(done, milliseconds));
+const safeErrorMessage = (error) => {
+  const candidate = [error?.details, error?.shortMessage, error?.message, error?.cause?.message]
+    .find((value) => typeof value === "string") ?? "";
+  const codes = candidate.match(/\b[A-Z][A-Z0-9_]{2,}\b/g);
+  return codes?.at(-1) ?? "RPC_SUBMISSION_REJECTED";
+};
 const decodeResult = (value) => {
   if (typeof value !== "string") return null;
   try {
@@ -98,7 +104,7 @@ const publicError = (error) => {
   const receipt = error?.cause?.data?.receipt;
   return {
     name: error?.name ?? "Error",
-    message: error?.details ?? error?.shortMessage ?? error?.message ?? "unknown error",
+    message: safeErrorMessage(error),
     code: error?.code ?? error?.cause?.code ?? null,
     executionResult: receipt?.execution_result ?? null,
     contractResult: decodeResult(receipt?.result),
@@ -123,7 +129,7 @@ async function rpcReadWithRetry(label, action, attempts = 5) {
     } catch (error) {
       lastError = error;
       if (!isTransientNetworkError(error) || attempt === attempts) throw error;
-      console.warn(JSON.stringify({ retry: label, attempt, reason: error?.details ?? error?.message }));
+      console.warn(JSON.stringify({ retry: label, attempt, reason: safeErrorMessage(error) }));
       await sleep(1000 * attempt);
     }
   }
@@ -251,7 +257,7 @@ async function transaction(name, client, submit) {
     } catch (error) {
       Object.assign(step, {
         phase: "REJECTED_BEFORE_HASH",
-        error: error?.details ?? error?.shortMessage ?? error?.message ?? "submission rejected",
+        error: safeErrorMessage(error),
         finishedAt: new Date().toISOString(),
       });
       await save();

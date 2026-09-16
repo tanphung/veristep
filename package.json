@@ -5,8 +5,6 @@
   "type": "module",
   "scripts": {
     "check:secrets": "node scripts/check-secrets.mjs",
-    "release:bradbury": "node scripts/bradbury-release.mjs",
-    "release:bradbury:v2": "node scripts/bradbury-v2-release.mjs",
     "release:studio-next": "node scripts/studio-next-release.mjs",
     "prepare:studio-wallets": "node scripts/prepare-studio-next-wallets.mjs",
     "check:studio-wallets": "node scripts/studio-next-wallet-check.mjs",
@@ -14,6 +12,9 @@
     "test:v2:local": "node scripts/integration-v2-local.mjs",
     "test:v2:studionet": "node scripts/integration-v2-studionet.mjs",
     "test:v2:studio-next": "node scripts/integration-v2-studionet.mjs",
+    "audit:studio-next": "node scripts/audit-studio-next-manifest.mjs",
+    "generate:fee-profile": "node scripts/generate-fee-profile.mjs",
+    "check:fee-profile": "node scripts/generate-fee-profile.mjs --check",
     "test:router": "node scripts/test-receipt-router.mjs",
     "test:worker": "vitest run --config vitest.worker.config.ts",
     "test:openai-smoke": "node scripts/worker-openai-smoke.mjs",
