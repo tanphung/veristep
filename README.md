@@ -7,7 +7,24 @@ calculates settlement.
 
 The active release target is **GenLayer Studio Next**, not Bradbury.
 
-## Active deployment
+> VeriStep shows where a multi-agent workflow introduced an error by preserving
+> immutable handoffs and asking GenLayer validators to judge the exact duties
+> each agent accepted.
+
+## Demo and Release
+
+| Item | Verified release |
+|---|---|
+| Demo video | [Watch the 2:25 product demo](submission/VeriStep-Agent-Tank-Demo.mp4) |
+| Live DApp | [veristep-genlayer.vercel.app](https://veristep-genlayer.vercel.app/) |
+| Network | GenLayer Studio Next, chain `61997` |
+| Contract | [`0xd72A...1b4b`](https://explorer-studio-dev.genlayer.com/contracts/0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b) |
+| Release evidence | [docs/RELEASE-EVIDENCE.md](docs/RELEASE-EVIDENCE.md) |
+
+The demo uses only the production DApp. Its [narration](submission/DEMO-NARRATION.md)
+and [scene outline](submission/DEMO-SCENES.md) are included with the submission.
+
+## Active Deployment
 
 - Network: Studio Next, chain `61997`
 - Contract: `0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b`
@@ -30,7 +47,24 @@ incidents remain preserved as recovery history. Read the [release evidence](docs
 [final B-fault manifest](reports/studio-next-b-fault-final/manifest.json), and
 [resume checkpoint](docs/RESUME.md) before running any live command.
 
-## What the contract enforces
+## Why GenLayer
+
+An event log can show that an agent submitted work. It cannot determine whether
+Agent A changed a source rule, whether Agent B faithfully preserved the finalized
+handoff, or which agent owns a semantic contradiction. VeriStep binds full
+immutable source/A/B artifacts to frozen obligations, then asks the Intelligent
+Contract's leader and independent GenLayer validators to assess the same evidence.
+
+The completed release matrix is intentionally small and inspectable:
+
+| Case | Agent A | Agent B |
+|---|---:|---:|
+| Happy Path / no-fault | `SATISFIED` | `SATISFIED` |
+| Upstream Fault / A-fault | `VIOLATED` | `SATISFIED` |
+| Downstream Fault / B-fault | `SATISFIED` | `VIOLATED` |
+| Hosted Agent A to B | `SATISFIED` | `SATISFIED` |
+
+## What the Contract Enforces
 
 - Immutable GitHub commit/path/blob/SHA-256 commitments for source, A and B.
 - A must precede B; each artifact binds its upstream submission identity.
@@ -47,17 +81,17 @@ not proven hidden redirects are observable or preventable; VeriStep preserves
 canonical origin and whole-artifact hash checks but does not claim to solve that
 platform limitation.
 
-## Public application
+## Public Application
 
-The early submission build is published at:
+The production build is published at:
 
-`https://veristep-genlayer.vercel.app`
+[https://veristep-genlayer.vercel.app/](https://veristep-genlayer.vercel.app/)
 
 Reviewers can inspect finalized deals, validator findings, immutable evidence
 and transaction links without a wallet. New deals require a funded Studio Next
 wallet and explicit user signatures.
 
-## Hosted A/B worker
+## Hosted A/B Worker
 
 The optional Cloudflare Worker only accepts work and submits immutable artifacts.
 It cannot adjudicate, choose settlement, or change frozen terms. Its current
@@ -69,7 +103,8 @@ OpenAI, worker keys, D1 budget, chain and contract configuration are deployed.
 The final hosted run `v2-hosted-agent-live-2` completed create, fund, A/B accepts,
 A/B immutable submissions, review request and review resolution. Both agents
 were `SATISFIED`; all eight transactions finalized successfully. The historical
-`live-1` deadline failure remains preserved as recovery evidence. Never place a
+`live-1` deadline failure remains preserved as recovery evidence. Its settlement
+legs remain `ELIGIBLE`; no Hosted settlement transaction was sent. Never place a
 key in a frontend variable or use a broad personal GitHub token for this service.
 
 ## Local development
