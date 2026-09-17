@@ -24,6 +24,6 @@ The Downstream Fault case reverses the outcome. Agent A preserves the source ter
 
 The Hosted Agent proof shows the same model with real server-side execution. A user connects one client wallet. VeriStep operates separate hosted wallets for Agent A and Agent B. Agent A generates and publishes immutable evidence, then signs its own submission. Agent B consumes the finalized handoff, publishes its own evidence, and signs its own submission. GenLayer validators, not the worker, independently adjudicate the frozen obligations.
 
-## Scene 7 - What is proven
+## Scene 7 - New Deal preview
 
-Across every record, reviewers can inspect frozen obligations, immutable GitHub evidence, validator findings, and Studio Next transaction links. Settlement rules are deterministic, while the current Studio Next boundary is kept honest: dispatches are visible, but the Intelligent Contract cannot yet verify that a native transfer reached its recipient. VeriStep makes responsibility inspectable before trust becomes irreversible.
+To begin a new deal, the client supplies one wallet. Agent A and Agent B are VeriStep Hosted Agents with separate prefilled wallets. Reviewer-ready evidence, exact obligations, and terms are reviewed in the wizard before any transaction is created. Here we stop before submission. This demo sends nothing on chain.

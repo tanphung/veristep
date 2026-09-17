@@ -1,6 +1,6 @@
 # VeriStep Demo Scene Outline
 
-Runtime: 2 minutes 25 seconds. Footage is limited to the production DApp at `https://veristep-genlayer.vercel.app/`.
+Runtime: 2 minutes 21 seconds. Footage is limited to the production DApp at `https://veristep-genlayer.vercel.app/`.
 
 1. Landing, 16 seconds: hero and five-stage accountability flow.
 2. Verify live cases, 20 seconds: four finalized proof cards and pairwise comparison.
@@ -8,7 +8,7 @@ Runtime: 2 minutes 25 seconds. Footage is limited to the production DApp at `htt
 4. Upstream Fault, 20 seconds: A violated, B satisfied, with material evidence.
 5. Downstream Fault, 21 seconds: A satisfied, B violated, with material evidence and dispatch state.
 6. Hosted Agent proof, 25 seconds: one client wallet, real A to B handoff, immutable artifacts and finalized adjudication.
-7. Closing proof, 23 seconds: reviewer summary, transaction access and honest settlement boundary.
+7. New Deal preview, about 20 seconds: one client wallet, prefilled hosted Agent A and B wallets, reviewer-ready evidence, obligations and terms. The walkthrough stops before submission.
 
 Direction:
 
