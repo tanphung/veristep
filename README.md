@@ -15,7 +15,7 @@ The active release target is **GenLayer Studio Next**, not Bradbury.
 
 | Item | Verified release |
 |---|---|
-| Demo video | [Watch the 2:25 product demo](submission/VeriStep-Agent-Tank-Demo.mp4) |
+| Demo video | [Watch the 2:21 product demo on YouTube](https://www.youtube.com/watch?v=8mKo2xxYzgM) ([release file](submission/VeriStep-Agent-Tank-Demo.mp4)) |
 | Live DApp | [veristep-genlayer.vercel.app](https://veristep-genlayer.vercel.app/) |
 | Network | GenLayer Studio Next, chain `61997` |
 | Contract | [`0xd72A...1b4b`](https://explorer-studio-dev.genlayer.com/contracts/0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b) |

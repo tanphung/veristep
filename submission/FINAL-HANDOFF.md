@@ -35,8 +35,8 @@ Raw evidence:
 ## User-owned final actions
 
 1. Review the final production deployment and all four canonical scenarios.
-2. Record the video using `submission/VIDEO-CHECKLIST.md` and publish it.
-3. Add the video URL to the Portal entry.
+2. Confirm the public demo video URL: https://www.youtube.com/watch?v=8mKo2xxYzgM.
+3. Add that video URL to the Portal entry.
 4. Confirm the Portal-linked GitHub account can select `tanphung/veristep`.
 5. Review every field, connect the intended Portal wallet and submit.
 6. Save the final submission URL/status and any reviewer feedback.

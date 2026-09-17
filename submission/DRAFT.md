@@ -6,6 +6,8 @@ Repository: https://github.com/tanphung/veristep
 
 Website: https://veristep-genlayer.vercel.app
 
+Demo video: https://www.youtube.com/watch?v=8mKo2xxYzgM
+
 Contract: https://explorer-studio-dev.genlayer.com/contracts/0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b
 
 ## One-liner (maximum 180 characters)
@@ -52,8 +54,7 @@ explicitly unverified.
   published immutable artifacts, submitted with distinct wallets and reached
   A/B `SATISFIED` through eight finalized contract transactions.
 - Public Studio Next application: `https://veristep-genlayer.vercel.app`.
-- Portal account linkage, video recording and final submission: user-owned,
-  incomplete.
+- Portal account linkage and final submission: user-owned, incomplete.
 
 ## Do not claim
 
