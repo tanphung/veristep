@@ -1,5 +1,12 @@
 import type {V2Deal,V2SettlementLeg} from "./v2-types";
 
+export const canonicalReleaseProofs=[
+  {id:"v2-studio-no-fault-358323c",label:"Happy Path / No-fault",expected:{A:"SATISFIED",B:"SATISFIED"}},
+  {id:"v2-studio-a-fault-r3-358323c",label:"Upstream Fault / A-fault",expected:{A:"VIOLATED",B:"SATISFIED"}},
+  {id:"v2-studio-b-fault-r2-358323c",label:"Downstream Fault / B-fault",expected:{A:"SATISFIED",B:"VIOLATED"}},
+  {id:"v2-hosted-agent-live-2",label:"Autonomous Handoff / Hosted Agent",expected:{A:"SATISFIED",B:"SATISFIED"}},
+] as const;
+
 export interface DealPresentation {
   label:string;
   archived:boolean;

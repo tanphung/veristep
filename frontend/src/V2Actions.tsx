@@ -12,6 +12,20 @@ const roleOf=(deal:V2Deal,account?:string):V2Role|undefined=>{if(!account)return
 const deadline=(deal:V2Deal)=>({FUNDED:deal.accept_deadline,ACTIVE_A:deal.a_deadline,ACTIVE_B:deal.b_deadline,REVIEWABLE:deal.review_deadline,REVIEW_REQUESTED:deal.adjudication_deadline,INCONCLUSIVE:deal.adjudication_deadline} as Record<string,number|undefined>)[deal.status];
 const timeoutSigningBlocked=Boolean(feeProfile.provenance.excludedMethods.advance_timeout);
 
+export function shouldRenderV2Actions(deal:V2Deal,account?:Address):boolean{
+  const role=roleOf(deal,account),due=deadline(deal),expired=due!==undefined&&Date.now()/1000>=due;
+  if(!account)return ["DRAFT_UNFUNDED","FUNDED","ACTIVE_A","ACTIVE_B","REVIEWABLE","REVIEW_REQUESTED","INCONCLUSIVE"].includes(deal.status);
+  if(!role)return false;
+  if(expired&&due)return true;
+  if(deal.status==="DRAFT_UNFUNDED")return role==="CLIENT";
+  if(deal.status==="FUNDED")return (role==="A"||role==="B")&&!deal.accepted[role];
+  if(deal.status==="ACTIVE_A")return role==="A";
+  if(deal.status==="ACTIVE_B")return role==="B";
+  if(deal.status==="REVIEWABLE"||deal.status==="REVIEW_REQUESTED")return true;
+  if(deal.status==="SETTLEMENT_PENDING")return deal.settlement_legs.some(leg=>leg.state==="ELIGIBLE");
+  return false;
+}
+
 export function V2Actions({deal,account,busy,onSubmitted}:{deal:V2Deal;account?:Address;busy:boolean;onSubmitted:()=>void}){
   const [error,setError]=useState(""),[signing,setSigning]=useState(false),[commit,setCommit]=useState(""),[path,setPath]=useState("");
   const [now,setNow]=useState(Date.now()/1000);useEffect(()=>{const timer=setInterval(()=>setNow(Date.now()/1000),1000);return()=>clearInterval(timer);},[]);
