@@ -9,9 +9,10 @@ export interface DealPresentation {
 export function dealPresentation(id:string):DealPresentation {
   if(/^v2-studio-no-fault-[a-f0-9]+$/.test(id))return {label:"Happy Path — Both Agents Correct",archived:false,priority:0};
   if(/^v2-studio-a-fault-r3-[a-f0-9]+$/.test(id))return {label:"Upstream Fault — Agent A Responsible",archived:false,priority:1};
-  if(/^v2-studio-b-fault-[a-f0-9]+$/.test(id))return {label:"Downstream Fault — Agent B Responsible",archived:false,priority:2};
-  if(/^v2-hosted-agent-live-\d+$/.test(id))return {label:"Autonomous Handoff — Agent A → Agent B",archived:false,priority:3};
-  if(/(?:-recovery-|-a-fault-(?:r[12]-)?|-b-fault-r\d+-)/.test(id))return {label:"Recovery attempt",archived:true,priority:100};
+  if(id==="v2-studio-b-fault-r2-358323c")return {label:"Downstream Fault — Agent B Responsible",archived:false,priority:2};
+  if(id==="v2-hosted-agent-live-2")return {label:"Autonomous Handoff — Agent A → Agent B",archived:false,priority:3};
+  if(/^v2-hosted-agent-live-\d+$/.test(id))return {label:"Hosted recovery attempt",archived:true,priority:100};
+  if(/(?:-recovery-|-a-fault-(?:r[12]-)?|-b-fault(?:-r\d+)?-)/.test(id))return {label:"Recovery attempt",archived:true,priority:100};
   return {label:"Custom Evidence Scenario",archived:false,priority:10};
 }
 

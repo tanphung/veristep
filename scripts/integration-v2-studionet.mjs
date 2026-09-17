@@ -82,6 +82,14 @@ const activeFixtures = requestedCaseIds.length === 0
   ? fixtures
   : fixtures.filter((fixture) => requestedCaseIds.includes(fixture.id));
 assert.equal(activeFixtures.length, requestedCaseIds.length || fixtures.length, "Unknown Studio Next case selector");
+const forcedDealId = process.env.VERISTEP_FORCED_DEAL_ID ?? "";
+const forcedPrefix = process.env.VERISTEP_FORCED_PREFIX ?? "";
+const preflightOnly = process.env.VERISTEP_PREFLIGHT_ONLY === "1";
+if (forcedDealId || forcedPrefix) {
+  assert.equal(activeFixtures.length, 1, "A forced recovery requires exactly one selected case");
+  assert.match(forcedDealId, /^[a-z0-9][a-z0-9-]{0,63}$/, "Forced deal ID is invalid");
+  assert.match(forcedPrefix, /^[a-z0-9][a-z0-9-]{0,63}$/, "Forced step prefix is invalid");
+}
 const exists = (path) => access(path).then(() => true, () => false);
 const stringify = (value) => JSON.stringify(value, (_, item) => typeof item === "bigint" ? item.toString() : item, 2);
 const sleep = (milliseconds) => new Promise((done) => setTimeout(done, milliseconds));
@@ -500,7 +508,7 @@ for (const fixture of activeFixtures) {
     "LEADER_TIMEOUT",
     "VALIDATORS_TIMEOUT",
   ]);
-  while (true) {
+  while (!forcedDealId) {
     const candidate = recovery === 0 ? fixture.id : `${fixture.id}-recovery-${recovery}`;
     const nextCandidate = `${fixture.id}-recovery-${recovery + 1}`;
     const failedResolve = manifest.steps[`${candidate}-resolve-review`];
@@ -515,10 +523,21 @@ for (const fixture of activeFixtures) {
     }
     break;
   }
-  const prefix = recovery === 0 ? fixture.id : `${fixture.id}-recovery-${recovery}`;
-  const dealId = recovery === 0
+  const prefix = forcedPrefix || (recovery === 0 ? fixture.id : `${fixture.id}-recovery-${recovery}`);
+  const dealId = forcedDealId || (recovery === 0
     ? `v2-studio-${fixture.id}-${evidenceCommit.slice(0, 7)}`
-    : `v2-studio-${fixture.id}-r${recovery}-${evidenceCommit.slice(0, 7)}`;
+    : `v2-studio-${fixture.id}-r${recovery}-${evidenceCommit.slice(0, 7)}`);
+  if (!manifest.steps[`${prefix}-create`]) {
+    const listedRaw = await clients.client.readContract({ address, functionName: "list_deals", args: [0n, 50n] });
+    assert.equal(typeof listedRaw, "string", "Fresh recovery preflight could not list deals");
+    const listed = JSON.parse(listedRaw);
+    assert.ok(Array.isArray(listed.ids), "Fresh recovery deal list is invalid");
+    assert.equal(listed.ids.includes(dealId), false, `Fresh recovery deal ${dealId} already exists`);
+  }
+  if (preflightOnly) {
+    console.log(JSON.stringify({preflight:"PASS",reportName,fixture:fixture.id,dealId,prefix,chainId,address,wallets:manifest.wallets,balances:manifest.preflightBalances,evidenceCommit,expected:fixture.expected,settlementLegsAfterPass:4},null,2));
+    continue;
+  }
   if (!manifest.steps[`${prefix}-create`]) {
     assert.equal(
       process.env.VERISTEP_ALLOW_NEW_RECOVERY,

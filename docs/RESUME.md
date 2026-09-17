@@ -1,5 +1,36 @@
 # Mốc tiếp tục VeriStep — cập nhật 16/09/2026
 
+## Bộ ba semantic E2E hoàn chỉnh — 17/09/2026
+
+- Fresh B-fault recovery `v2-studio-b-fault-r2-358323c` đã PASS đúng outcome
+  `A=SATISFIED`, `B=VIOLATED`. Tám lifecycle transactions và bốn settlement
+  dispatch transactions đều `FINALIZED + FINISHED_WITH_RETURN`; 12 hash riêng.
+- Bốn legs hiện `DISPATCHED_UNVERIFIED`. Không claim payment confirmed. Resolve
+  hash `0xffd833e4c89704b16cfc27dfc6523691de7b15c0589d805e32a8f8ff9fa701b5`.
+- Bộ ba semantic live hiện đủ: no-fault PASS, A-fault r3 PASS, B-fault r2 PASS.
+  Các B-fault `UNDETERMINED` cũ vẫn giữ nguyên trong archive và không resend.
+- Raw evidence nằm ở `reports/studio-next-b-fault-final/`; chạy
+  `npm run audit:b-fault-final` để kiểm chứng 12 receipts, calldata, sender,
+  contract, deal identity, outcome và settlement state.
+
+## Hosted Agent E2E PASS — 17/09/2026
+
+- Fresh deal `v2-hosted-agent-live-2` hoàn thành đúng 8 contract transactions:
+  create, fund, accept A/B, submit A/B, request review và resolve review. Audit
+  decode calldata xác nhận 8 hash riêng, đúng sender/contract/deal và toàn bộ
+  `FINALIZED + FINISHED_WITH_RETURN`.
+- Final state `SETTLEMENT_PENDING`; semantic outcome A/B đều `SATISFIED`; bốn
+  settlement legs vẫn `ELIGIBLE`. Không gọi `route_settlement`, timeout hoặc
+  redeploy. Thời gian gồm cả post-run receipt collection là `17.33` phút, dưới
+  hard stop 60 phút.
+- Hosted worker gặp một lần Cloudflare subrequest limit sau khi A submission đã
+  finalized. Chain state khi đánh giá là `ACTIVE_B`, accepts A/B true, artifact A
+  có mặt và B chưa có; named recovery restart cùng workflow đã skip A và tiếp tục
+  từ B, không resend transaction và không tạo deal thứ hai.
+- Raw manifest, deal snapshot và đủ 8 receipts nằm trong
+  `reports/studio-next-hosted-agent-final/`. Chạy `npm run audit:hosted-final`
+  để tái kiểm chứng.
+
 ## Checkpoint mới nhất — không lặp giao dịch (16/09/2026)
 
 - **Submission-first checkpoint:** người dùng quyết định không để hosted A/B,

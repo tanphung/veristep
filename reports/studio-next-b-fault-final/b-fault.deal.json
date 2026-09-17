@@ -1,0 +1,737 @@
+{
+  "a_deadline": 1789645504,
+  "accept_deadline": 1789645423,
+  "accepted": {
+    "A": true,
+    "B": true
+  },
+  "activated_at": 1789643704,
+  "adjudication_deadline": 1789647432,
+  "artifacts": {
+    "A": {
+      "commitment": {
+        "blob": "2907762c6751e27ea951e6b2529dafce03cb56b1",
+        "byte_length": 140,
+        "commit": "358323c1c33d667e0599f330554fb5f5fad6406d",
+        "content_type": "text/plain",
+        "encoding": "utf-8",
+        "origin": {
+          "hostname": "api.github.com",
+          "owner": "tanphung",
+          "owner_id": 162718327,
+          "provider": "github",
+          "repository": "veristep-evidence",
+          "repository_id": 1368396966
+        },
+        "path": "fixtures/b-fault/agent-a.txt",
+        "sha256": "34d0ed1b4cf1313c2bd91e00d1627d4c3cf7a6d58d9427366de6aa097fcc82fd"
+      },
+      "deal_id": "v2-studio-b-fault-r2-358323c",
+      "issuer": "0xe78def025cE53c9b46ac56cF19f720391119fa5b",
+      "revision": 0,
+      "role": "A",
+      "submission_id": "df3714f5c04b69a78fe1c322f01b6cd403d54eaf15a2f77c7499e5be5fd65ceb",
+      "upstream_submission_id": "5d39cb9ae6be0984b128515ea6caafa2cb4d0371d76f62d9058e41b48041d6ef"
+    },
+    "B": {
+      "commitment": {
+        "blob": "5cd9273553fd7270f0892b16f373e6a61ce546a7",
+        "byte_length": 162,
+        "commit": "358323c1c33d667e0599f330554fb5f5fad6406d",
+        "content_type": "text/plain",
+        "encoding": "utf-8",
+        "origin": {
+          "hostname": "api.github.com",
+          "owner": "tanphung",
+          "owner_id": 162718327,
+          "provider": "github",
+          "repository": "veristep-evidence",
+          "repository_id": 1368396966
+        },
+        "path": "fixtures/b-fault/agent-b.txt",
+        "sha256": "3901c52daf6d9fa98ef88a7a81fbc1461f73840efd43c2996064c2f12469d70e"
+      },
+      "deal_id": "v2-studio-b-fault-r2-358323c",
+      "issuer": "0xd2A9bdb94935Bf7ed069F19b993acF0308eBbBd0",
+      "revision": 0,
+      "role": "B",
+      "submission_id": "6815ff9c8fd71f0a52bcbcb149931b8a446c4c4eb1aa77f77e50a645fbd978d0",
+      "upstream_submission_id": "df3714f5c04b69a78fe1c322f01b6cd403d54eaf15a2f77c7499e5be5fd65ceb"
+    },
+    "SOURCE": {
+      "commitment": {
+        "blob": "76a5fbc341e161a0e58b01b904ba31fce132710e",
+        "byte_length": 222,
+        "commit": "358323c1c33d667e0599f330554fb5f5fad6406d",
+        "content_type": "text/plain",
+        "encoding": "utf-8",
+        "origin": {
+          "hostname": "api.github.com",
+          "owner": "tanphung",
+          "owner_id": 162718327,
+          "provider": "github",
+          "repository": "veristep-evidence",
+          "repository_id": 1368396966
+        },
+        "path": "fixtures/b-fault/source.txt",
+        "sha256": "380f6a4082055198e4a55e0c02ad5371b77c7ef1163a3dd53d7e1afbc78c7505"
+      },
+      "issuer": "0x04D9beb3ae05ca01C77C7252d0B4fDbf4485b2e8",
+      "revision": 0,
+      "submission_id": "5d39cb9ae6be0984b128515ea6caafa2cb4d0371d76f62d9058e41b48041d6ef",
+      "upstream_submission_id": ""
+    }
+  },
+  "b_deadline": 1789645546,
+  "chain_id": 61997,
+  "contract": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+  "deal_id": "v2-studio-b-fault-r2-358323c",
+  "decision_hash": "043ab6a8647fa8e1719f95d0a872f86fb4a1c2f41bd6095b81303ee349f0e1f4",
+  "evidence_manifest_hash": "44ade1f8989a12efb88b3cfa941739ab9f50b870ccc721019b94a011c84a9178",
+  "funded_at": 1789643623,
+  "ledger": {
+    "confirmed": "0",
+    "received": "3000",
+    "routed": "3000"
+  },
+  "manifest": {
+    "chain_domain": "61997",
+    "client": "0x04D9beb3ae05ca01C77C7252d0B4fDbf4485b2e8",
+    "contract": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+    "deal_id": "v2-studio-b-fault-r2-358323c",
+    "obligations": [
+      {
+        "evidence_ids": [
+          "SOURCE",
+          "A"
+        ],
+        "id": "SEM_A_POLICY_ACCURACY",
+        "kind": "SEMANTIC",
+        "stage": "A",
+        "statement": "Stage A must preserve every export-policy rule in SOURCE: trial accounts cannot export; paid accounts require administrator approval for every export; there is no automatic-export exception. A later sentence that overrides these rules is a violation."
+      },
+      {
+        "evidence_ids": [
+          "A",
+          "B"
+        ],
+        "id": "SEM_B_FAITHFUL_HANDOFF",
+        "kind": "SEMANTIC",
+        "stage": "B",
+        "statement": "Stage B must faithfully preserve Stage A's complete delivered policy, including a final override, without independently weakening, contradicting, or inventing a different export rule. Stage B is not required to repair Stage A against SOURCE."
+      },
+      {
+        "id": "SYS_ACCEPT_A",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "client": "0x04D9beb3ae05ca01C77C7252d0B4fDbf4485b2e8",
+          "seconds": 1800,
+          "worker": "0xe78def025cE53c9b46ac56cF19f720391119fa5b"
+        }
+      },
+      {
+        "id": "SYS_ACCEPT_B",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "client": "0x04D9beb3ae05ca01C77C7252d0B4fDbf4485b2e8",
+          "seconds": 1800,
+          "worker": "0xd2A9bdb94935Bf7ed069F19b993acF0308eBbBd0"
+        }
+      },
+      {
+        "id": "SYS_DELIVERY_A",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "step_seconds": 1800
+        }
+      },
+      {
+        "id": "SYS_DELIVERY_B",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "step_seconds": 1800
+        }
+      },
+      {
+        "id": "SYS_MONEY_A",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "bond": "500",
+          "fee": "1000",
+          "penalty": "300"
+        }
+      },
+      {
+        "id": "SYS_MONEY_B",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "bond": "500",
+          "fee": "1000",
+          "penalty": "300"
+        }
+      },
+      {
+        "id": "SYS_PROVENANCE_A",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "adapter": "github-commit-v1",
+          "max_bytes": 4096,
+          "max_total_bytes": 8192,
+          "origin": {
+            "hostname": "api.github.com",
+            "owner": "tanphung",
+            "owner_id": 162718327,
+            "provider": "github",
+            "repository": "veristep-evidence",
+            "repository_id": 1368396966
+          },
+          "source": null
+        }
+      },
+      {
+        "id": "SYS_PROVENANCE_B",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "adapter": "github-commit-v1",
+          "max_bytes": 4096,
+          "max_total_bytes": 8192,
+          "origin": {
+            "hostname": "api.github.com",
+            "owner": "tanphung",
+            "owner_id": 162718327,
+            "provider": "github",
+            "repository": "veristep-evidence",
+            "repository_id": 1368396966
+          },
+          "source": null
+        }
+      },
+      {
+        "id": "SYS_PROVENANCE_SOURCE",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "adapter": "github-commit-v1",
+          "max_bytes": 4096,
+          "max_total_bytes": 8192,
+          "origin": {
+            "hostname": "api.github.com",
+            "owner": "tanphung",
+            "owner_id": 162718327,
+            "provider": "github",
+            "repository": "veristep-evidence",
+            "repository_id": 1368396966
+          },
+          "source": {
+            "blob": "76a5fbc341e161a0e58b01b904ba31fce132710e",
+            "byte_length": 222,
+            "commit": "358323c1c33d667e0599f330554fb5f5fad6406d",
+            "content_type": "text/plain",
+            "encoding": "utf-8",
+            "origin": {
+              "hostname": "api.github.com",
+              "owner": "tanphung",
+              "owner_id": 162718327,
+              "provider": "github",
+              "repository": "veristep-evidence",
+              "repository_id": 1368396966
+            },
+            "path": "fixtures/b-fault/source.txt",
+            "sha256": "380f6a4082055198e4a55e0c02ad5371b77c7ef1163a3dd53d7e1afbc78c7505"
+          }
+        }
+      },
+      {
+        "id": "SYS_REVIEW",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "seconds": 1800
+        }
+      },
+      {
+        "id": "SYS_REVISIONS",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "maximum": 0
+        }
+      },
+      {
+        "id": "SYS_UNWIND",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "rule": "NEUTRAL_AT_EXPIRY",
+          "seconds": 3600
+        }
+      },
+      {
+        "id": "SYS_UPSTREAM_A",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "artifact": "SOURCE",
+          "revision": 0
+        }
+      },
+      {
+        "id": "SYS_UPSTREAM_B",
+        "kind": "DETERMINISTIC",
+        "parameters": {
+          "artifact": "A",
+          "revision": 0
+        }
+      }
+    ],
+    "router": "0x04D9beb3ae05ca01C77C7252d0B4fDbf4485b2e8",
+    "terms": {
+      "max_revisions": 0,
+      "money": {
+        "A": {
+          "bond": "500",
+          "fee": "1000",
+          "penalty": "300"
+        },
+        "B": {
+          "bond": "500",
+          "fee": "1000",
+          "penalty": "300"
+        }
+      },
+      "origins": {
+        "A": {
+          "hostname": "api.github.com",
+          "owner": "tanphung",
+          "owner_id": 162718327,
+          "provider": "github",
+          "repository": "veristep-evidence",
+          "repository_id": 1368396966
+        },
+        "B": {
+          "hostname": "api.github.com",
+          "owner": "tanphung",
+          "owner_id": 162718327,
+          "provider": "github",
+          "repository": "veristep-evidence",
+          "repository_id": 1368396966
+        },
+        "SOURCE": {
+          "hostname": "api.github.com",
+          "owner": "tanphung",
+          "owner_id": 162718327,
+          "provider": "github",
+          "repository": "veristep-evidence",
+          "repository_id": 1368396966
+        }
+      },
+      "semantic_obligations": [
+        {
+          "evidence_ids": [
+            "SOURCE",
+            "A"
+          ],
+          "id": "SEM_A_POLICY_ACCURACY",
+          "stage": "A",
+          "statement": "Stage A must preserve every export-policy rule in SOURCE: trial accounts cannot export; paid accounts require administrator approval for every export; there is no automatic-export exception. A later sentence that overrides these rules is a violation."
+        },
+        {
+          "evidence_ids": [
+            "A",
+            "B"
+          ],
+          "id": "SEM_B_FAITHFUL_HANDOFF",
+          "stage": "B",
+          "statement": "Stage B must faithfully preserve Stage A's complete delivered policy, including a final override, without independently weakening, contradicting, or inventing a different export rule. Stage B is not required to repair Stage A against SOURCE."
+        }
+      ],
+      "source": {
+        "blob": "76a5fbc341e161a0e58b01b904ba31fce132710e",
+        "byte_length": 222,
+        "commit": "358323c1c33d667e0599f330554fb5f5fad6406d",
+        "content_type": "text/plain",
+        "encoding": "utf-8",
+        "origin": {
+          "hostname": "api.github.com",
+          "owner": "tanphung",
+          "owner_id": 162718327,
+          "provider": "github",
+          "repository": "veristep-evidence",
+          "repository_id": 1368396966
+        },
+        "path": "fixtures/b-fault/source.txt",
+        "sha256": "380f6a4082055198e4a55e0c02ad5371b77c7ef1163a3dd53d7e1afbc78c7505"
+      },
+      "windows": {
+        "accept": 1800,
+        "adjudication": 3600,
+        "review": 1800,
+        "step": 1800
+      },
+      "workers": {
+        "A": "0xe78def025cE53c9b46ac56cF19f720391119fa5b",
+        "B": "0xd2A9bdb94935Bf7ed069F19b993acF0308eBbBd0"
+      }
+    },
+    "version": "veristep-2.0-rc"
+  },
+  "report": {
+    "chain_domain": "61997",
+    "contract": "0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b",
+    "decision": {
+      "next_state": "READY_FOR_SETTLEMENT",
+      "stages": {
+        "A": {
+          "entitlements": {
+            "BOND_RETURN": "500",
+            "PAYOUT": "1000",
+            "REFUND": "0"
+          },
+          "outcome": "SATISFIED"
+        },
+        "B": {
+          "entitlements": {
+            "BOND_RETURN": "200",
+            "PAYOUT": "0",
+            "REFUND": "1300"
+          },
+          "outcome": "VIOLATED"
+        }
+      }
+    },
+    "evidence_citations": [
+      {
+        "artifact_id": "SOURCE",
+        "end_byte": 221,
+        "id": "C001",
+        "obligation_id": "SEM_A_POLICY_ACCURACY",
+        "quote": "Trial accounts cannot export data. Paid accounts may export data only after an administrator approves the request. Approval is required for every paid-account export; there is no automatic-export exception.",
+        "sha256": "380f6a4082055198e4a55e0c02ad5371b77c7ef1163a3dd53d7e1afbc78c7505",
+        "start_byte": 15
+      },
+      {
+        "artifact_id": "A",
+        "end_byte": 139,
+        "id": "C002",
+        "obligation_id": "SEM_A_POLICY_ACCURACY",
+        "quote": "Trial accounts cannot export data. Paid accounts may export data only after administrator approval. There is no automatic-export exception.",
+        "sha256": "34d0ed1b4cf1313c2bd91e00d1627d4c3cf7a6d58d9427366de6aa097fcc82fd",
+        "start_byte": 0
+      },
+      {
+        "artifact_id": "A",
+        "end_byte": 139,
+        "id": "C003",
+        "obligation_id": "SEM_B_FAITHFUL_HANDOFF",
+        "quote": "Trial accounts cannot export data. Paid accounts may export data only after administrator approval. There is no automatic-export exception.",
+        "sha256": "34d0ed1b4cf1313c2bd91e00d1627d4c3cf7a6d58d9427366de6aa097fcc82fd",
+        "start_byte": 0
+      },
+      {
+        "artifact_id": "B",
+        "end_byte": 161,
+        "id": "C004",
+        "obligation_id": "SEM_B_FAITHFUL_HANDOFF",
+        "quote": "The delivered policy permits trial accounts to export data. Paid accounts export automatically without administrator approval, so no approval record is required.",
+        "sha256": "3901c52daf6d9fa98ef88a7a81fbc1461f73840efd43c2996064c2f12469d70e",
+        "start_byte": 0
+      }
+    ],
+    "evidence_manifest_hash": "44ade1f8989a12efb88b3cfa941739ab9f50b870ccc721019b94a011c84a9178",
+    "findings": [
+      {
+        "citation_ids": [
+          "C003",
+          "C004"
+        ],
+        "id": "F001",
+        "obligation_id": "SEM_B_FAITHFUL_HANDOFF",
+        "severity": "MATERIAL",
+        "summary": "Stage B directly contradicts the policy delivered in Stage A. While Stage A prohibits trial exports and requires approval for paid exports, Stage B incorrectly claims the policy permits trial exports and allows paid accounts to export automatically without approval."
+      }
+    ],
+    "job_id": "v2-studio-b-fault-r2-358323c",
+    "missing_items": [],
+    "obligation_assessments": [
+      {
+        "applicable": true,
+        "citation_ids": [
+          "C001",
+          "C002"
+        ],
+        "kind": "SEMANTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SEM_A_POLICY_ACCURACY",
+        "reason": "Stage A accurately reflects all three conditions from the source: it explicitly prohibits trial exports, mandates administrator approval for paid accounts, and confirms the lack of an automatic-export exception.",
+        "stage": "A",
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [
+          "C003",
+          "C004"
+        ],
+        "kind": "SEMANTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SEM_B_FAITHFUL_HANDOFF",
+        "reason": "Stage B directly contradicts the policy delivered in Stage A. While Stage A prohibits trial exports and requires approval for paid exports, Stage B incorrectly claims the policy permits trial exports and allows paid accounts to export automatically without approval.",
+        "stage": "B",
+        "status": "VIOLATED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_ACCEPT_A",
+        "reason": "The designated worker accepted the exact funded terms before deadline.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_ACCEPT_B",
+        "reason": "The designated worker accepted the exact funded terms before deadline.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_DELIVERY_A",
+        "reason": "The designated worker submitted one immutable artifact before deadline.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_DELIVERY_B",
+        "reason": "The designated worker submitted one immutable artifact before deadline.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_MONEY_A",
+        "reason": "Fees, bond and penalty remain the exact funded deterministic terms.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_MONEY_B",
+        "reason": "Fees, bond and penalty remain the exact funded deterministic terms.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_PROVENANCE_A",
+        "reason": "The complete artifact passed the committed GitHub provenance adapter.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_PROVENANCE_B",
+        "reason": "The complete artifact passed the committed GitHub provenance adapter.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_PROVENANCE_SOURCE",
+        "reason": "The complete artifact passed the committed GitHub provenance adapter.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_REVIEW",
+        "reason": "Review used the frozen evidence manifest and contract-defined validator.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_REVISIONS",
+        "reason": "The contract accepted revision zero only.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_UNWIND",
+        "reason": "The pre-funded neutral unwind rule remains enforceable at expiry.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_UPSTREAM_A",
+        "reason": "The submission references the exact required upstream artifact.",
+        "stage": null,
+        "status": "SATISFIED"
+      },
+      {
+        "applicable": true,
+        "citation_ids": [],
+        "kind": "DETERMINISTIC",
+        "missing_evidence_ids": [],
+        "obligation_id": "SYS_UPSTREAM_B",
+        "reason": "The submission references the exact required upstream artifact.",
+        "stage": null,
+        "status": "SATISFIED"
+      }
+    ],
+    "reasoning": "Decision derived by the Intelligent Contract from the complete exact obligation assessments.",
+    "review_id": "f486b693d05410adf58eddb20d808a42c7cd1a45f1c2993523cf5fe56f1ecd01",
+    "reviewed_at": "1789643885",
+    "revision": 0,
+    "schema_version": "veristep-report-2",
+    "score": {
+      "A": 10000,
+      "B": 0
+    },
+    "source_assessments": [
+      {
+        "adapter": "github-commit-v1",
+        "artifact_id": "SOURCE",
+        "blob": "76a5fbc341e161a0e58b01b904ba31fce132710e",
+        "byte_length": 222,
+        "commit": "358323c1c33d667e0599f330554fb5f5fad6406d",
+        "content_type": "text/plain",
+        "hostname": "api.github.com",
+        "owner": "tanphung",
+        "owner_id": 162718327,
+        "path": "fixtures/b-fault/source.txt",
+        "provider": "github",
+        "repository": "veristep-evidence",
+        "repository_id": 1368396966,
+        "sha256": "380f6a4082055198e4a55e0c02ad5371b77c7ef1163a3dd53d7e1afbc78c7505",
+        "status": "VERIFIED"
+      },
+      {
+        "adapter": "github-commit-v1",
+        "artifact_id": "A",
+        "blob": "2907762c6751e27ea951e6b2529dafce03cb56b1",
+        "byte_length": 140,
+        "commit": "358323c1c33d667e0599f330554fb5f5fad6406d",
+        "content_type": "text/plain",
+        "hostname": "api.github.com",
+        "owner": "tanphung",
+        "owner_id": 162718327,
+        "path": "fixtures/b-fault/agent-a.txt",
+        "provider": "github",
+        "repository": "veristep-evidence",
+        "repository_id": 1368396966,
+        "sha256": "34d0ed1b4cf1313c2bd91e00d1627d4c3cf7a6d58d9427366de6aa097fcc82fd",
+        "status": "VERIFIED"
+      },
+      {
+        "adapter": "github-commit-v1",
+        "artifact_id": "B",
+        "blob": "5cd9273553fd7270f0892b16f373e6a61ce546a7",
+        "byte_length": 162,
+        "commit": "358323c1c33d667e0599f330554fb5f5fad6406d",
+        "content_type": "text/plain",
+        "hostname": "api.github.com",
+        "owner": "tanphung",
+        "owner_id": 162718327,
+        "path": "fixtures/b-fault/agent-b.txt",
+        "provider": "github",
+        "repository": "veristep-evidence",
+        "repository_id": 1368396966,
+        "sha256": "3901c52daf6d9fa98ef88a7a81fbc1461f73840efd43c2996064c2f12469d70e",
+        "status": "VERIFIED"
+      }
+    ],
+    "terms_hash": "1a5e99e61475c48634b6bd19c7fd9a345b05c9f565b2709a7d6f490aa8e3bb96"
+  },
+  "review_deadline": 1789645587,
+  "review_requested_at": 1789643832,
+  "router": "0x04D9beb3ae05ca01C77C7252d0B4fDbf4485b2e8",
+  "settlement_legs": [
+    {
+      "amount": "1000",
+      "id": "A:PAYOUT",
+      "kind": "PAYOUT",
+      "outcome": "SATISFIED",
+      "receipt_id": "4adbeaa3bf30f9ec67ba066818d66de8824f1e660458eefa55a5338f664024b6",
+      "recipient": "0xe78def025cE53c9b46ac56cF19f720391119fa5b",
+      "role": "A",
+      "routed_at": 1789643963,
+      "sequence": 0,
+      "state": "DISPATCHED_UNVERIFIED"
+    },
+    {
+      "amount": "500",
+      "id": "A:BOND_RETURN",
+      "kind": "BOND_RETURN",
+      "outcome": "SATISFIED",
+      "receipt_id": "28d87163a086fd4ebe2c325ad15a348f2016c0475ecbb95792a99295a04c7cd5",
+      "recipient": "0xe78def025cE53c9b46ac56cF19f720391119fa5b",
+      "role": "A",
+      "routed_at": 1789644009,
+      "sequence": 1,
+      "state": "DISPATCHED_UNVERIFIED"
+    },
+    {
+      "amount": "1300",
+      "id": "B:REFUND",
+      "kind": "REFUND",
+      "outcome": "VIOLATED",
+      "receipt_id": "2085e38a4c7c98062a39e2172b9893e9bf044460759039e978c1ec6c41cb91a8",
+      "recipient": "0x04D9beb3ae05ca01C77C7252d0B4fDbf4485b2e8",
+      "role": "B",
+      "routed_at": 1789644048,
+      "sequence": 2,
+      "state": "DISPATCHED_UNVERIFIED"
+    },
+    {
+      "amount": "200",
+      "id": "B:BOND_RETURN",
+      "kind": "BOND_RETURN",
+      "outcome": "VIOLATED",
+      "receipt_id": "6c94b2b8770248246b4fdcf26e57de2572dc11b1c216fac539f595ee7fdc6a29",
+      "recipient": "0xd2A9bdb94935Bf7ed069F19b993acF0308eBbBd0",
+      "role": "B",
+      "routed_at": 1789644097,
+      "sequence": 3,
+      "state": "DISPATCHED_UNVERIFIED"
+    }
+  ],
+  "status": "SETTLEMENT_PENDING",
+  "terms_hash": "1a5e99e61475c48634b6bd19c7fd9a345b05c9f565b2709a7d6f490aa8e3bb96"
+}

@@ -5,17 +5,21 @@ import deployment from "../../frontend/src/deployment.json";
 
 describe("deal presentation",()=>{
   it("prioritizes canonical reviewer scenarios and archives recovery attempts",()=>{
-    const ids=["v2-studio-a-fault-r1-358323c","v2-hosted-agent-live-1","v2-studio-b-fault-358323c","v2-studio-a-fault-r3-358323c","v2-studio-no-fault-358323c"];
-    expect(sortDealIds(ids)).toEqual(["v2-studio-no-fault-358323c","v2-studio-a-fault-r3-358323c","v2-studio-b-fault-358323c","v2-hosted-agent-live-1","v2-studio-a-fault-r1-358323c"]);
+    const ids=["v2-studio-a-fault-r1-358323c","v2-hosted-agent-live-1","v2-hosted-agent-live-2","v2-studio-b-fault-358323c","v2-studio-b-fault-r2-358323c","v2-studio-a-fault-r3-358323c","v2-studio-no-fault-358323c"];
+    expect(sortDealIds(ids)).toEqual(["v2-studio-no-fault-358323c","v2-studio-a-fault-r3-358323c","v2-studio-b-fault-r2-358323c","v2-hosted-agent-live-2","v2-hosted-agent-live-1","v2-studio-a-fault-r1-358323c","v2-studio-b-fault-358323c"]);
     expect(dealPresentation(ids[0]).archived).toBe(true);
-    expect(dealPresentation(ids[3]).label).toBe("Upstream Fault — Agent A Responsible");
+    expect(dealPresentation(ids[5]).label).toBe("Upstream Fault — Agent A Responsible");
+    expect(dealPresentation("v2-hosted-agent-live-1").archived).toBe(true);
+    expect(dealPresentation("v2-studio-b-fault-358323c").archived).toBe(true);
   });
   it("distinguishes dispatched transfers from verified settlement",()=>{
     expect(dealStatusLabel({status:"SETTLEMENT_PENDING",settlement_legs:[{state:"DISPATCHED_UNVERIFIED"} as never]})).toBe("Transfers Dispatched — Verification Pending");
   });
-  it("opens verified writes without overstating submission readiness",()=>{
+  it("marks the audited release ready while preserving platform limitations",()=>{
     expect(writesEnabled).toBe(true);
-    expect(deployment.submissionReady).toBe(false);
-    expect(deployment.limitations).toContain("The live B-fault scenario ended UNDETERMINED and is not claimed as a passing release gate.");
+    expect(deployment.releaseStatus).toBe("READY");
+    expect(deployment.submissionReady).toBe(true);
+    expect(deployment.limitations).toContain("Studio Next cannot prove a native transfer receipt inside the Intelligent Contract.");
+    expect(deployment.limitations).toContain("Timeout writes remain unavailable because Studio Next simulation time has not proven the deadline predicate.");
   });
 });

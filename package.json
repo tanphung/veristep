@@ -19,6 +19,8 @@
     "probe:studio-next-time": "node scripts/probe-studio-next-time.mjs",
     "diagnose:studio-next-resolve": "node scripts/diagnose-studio-next-resolve.mjs",
     "test:hosted-agent-live": "node scripts/hosted-agent-live.mjs",
+    "audit:hosted-final": "node scripts/audit-hosted-final.mjs",
+    "audit:b-fault-final": "node scripts/audit-b-fault-final.mjs",
     "test:router": "node scripts/test-receipt-router.mjs",
     "test:worker": "vitest run --config vitest.worker.config.ts",
     "test:openai-smoke": "node scripts/worker-openai-smoke.mjs",

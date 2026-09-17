@@ -17,15 +17,17 @@ The active release target is **GenLayer Studio Next**, not Bradbury.
   `baedb9762690220aa8620fc6a94065b993700cbccb5ded586b4560ee3fc4019b`
 - Explorer: [Studio Next contract](https://explorer-studio-dev.genlayer.com/contracts/0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b)
 
-Two live cases have finalized with their predetermined semantic outcomes:
+All three semantic live cases have finalized with their predetermined outcomes:
 
 - no-fault: A/B `SATISFIED`;
-- A-fault recovery 3: A `VIOLATED`, B `SATISFIED`.
+- A-fault recovery 3: A `VIOLATED`, B `SATISFIED`;
+- B-fault recovery 2: A `SATISFIED`, B `VIOLATED`.
 
-Both cases have four native settlement legs honestly recorded as
-`DISPATCHED_UNVERIFIED`. B-fault recovery 1 ended `UNDETERMINED`; its incident
-is preserved rather than presented as a pass. Read the [release evidence](docs/RELEASE-EVIDENCE.md),
-[live manifest](reports/studio-next-agent-tank/manifest.json), and
+All three cases have four native settlement legs honestly recorded as
+`DISPATCHED_UNVERIFIED`. Earlier B-fault attempts ended `UNDETERMINED`; their
+incidents remain preserved as recovery history. Read the [release evidence](docs/RELEASE-EVIDENCE.md),
+[core manifest](reports/studio-next-agent-tank/manifest.json),
+[final B-fault manifest](reports/studio-next-b-fault-final/manifest.json), and
 [resume checkpoint](docs/RESUME.md) before running any live command.
 
 ## What the contract enforces
@@ -51,9 +53,9 @@ The early submission build is published at:
 
 `https://veristep-genlayer.vercel.app`
 
-It is deliberately read-only. Reviewers can inspect finalized deals, validator
-findings, immutable evidence and transaction links without a wallet. Signing new
-writes remains release-locked while the remaining optional gates are unfinished.
+Reviewers can inspect finalized deals, validator findings, immutable evidence
+and transaction links without a wallet. New deals require a funded Studio Next
+wallet and explicit user signatures.
 
 ## Hosted A/B worker
 
@@ -64,12 +66,11 @@ health endpoint is:
 `https://veristep-agent-worker.veristep.workers.dev/api/health`
 
 OpenAI, worker keys, D1 budget, chain and contract configuration are deployed.
-The optional hosted run is not part of the early submission claim. It proved a
-real server-side Agent A generation and GitHub Contents publish, but the later
-submit-A transaction correctly rolled back with `SUBMISSION_WINDOW_CLOSED` after
-the frozen delivery deadline elapsed. The frontend therefore keeps hosted
-controls locked. Never place a key in a frontend variable or use a broad personal
-GitHub token for this service.
+The final hosted run `v2-hosted-agent-live-2` completed create, fund, A/B accepts,
+A/B immutable submissions, review request and review resolution. Both agents
+were `SATISFIED`; all eight transactions finalized successfully. The historical
+`live-1` deadline failure remains preserved as recovery evidence. Never place a
+key in a frontend variable or use a broad personal GitHub token for this service.
 
 ## Local development
 

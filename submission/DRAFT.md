@@ -46,11 +46,11 @@ explicitly unverified.
   `DISPATCHED_UNVERIFIED`, not payment-confirmed.
 - A-fault recovery 3: A `VIOLATED`, B `SATISFIED`; all four settlement legs are
   `DISPATCHED_UNVERIFIED`.
-- B-fault recovery 1 ended `UNDETERMINED`; its receipt and incident report are
-  preserved and are not represented as a passing demo.
-- The optional hosted worker is excluded from the early submission claim. It
-  generated and published Agent A at immutable commit `c875720d…`, but submit A
-  correctly rolled back `SUBMISSION_WINDOW_CLOSED` after the delivery deadline.
+- B-fault recovery 2: A `SATISFIED`, B `VIOLATED`; all four settlement legs are
+  `DISPATCHED_UNVERIFIED`. Earlier `UNDETERMINED` attempts remain preserved.
+- Hosted Agent deal `v2-hosted-agent-live-2`: Agent A and B ran server-side,
+  published immutable artifacts, submitted with distinct wallets and reached
+  A/B `SATISFIED` through eight finalized contract transactions.
 - Public Studio Next application: `https://veristep-genlayer.vercel.app`.
 - Portal account linkage, video recording and final submission: user-owned,
   incomplete.
@@ -59,6 +59,4 @@ explicitly unverified.
 
 - Contract-side confirmation of Studio Next native transfers.
 - Prevention or observation of hidden redirects by the Studio Next web host.
-- A finalized B-fault consensus result until a corresponding passing live receipt
-  exists.
 - Hackathon acceptance or submission before the user completes Portal actions.
