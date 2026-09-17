@@ -44,16 +44,16 @@ h1,h2,h3{color:var(--vs-text)}
 .vs-brand img{width:38px;height:38px;object-fit:contain;filter:drop-shadow(0 8px 15px rgba(43,93,255,.35))}
 .vs-brand strong{font:800 1.22rem/1 Manrope,sans-serif;letter-spacing:-.05em;color:#f9fbff}
 .vs-brand strong span{background:linear-gradient(100deg,#25cdf3,#8658ff);background-clip:text;color:transparent}
-.vs-navbar nav{display:flex;justify-content:center;gap:28px;color:#9ba8bd;font-size:.82rem}
+.vs-navbar nav{position:absolute;left:50%;display:flex;gap:28px;color:#9ba8bd;font-size:.82rem;transform:translateX(-50%)}
 .vs-navbar nav a{transition:color .16s ease}
 .vs-navbar nav a:hover{color:#fff}
-.vs-nav-actions{display:flex;align-items:center;gap:9px}
+.vs-nav-actions{grid-column:3;display:flex;align-items:center;gap:9px;justify-self:end}
 .nav-verify{display:inline-flex;align-items:center;gap:7px;min-height:42px;padding:0 15px;color:#fff;background:linear-gradient(110deg,#289ed9,#7657e9);border:1px solid transparent;border-radius:8px;box-shadow:0 10px 24px rgba(56,92,214,.22);font-size:.76rem;font-weight:800}.nav-verify:hover{color:#fff;filter:brightness(1.1);box-shadow:0 12px 28px rgba(56,92,214,.32)}.nav-verify:focus-visible{outline:2px solid #78c9f5;outline-offset:2px}.nav-verify svg{width:15px}
 .vs-github{display:grid;place-items:center;width:40px;height:40px;border:1px solid var(--vs-line);border-radius:10px;background:#0d1528}
 .vs-github svg,.vs-navbar .wallet-button svg{width:17px}
 .vs-navbar .wallet-button{min-height:42px;color:#dbe7f8;background:#111d34;border:1px solid rgba(123,165,231,.32)}.vs-navbar .wallet-button:hover:not(:disabled){color:#fff;background:#192945;border-color:rgba(123,165,231,.55)}
 
-.vs-hero{position:relative;display:grid;align-content:start;min-height:750px;padding:115px max(24px,calc((100vw - 1180px)/2)) 56px;overflow:hidden;border-bottom:1px solid rgba(143,158,207,.08);isolation:isolate}
+.vs-hero{position:relative;display:grid;align-content:start;min-height:680px;padding:115px max(24px,calc((100vw - 1180px)/2)) 56px;overflow:hidden;border-bottom:1px solid rgba(143,158,207,.08);isolation:isolate}
 .vs-glow{position:absolute;inset:-20% -10% auto;height:680px;z-index:-2;background:radial-gradient(circle at 18% 42%,rgba(0,210,240,.14),transparent 28%),radial-gradient(circle at 78% 52%,rgba(121,68,255,.14),transparent 34%);filter:blur(15px)}
 .vs-hero-copy{position:relative;z-index:2;max-width:900px;margin:0 auto;text-align:center}
 .vs-hero-copy .eyebrow{margin-bottom:22px;color:#79a9e8}
@@ -70,7 +70,7 @@ h1,h2,h3{color:var(--vs-text)}
 .vs-causal li:nth-child(4) i{border-color:#9a62f5}.vs-causal li:nth-child(5) i{border-color:#63e6be}
 .vs-causal strong{font-size:.83rem}.vs-causal span{color:#768caf;font-size:.7rem}
 
-.vs-story,.vs-boundary,.vs-product{width:min(1180px,calc(100vw - 48px));margin:0 auto;padding:105px 0}
+.vs-story,.vs-boundary,.vs-product{width:min(1180px,calc((100vw - 48px)));margin:0 auto;padding:105px 0}.vs-story{padding-top:82px}
 .vs-story>div:first-child,.vs-section-head{max-width:760px;margin-bottom:38px}
 .vs-story h2,.vs-section-head h2{font-size:clamp(2.2rem,4.2vw,3.65rem);line-height:1.08;letter-spacing:-.055em}
 .vs-story h2 span,.vs-section-head h2 span{background:linear-gradient(95deg,#55c8f4,#8b63f5);background-clip:text;color:transparent}
@@ -144,7 +144,7 @@ label{color:#c5d1e3}input,textarea,select{color:#f3f6ff;background:#080f20;borde
 .vs-footer{display:flex;align-items:center;gap:28px;width:min(1180px,calc(100vw - 48px));margin:0 auto;padding:28px 0 45px;color:#71819a;border-top:1px solid var(--vs-line);font-size:.78rem}.vs-footer .vs-brand img{width:31px;height:31px}.vs-footer .vs-brand strong{font-size:1rem}.vs-footer p{margin-right:auto}.vs-footer>a:last-child{display:flex;align-items:center;gap:5px;color:#a9b9d0}.vs-footer svg{width:14px}
 
 @media(max-width:1080px){
-  .vs-navbar{grid-template-columns:auto minmax(0,1fr)}.vs-navbar nav{display:none}.vs-nav-actions{min-width:0;justify-self:end}
+  .vs-navbar{grid-template-columns:auto minmax(0,1fr)}.vs-navbar nav{display:none}.vs-nav-actions{grid-column:auto;min-width:0;justify-self:end}
   .vs-causal{grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;padding:18px}.vs-causal li{padding-right:10px;padding-left:10px}
   .vs-story-grid{grid-template-columns:1fr 1fr}.vs-story-grid article:last-child{grid-column:1/-1}
   .vs-dashboard{grid-template-columns:205px minmax(0,1fr)}

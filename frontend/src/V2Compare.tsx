@@ -1,6 +1,6 @@
 import {useEffect,useState} from "react";
 import {ArrowLeftRight,CheckCircle2,MinusCircle} from "lucide-react";
-import {readV2Deal} from "./v2-client";
+import {readFinalizedWithRetry,readV2Deal} from "./v2-client";
 import {canonicalReleaseProofs,dealPresentation,dealStatusLabel} from "./deal-presentation";
 import type {V2Deal,V2Outcome} from "./v2-types";
 
@@ -12,8 +12,8 @@ export function V2Compare({ids}:{ids:string[]}){
   const [left,setLeft]=useState<V2Deal>(),[right,setRight]=useState<V2Deal>(),[error,setError]=useState(""),[loading,setLoading]=useState(false);
   const [proofs,setProofs]=useState<Record<string,V2Deal>>({}),[proofError,setProofError]=useState(""),[proofLoading,setProofLoading]=useState(true);
   useEffect(()=>{if(!leftId&&ids[0])setLeftId(ids[0]);if(!rightId&&(ids[1]||ids[0]))setRightId(ids[1]??ids[0]);},[ids,leftId,rightId]);
-  useEffect(()=>{let live=true;setProofLoading(true);setProofError("");void Promise.all(canonicalReleaseProofs.map(item=>readV2Deal(item.id))).then(deals=>{if(live)setProofs(Object.fromEntries(deals.map(deal=>[deal.deal_id,deal])));}).catch(cause=>{if(live){setProofs({});setProofError(cause instanceof Error?cause.message:"Verified live cases unavailable");}}).finally(()=>{if(live)setProofLoading(false);});return()=>{live=false;};},[]);
-  useEffect(()=>{let live=true;if(!leftId||!rightId){setLeft(undefined);setRight(undefined);return;}setLoading(true);setError("");void Promise.all([readV2Deal(leftId),readV2Deal(rightId)]).then(([a,b])=>{if(live){setLeft(a);setRight(b);}}).catch(cause=>{if(live)setError(cause instanceof Error?cause.message:"Comparison failed");}).finally(()=>{if(live)setLoading(false);});return()=>{live=false;};},[leftId,rightId]);
+  useEffect(()=>{let live=true;setProofLoading(true);setProofError("");void Promise.all(canonicalReleaseProofs.map(item=>readFinalizedWithRetry(()=>readV2Deal(item.id)))).then(deals=>{if(live)setProofs(Object.fromEntries(deals.map(deal=>[deal.deal_id,deal])));}).catch(cause=>{if(live)setProofError(cause instanceof Error?cause.message:"Verified live cases unavailable");}).finally(()=>{if(live)setProofLoading(false);});return()=>{live=false;};},[]);
+  useEffect(()=>{let live=true;if(!leftId||!rightId){setLeft(undefined);setRight(undefined);return;}setLoading(true);setError("");void Promise.all([readFinalizedWithRetry(()=>readV2Deal(leftId)),readFinalizedWithRetry(()=>readV2Deal(rightId))]).then(([a,b])=>{if(live){setLeft(a);setRight(b);}}).catch(cause=>{if(live)setError(cause instanceof Error?cause.message:"Comparison failed");}).finally(()=>{if(live)setLoading(false);});return()=>{live=false;};},[leftId,rightId]);
   const rows=[
     ["Contract status",left?dealStatusLabel(left):"Not available",right?dealStatusLabel(right):"Not available"],
     ["Worker A decision",label(outcome(left,"A")),label(outcome(right,"A"))],

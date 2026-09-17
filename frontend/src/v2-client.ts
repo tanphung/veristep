@@ -2,6 +2,22 @@ import {TransactionHashVariant} from "genlayer-js/types";
 import {contract,evidenceChainId,readClient} from "./client";
 import type {V2Deal} from "./v2-types";
 
+const retryDelayMs=450;
+
+export function isRetryableFinalizedReadError(cause:unknown):boolean{
+  const message=cause instanceof Error?cause.message:String(cause);
+  return /unknown rpc|failed to fetch|network(?: error)?|fetch failed|timeout|timed out|gateway|\b(?:429|500|502|503|504)\b/i.test(message);
+}
+
+export async function readFinalizedWithRetry<T>(read:()=>Promise<T>,delayMs=retryDelayMs):Promise<T>{
+  try{return await read();}
+  catch(cause){
+    if(!isRetryableFinalizedReadError(cause))throw cause;
+    await new Promise(resolve=>setTimeout(resolve,delayMs));
+    return read();
+  }
+}
+
 function assertHex(value:string,bytes:number,label:string){
   if(!new RegExp(`^[0-9a-f]{${bytes*2}}$`).test(value))throw new Error(`Invalid ${label} in finalized contract state`);
 }
