@@ -109,7 +109,8 @@ export async function observeV2(record:TxRecord){
     const raw=receipt as {hash?:string;from_address?:string;to_address?:string;data?:{calldata?:{raw?:number[]}}};
     if(raw.hash?.toLowerCase()!==record.hash.toLowerCase()||raw.from_address?.toLowerCase()!==record.account.toLowerCase()||raw.to_address?.toLowerCase()!==contract.toLowerCase()||!Array.isArray(raw.data?.calldata?.raw))throw new Error("Finalized receipt identity does not match this v2 action");
     const call=abi.calldata.decode(Uint8Array.from(raw.data.calldata.raw));
-    if(!(call instanceof Map)||call.get("method")!==record.method||!Array.isArray(call.get("args"))||(call.get("args") as unknown[])[0]!==record.jobId)throw new Error("Finalized receipt belongs to another v2 operation");
+    // GenLayerJS encodes the method under the empty-string key.
+    if(!(call instanceof Map)||call.get("")!==record.method||!Array.isArray(call.get("args"))||(call.get("args") as unknown[])[0]!==record.jobId)throw new Error("Finalized receipt belongs to another v2 operation");
     const deal=await readV2Deal(record.jobId);
     const role=deal.manifest.client.toLowerCase()===record.account.toLowerCase()?"CLIENT":(["A","B"] as const).find(item=>deal.manifest.terms.workers[item].toLowerCase()===record.account.toLowerCase());
     const legId=String((call.get("args") as unknown[])[1]??"");

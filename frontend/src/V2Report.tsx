@@ -1,6 +1,6 @@
 import {ArrowUpRight,CheckCircle2,FileCheck2,Landmark,ShieldCheck,TriangleAlert} from "lucide-react";
 import {short} from "./client";
-import {settlementStateLabel} from "./deal-presentation";
+import {pendingReviewCopy,settlementStateLabel} from "./deal-presentation";
 import {InlineTransactionProof} from "./V2OnchainActivity";
 import {activityForContext,activityForSettlementLeg,type ActivityContext} from "./onchain-activity";
 import type {V2Assessment,V2Citation,V2Deal,V2Outcome} from "./v2-types";
@@ -33,7 +33,7 @@ function ArtifactTransactionProof({dealId,artifactId}:{dealId:string;artifactId:
 
 export function V2Report({deal}:{deal:V2Deal}){
   const report=deal.report;
-  if(!report)return <section className="v2-empty-review"><ShieldCheck/><div><span className="eyebrow">CONSENSUS REVIEW</span><h3>No authoritative report yet</h3><p>The interface will not infer a verdict. Only the structured report stored by the Intelligent Contract appears here.</p><ReviewTransactionProof dealId={deal.deal_id}/></div></section>;
+  if(!report){const copy=pendingReviewCopy(deal.status);return <section className="v2-empty-review"><ShieldCheck/><div><span className="eyebrow">DEAL PROGRESS</span><h3>{copy.title}</h3><p>{copy.description}</p><ReviewTransactionProof dealId={deal.deal_id}/></div></section>;}
   const citations=new Map(report.evidence_citations.map(item=>[item.id,item]));
   const semanticFindings=report.obligation_assessments.filter(item=>item.kind==="SEMANTIC"),systemChecks=report.obligation_assessments.filter(item=>item.kind==="DETERMINISTIC");
   const systemPassed=systemChecks.filter(item=>item.status==="SATISFIED").length;

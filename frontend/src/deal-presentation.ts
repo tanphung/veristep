@@ -20,7 +20,7 @@ export function dealPresentation(id:string):DealPresentation {
   if(id==="v2-hosted-agent-live-2")return {label:"Autonomous Handoff — Agent A → Agent B",archived:false,priority:3};
   if(/^v2-hosted-agent-live-\d+$/.test(id))return {label:"Hosted recovery attempt",archived:true,priority:100};
   if(/(?:-recovery-|-a-fault-(?:r[12]-)?|-b-fault(?:-r\d+)?-)/.test(id))return {label:"Recovery attempt",archived:true,priority:100};
-  return {label:"Custom Evidence Scenario",archived:false,priority:10};
+  return {label:id,archived:false,priority:10};
 }
 
 export function sortDealIds(ids:string[]):string[]{
@@ -33,7 +33,21 @@ export function sortDealIds(ids:string[]):string[]{
 export function dealStatusLabel(deal:Pick<V2Deal,"status"|"settlement_legs">):string {
   const allDispatched=deal.settlement_legs.length>0&&deal.settlement_legs.every(leg=>leg.state==="DISPATCHED_UNVERIFIED");
   if(deal.status==="SETTLEMENT_PENDING"&&allDispatched)return "Transfers Dispatched — Verification Pending";
-  return deal.status.replaceAll("_"," ");
+  const labels:Record<V2Deal["status"],string>={DRAFT_UNFUNDED:"Awaiting funding",FUNDED:"Awaiting worker acceptance",ACTIVE_A:"Awaiting Agent A delivery",ACTIVE_B:"Awaiting Agent B delivery",REVIEWABLE:"Ready for review",REVIEW_REQUESTED:"Review requested",INCONCLUSIVE:"Review inconclusive",SETTLEMENT_PENDING:"Settlement pending",COMPLETED:"Completed"};
+  return labels[deal.status];
+}
+
+export function pendingReviewCopy(status:V2Deal["status"]):{title:string;description:string}{
+  switch(status){
+    case "DRAFT_UNFUNDED":return {title:"Deal created — awaiting funding",description:"The client must fund the worker fees before the agents can begin. A review report comes after both agents deliver their work."};
+    case "FUNDED":return {title:"Funded — awaiting workers",description:"Workers must accept the frozen terms and post their bonds before delivery begins."};
+    case "ACTIVE_A":return {title:"Awaiting Agent A delivery",description:"Agent A must submit its artifact before Agent B can continue."};
+    case "ACTIVE_B":return {title:"Awaiting Agent B delivery",description:"Agent B must submit its artifact before the evidence is ready for review."};
+    case "REVIEWABLE":return {title:"Evidence ready for review",description:"A participant can now freeze the evidence manifest and request validator review."};
+    case "REVIEW_REQUESTED":return {title:"Review requested — no finalized report",description:"The review request is recorded, but no verdict is stored yet. This status alone does not mean validators are currently processing it. Check the available action and transaction details."};
+    case "INCONCLUSIVE":return {title:"Review needs attention",description:"There is no conclusive report available. Check the deal actions and deadline before continuing."};
+    default:return {title:"Review report unavailable",description:"No review report is stored for this deal. Check its contract state and transaction details."};
+  }
 }
 
 export function settlementStateLabel(state:V2SettlementLeg["state"]):string {
