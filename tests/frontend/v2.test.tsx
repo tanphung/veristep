@@ -30,6 +30,22 @@ function report():Report{
 }
 
 describe("VeriStep v2 finalized-state renderer",()=>{
+  it("collapses the entire finding while keeping its evidence available",()=>{
+    const deal=fixture();deal.report=report();
+    deal.report.findings=[{id:"F001",obligation_id:"SEM_A_TEST",severity:"MATERIAL",summary:"Agent A changed the approval requirement.",citation_ids:["C001"]}];
+    deal.report.evidence_citations=[{id:"C001",obligation_id:"SEM_A_TEST",artifact_id:"A",sha256:hash,start_byte:0,end_byte:17,quote:"Approval required"}];
+    render(<V2Report deal={deal}/>);
+    const toggle=screen.getByText("Agent A test — issue found");
+    expect(toggle).toBeVisible();
+    expect(screen.getByText("Agent A changed the approval requirement.")).not.toBeVisible();
+    expect(screen.getByText("F001")).not.toBeVisible();
+    fireEvent.click(toggle);
+    expect(screen.getByText("Agent A changed the approval requirement.")).toBeVisible();
+    expect(screen.getByText("F001")).toBeVisible();
+    expect(screen.getByText("“Approval required”")).toBeVisible();
+    fireEvent.click(toggle);
+    expect(screen.getByText("Agent A changed the approval requirement.")).not.toBeVisible();
+  });
   it("does not invent a report while consensus is pending",()=>{render(<V2Report deal={fixture()}/>);expect(screen.getByText("Review requested — no finalized report")).toBeInTheDocument();expect(screen.queryByText("100%")).not.toBeInTheDocument();});
   it("explains the funding step before review for a new deal",()=>{const deal=fixture();deal.status="DRAFT_UNFUNDED";render(<V2Report deal={deal}/>);expect(screen.getByText("Deal created — awaiting funding")).toBeVisible();expect(screen.getByText(/client must fund the worker fees/)).toBeVisible();});
   it("accepts a report only when it covers the exact frozen obligation set",()=>{const deal=fixture();deal.report=report();render(<V2Report deal={deal}/>);expect(screen.getByText("Pinned GitHub evidence independently re-fetched by validators.")).toBeVisible();expect(validateV2Deal(deal,"deal-1")).toBe(deal);deal.report.obligation_assessments.pop();expect(()=>validateV2Deal(deal,"deal-1")).toThrow("exact obligation set");});
@@ -39,8 +55,29 @@ describe("VeriStep v2 finalized-state renderer",()=>{
   it("enables hosted delivery only when production health matches the frozen deal",async()=>{const deal=fixture();deal.status="FUNDED";const fetchMock=vi.fn(async()=>({ok:true,json:async()=>({ready:true,network:{chainId:Number(evidenceChainId),contract,workers:deal.manifest.terms.workers}})}));vi.stubGlobal("fetch",fetchMock);localStorage.clear();render(<V2Worker deal={deal} account={deal.manifest.client as `0x${string}`}/>);await waitFor(()=>expect(screen.getByText("SERVICE READY")).toBeInTheDocument());expect(screen.getByRole("button",{name:/Start A\/B delivery/})).toBeEnabled();vi.unstubAllGlobals();});
   it("explains that hosted agents are real server-side transaction actors",async()=>{const deal=fixture();const fetchMock=vi.fn(async()=>({ok:true,json:async()=>({ready:true,network:{chainId:Number(evidenceChainId),contract,workers:deal.manifest.terms.workers}})}));vi.stubGlobal("fetch",fetchMock);localStorage.clear();render(<V2Worker deal={deal}/>);expect(screen.getByText(/real backend agents/)).toBeInTheDocument();expect(screen.getByText(/server-side OpenAI API/)).toBeInTheDocument();expect(screen.getByText(/signs its own transaction/)).toBeInTheDocument();vi.unstubAllGlobals();});
   it("keeps finalized hosted proof valid when current worker health is unavailable",async()=>{const deal=fixture();deal.deal_id="v2-hosted-agent-live-2";deal.status="SETTLEMENT_PENDING";deal.report=report();vi.stubGlobal("fetch",vi.fn(async()=>{throw new Error("offline");}));localStorage.clear();render(<V2Worker deal={deal}/>);expect(screen.getByText("FINALIZED PROOF")).toBeVisible();await waitFor(()=>expect(screen.getByText("Current worker health unavailable.")).toBeVisible());expect(screen.queryByText("SERVICE UNAVAILABLE")).not.toBeInTheDocument();expect(screen.queryByText("Failed to fetch")).not.toBeInTheDocument();vi.unstubAllGlobals();});
-  it("labels dispatched native transfers without claiming payment confirmation",()=>{const deal=fixture();deal.status="SETTLEMENT_PENDING";deal.report=report();deal.settlement_legs=[{id:"A:PAYOUT",role:"A",sequence:0,recipient:deal.manifest.terms.workers.A,amount:"10",kind:"PAYOUT",outcome:"SATISFIED",state:"DISPATCHED_UNVERIFIED",receipt_id:hash}];render(<V2Report deal={deal}/>);expect(screen.getByText("Dispatched — verification pending")).toBeInTheDocument();expect(screen.queryByText(/payment confirmed/i)).not.toBeInTheDocument();fireEvent.click(screen.getByText("Technical details"));expect(screen.getByText("DISPATCHED_UNVERIFIED")).toBeInTheDocument();});
-  it("places transaction proof beside provenance, adjudication and settlement contexts",()=>{const deal=fixture();deal.deal_id="v2-studio-no-fault-358323c";deal.report=report();deal.settlement_legs=[{id:"A:PAYOUT",role:"A",sequence:0,recipient:deal.manifest.terms.workers.A,amount:"10",kind:"PAYOUT",outcome:"SATISFIED",state:"DISPATCHED_UNVERIFIED",receipt_id:hash}];render(<V2Report deal={deal}/>);expect(screen.getByText("Deal created")).toBeVisible();expect(screen.getByText("Agent A accepted")).toBeVisible();expect(screen.getByText("Agent B submitted")).toBeVisible();expect(screen.getByText("Review requested")).toBeVisible();expect(screen.getByText("Review resolved")).toBeVisible();expect(screen.getByText("Agent A payout dispatched")).toBeVisible();expect(screen.getAllByRole("link",{name:/View tx/}).length).toBeGreaterThanOrEqual(9);});
+  it("labels dispatched native transfers without claiming payment confirmation",()=>{const deal=fixture();deal.status="SETTLEMENT_PENDING";deal.report=report();deal.settlement_legs=[{id:"A:PAYOUT",role:"A",sequence:0,recipient:deal.manifest.terms.workers.A,amount:"10",kind:"PAYOUT",outcome:"SATISFIED",state:"DISPATCHED_UNVERIFIED",receipt_id:hash}];render(<V2Report deal={deal}/>);expect(screen.getByText("Dispatched · receipt unverified")).toBeVisible();expect(screen.getByText("Native transfer dispatched; contract-side receipt verification is unavailable on Studio Next.")).toBeVisible();expect(screen.queryByText(/payment confirmed/i)).not.toBeInTheDocument();fireEvent.click(screen.getByText("Technical details"));expect(screen.getByText("DISPATCHED_UNVERIFIED")).toBeInTheDocument();});
+  it("keeps complete evidence and transaction proof available in expandable details",()=>{
+    const deal=fixture();deal.deal_id="v2-studio-no-fault-358323c";deal.report=report();
+    deal.settlement_legs=[{id:"A:PAYOUT",role:"A",sequence:0,recipient:deal.manifest.terms.workers.A,amount:"10",kind:"PAYOUT",outcome:"SATISFIED",state:"DISPATCHED_UNVERIFIED",receipt_id:hash}];
+    const {container}=render(<V2Report deal={deal}/>);
+    expect(screen.getByText("Original source")).toBeVisible();
+    expect(screen.getByText(/not AI confidence/)).toBeVisible();
+    expect(screen.getByRole("link",{name:"Open source"})).toHaveAttribute("href",`https://github.com/tanphung/veristep/blob/${commit}/evidence/SOURCE.txt`);
+    expect(screen.getByText("Deal created")).not.toBeVisible();
+    expect(screen.getByText("Contract result")).not.toBeVisible();
+    expect(screen.getByText("evidence/SOURCE.txt")).not.toBeVisible();
+    const disclosures=container.querySelectorAll<HTMLDetailsElement>(".evidence-disclosure");
+    expect(disclosures).toHaveLength(4);
+    disclosures.forEach(details=>fireEvent.click(details.querySelector("summary")!));
+    for(const label of ["Deal created","Agent A accepted","Agent B submitted","Review requested","Review resolved","Agent A payout dispatched","Contract result","evidence/SOURCE.txt"]){expect(screen.getByText(label)).toBeVisible();}
+    expect(screen.getAllByText(hash)).toHaveLength(3);
+    screen.getAllByText(hash).forEach(element=>expect(element).toBeVisible());
+    expect(screen.getAllByRole("link",{name:/View tx/}).length).toBeGreaterThanOrEqual(9);
+    disclosures.forEach(details=>fireEvent.click(details.querySelector("summary")!));
+    expect(screen.getByText("Deal created")).not.toBeVisible();
+    expect(screen.getByText("Review resolved")).not.toBeVisible();
+    expect(screen.getByText("Agent A payout dispatched")).toBeVisible();
+  });
   it("withholds an expired timeout action while no-broadcast simulation is before its deadline",()=>{const deal=fixture();deal.adjudication_deadline=1;render(<V2Actions deal={deal} account={deal.manifest.client as `0x${string}`} busy={false} onSubmitted={()=>undefined}/>);expect(screen.getByRole("status")).toHaveTextContent("Timeout signing is unavailable");expect(screen.queryByRole("button",{name:/Apply frozen timeout rule/})).not.toBeInTheDocument();});
   it("hides the participant action shell for finalized reviewer-only records",()=>{const deal=fixture();deal.status="SETTLEMENT_PENDING";deal.report=report();deal.settlement_legs=[];expect(shouldRenderV2Actions(deal)).toBe(false);expect(shouldRenderV2Actions(deal,deal.manifest.client as `0x${string}`)).toBe(false);deal.status="FUNDED";expect(shouldRenderV2Actions(deal)).toBe(true);});
   it("presents three reviewer-ready templates while keeping immutable evidence config non-editable",()=>{const {container}=render(<V2NewDeal account={`0x${"11".repeat(20)}`} onClose={()=>undefined} onSubmitted={()=>undefined}/>);fireEvent.change(screen.getByLabelText("Worker A wallet"),{target:{value:`0x${"22".repeat(20)}`}});fireEvent.change(screen.getByLabelText("Worker B wallet"),{target:{value:`0x${"33".repeat(20)}`}});fireEvent.click(screen.getByRole("button",{name:/Continue/}));expect(screen.getAllByRole("radio")).toHaveLength(3);expect(screen.getByText(/Select a card below/)).toBeVisible();expect(screen.queryByLabelText("Source repository")).not.toBeInTheDocument();const repo=container.querySelector<HTMLInputElement>('input[name="sourceRepo"]'),commitInput=container.querySelector<HTMLInputElement>('input[name="sourceCommit"]'),pathInput=container.querySelector<HTMLInputElement>('input[name="sourcePath"]'),snapshotPath=()=>container.querySelector<HTMLElement>(".source-snapshot code");expect(repo).toHaveAttribute("type","hidden");expect(repo).toHaveValue("veristep-evidence");expect(commitInput).toHaveValue("5502b42323eb533306dbae2c82cf0e0f25b6cd8b");expect(snapshotPath()).toHaveTextContent("templates/export-rights.md");fireEvent.click(screen.getByRole("radio",{name:/Refund Policy/}));expect(pathInput).toHaveValue("templates/refund-policy.md");expect(snapshotPath()).toHaveTextContent("templates/refund-policy.md");fireEvent.click(screen.getByText("View source and repository details"));expect(screen.getByText("5502b42323eb533306dbae2c82cf0e0f25b6cd8b")).toBeVisible();});

@@ -1,5 +1,5 @@
 import {describe,expect,it} from "vitest";
-import {dealPresentation,dealStatusLabel,sortDealIds} from "../../frontend/src/deal-presentation";
+import {dealLifecycleStage,dealPresentation,dealStatusLabel,sortDealIds} from "../../frontend/src/deal-presentation";
 import {writesEnabled} from "../../frontend/src/client";
 import deployment from "../../frontend/src/deployment.json";
 
@@ -13,7 +13,14 @@ describe("deal presentation",()=>{
     expect(dealPresentation("v2-studio-b-fault-358323c").archived).toBe(true);
   });
   it("distinguishes dispatched transfers from verified settlement",()=>{
-    expect(dealStatusLabel({status:"SETTLEMENT_PENDING",settlement_legs:[{state:"DISPATCHED_UNVERIFIED"} as never]})).toBe("Transfers Dispatched — Verification Pending");
+    const deal={status:"SETTLEMENT_PENDING",settlement_legs:[{state:"DISPATCHED_UNVERIFIED"} as never]};
+    expect(dealStatusLabel(deal)).toBe("Transfers dispatched");
+    expect(dealLifecycleStage(deal)).toBe(6);
+    expect(deal.status).toBe("SETTLEMENT_PENDING");
+    for(const settlement_legs of [[],[{state:"ELIGIBLE"} as never],[{state:"DISPATCHED_UNVERIFIED"} as never,{state:"ELIGIBLE"} as never]]){
+      expect(dealLifecycleStage({...deal,settlement_legs})).toBe(5);
+      expect(dealStatusLabel({...deal,settlement_legs})).toBe("Awaiting transfer dispatch");
+    }
   });
   it("marks the audited release ready while preserving platform limitations",()=>{
     expect(writesEnabled).toBe(true);

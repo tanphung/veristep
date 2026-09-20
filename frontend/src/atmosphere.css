@@ -1,9 +1,24 @@
-/* Pearl, orchid and ink. Motion stays outside the task workspace. */
-:root {--vs-bg:#121019;--vs-panel:#1c1825;--vs-panel-2:#272031;--vs-line:#403348;--vs-text:#faf1f5;--vs-muted:#bbadbf;--vs-mint:#dfb9f1;--vs-red:#f1aaa8;--forest:#302339;--forest-soft:#3e2b49}
-.vs-navbar {background:#121019f5}
-button:hover:not(:disabled){background:#3b2d45}
-.primary {background:#e2b7ee;border-color:#e2b7ee;color:#281630}
-.primary:hover:not(:disabled){background:#f2d1f7;border-color:#f2d1f7;color:#281630}
+/* One neon-pink accent on matte black surfaces; atmospheric art stays in the hero. */
+:root {
+  --vs-accent:#ef5aa6;
+  --vs-accent-soft:#24101c;
+  --vs-accent-ink:#180910;
+  --vs-bg:#09090b;
+  --vs-panel:#0c0c0e;
+  --vs-panel-2:#101012;
+  --vs-card:#0a0a0c;
+  --vs-line:#363138;
+  --vs-text:#f1eff1;
+  --vs-muted:#b3adb6;
+  --vs-mint:var(--vs-accent);
+  --vs-red:#f1aaa8;
+  --forest:var(--vs-panel);
+  --forest-soft:var(--vs-panel-2);
+}
+.vs-navbar {background:#09090bf5}
+button:hover:not(:disabled){background:var(--vs-accent-soft);border-color:var(--vs-accent)}
+.primary,.primary:hover:not(:disabled) {background:var(--vs-accent);border-color:var(--vs-accent);color:var(--vs-accent-ink);box-shadow:none}
+.primary:hover:not(:disabled){outline:1px solid var(--vs-accent);outline-offset:3px}
 .brand-glyph {filter:none}
 .vs-intro {position:relative;isolation:isolate;overflow:hidden;width:100%;max-width:none;min-height:470px;padding:100px max(24px,calc((100vw - 1200px)/2)) 80px;gap:60px;background:radial-gradient(ellipse at 87% 30%,#69436480,transparent 55%),radial-gradient(ellipse at 65% 120%,#62448288,transparent 60%),#17121f}
 .vs-intro>div:not(.vs-atmosphere){position:relative;z-index:1}
@@ -27,12 +42,34 @@ button:hover:not(:disabled){background:#3b2d45}
 .flight-4{left:90%;top:40%;width:24px;animation-delay:-13s;opacity:.45}
 .flight-1 .wing,.flight-3 .wing{animation-duration:1.3s}
 .is-paused .butterfly,.is-paused .wing {animation-play-state:paused}
-.verified-proof {background:#17131f}.verified-proof:hover{background:#261c30;border-color:#a17eae}
-.scenario-number{color:#c49bcc}
-.proof-result.pass,.verdict.satisfied,.activity-status.success {color:#a5dfc6;background:#20342d}
-.verified-proof dd.satisfied{color:#a5dfc6}
-.vs-records a.active{border-color:#82618e;background:#30223a}
 @keyframes wingbeat {from{transform:scaleX(.94)}to{transform:scaleX(.22)}}
 @keyframes butterfly-drift {0%{translate:0 0;rotate:-18deg}35%{translate:32px -27px;rotate:12deg}70%{translate:-20px 20px;rotate:-5deg}100%{translate:35px 8px;rotate:24deg}}
 @media(max-width:780px){.vs-intro{padding:56px 24px 58px;min-height:0;gap:18px}.intro-aside{padding:0}.vs-intro h1{max-width:560px}.pearl-orbit{right:-210px;opacity:.6}.atmosphere-art{mask-image:linear-gradient(90deg,transparent 20%,black)}.flight-0{left:83%;top:9%;width:52px}.flight-1,.flight-3,.flight-4{display:none}.motion-toggle{bottom:12px}}
 @media(prefers-reduced-motion:reduce){.butterfly,.wing{animation:none!important}.motion-toggle{display:none}}
+
+/* All deal, evidence, settlement and form surfaces share the black palette. */
+.workspace,.new-job,.transaction-panel{background:var(--vs-panel);border-color:var(--vs-line);box-shadow:none}
+.verified-proof,.verified-proof:hover,.compare-head,.v2-identity details>div,.compare-technical>div,.receipt-technical>div,.template-option,.evidence-technical dl div,.v2-decision article,.v2-source-grid article,.obligation-list>article,.receipt-list>article,.settlement-actions article,.system-check-list>article,.onchain-activity-list>article,.contextual-activity article,.v2-actions,.v2-worker,.v2-empty-review{background:var(--vs-card);border-color:var(--vs-line);box-shadow:none}
+.v2-source-grid dl div,.system-checks,.contextual-activity,.obligation-list blockquote,.system-check-list blockquote,.freeze-note{background:var(--vs-card);border-color:var(--vs-line)}
+.v2-source-grid dl div{border:1px solid var(--vs-line)}
+.obligation-list blockquote,.system-check-list blockquote{border-left-color:var(--vs-accent)}
+input,textarea,select{background:var(--vs-card);border-color:#4b424b}
+.template-option:hover,.template-option.selected,.verified-proof:hover{background:var(--vs-card);border-color:var(--vs-accent)}
+.vs-records a.active{background:var(--vs-accent-soft);border-color:var(--vs-accent)}
+
+/* Reuse the same neon hue for CTA buttons, status badges and highlighted text. */
+.scenario-number,.vs-explainer li>span,.verified-proof dd.satisfied{color:var(--vs-accent)}
+.status,.artifact-role,.count-pill,.system-check-action,.all-transactions>summary,.receipt-state.dispatched_unverified,.receipt-state.routed,.receipt-state.confirmed,.proof-result.pass,.verdict.satisfied,.activity-status.success,.worker-state.ready,.worker-state.complete,.v2-worker .worker-icon,.agent-letter{background:var(--vs-accent-soft);color:var(--vs-accent);box-shadow:none}
+.status{border-color:var(--vs-accent)}
+.worker-state{background:var(--vs-card)}
+.v2-lifecycle li.done>span{background:var(--vs-accent);border-color:var(--vs-accent);color:var(--vs-accent-ink);box-shadow:none}
+.v2-lifecycle li.current>span{background:var(--vs-accent-soft);border:2px solid var(--vs-accent);color:var(--vs-accent);box-shadow:none}
+.verdict{background:var(--vs-card)}
+.pending-notice,.v2-alert-grid article{background:var(--vs-card)}
+
+/* Let actions carry the accent; repeated proof labels stay quiet. */
+.status,.artifact-role,.count-pill,.system-check-action,.all-transactions>summary,.receipt-state.dispatched_unverified,.receipt-state.routed,.receipt-state.confirmed,.proof-result.pass,.verdict.satisfied,.activity-status.success,.worker-state.ready,.worker-state.complete{background:var(--vs-card);color:var(--vs-text);border-color:var(--vs-line)}
+.verified,.verified-proof dd.satisfied,.v2-source-grid a,.onchain-activity-list a,.inline-transaction-proof a,.transaction a,.all-onchain-transactions>summary svg{color:var(--vs-muted)}
+.v2-source-grid a:hover,.onchain-activity-list a:hover,.inline-transaction-proof a:hover,.transaction a:hover{color:var(--vs-accent);text-decoration:underline}
+.scenario-number,.vs-explainer li>span,.evidence-disclosure>summary svg{color:var(--vs-muted)}
+.obligation-list blockquote,.system-check-list blockquote{border-left-color:var(--vs-line)}

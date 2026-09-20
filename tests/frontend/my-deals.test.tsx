@@ -23,6 +23,18 @@ describe("wallet-scoped deals",()=>{
     expect(link).toHaveTextContent("Awaiting funding");
     expect(screen.queryByRole("link",{name:/theirs/})).not.toBeInTheDocument();
   });
+  it("shows a clear sync indicator and keeps results when IDs are recreated with the same contents",async()=>{
+    let finish!:(value:V2Deal)=>void;
+    read.mockImplementationOnce(()=>new Promise<V2Deal>(resolve=>{finish=resolve;}));
+    const {rerender}=render(<V2MyDeals account={wallet} ids={["mine"]} selected=""/>);
+    expect(screen.getByRole("status")).toHaveTextContent("Syncing your deals from GenLayer");
+    expect(screen.queryByText(/No deals yet/)).not.toBeInTheDocument();
+    await act(async()=>finish(deal("mine",wallet)));
+    await screen.findByRole("link",{name:/mine/});
+    rerender(<V2MyDeals account={wallet} ids={["mine"]} selected=""/>);
+    expect(screen.getByRole("link",{name:/mine/})).toBeVisible();
+    expect(read).toHaveBeenCalledTimes(1);
+  });
   it("discards late results after a wallet change or disconnect",async()=>{
     let finish!:(value:V2Deal)=>void;
     read.mockImplementationOnce(()=>new Promise<V2Deal>(resolve=>{finish=resolve;}));

@@ -30,10 +30,18 @@ export function sortDealIds(ids:string[]):string[]{
   });
 }
 
+function allTransfersDispatched(deal:Pick<V2Deal,"settlement_legs">):boolean {
+  return deal.settlement_legs.length>0&&deal.settlement_legs.every(leg=>leg.state==="DISPATCHED_UNVERIFIED");
+}
+
+export function dealLifecycleStage(deal:Pick<V2Deal,"status"|"settlement_legs">):number {
+  if(deal.status==="SETTLEMENT_PENDING"&&allTransfersDispatched(deal))return 6;
+  return ({DRAFT_UNFUNDED:0,FUNDED:1,ACTIVE_A:2,ACTIVE_B:2,REVIEWABLE:3,REVIEW_REQUESTED:4,INCONCLUSIVE:4,SETTLEMENT_PENDING:5,COMPLETED:6})[deal.status]??-1;
+}
+
 export function dealStatusLabel(deal:Pick<V2Deal,"status"|"settlement_legs">):string {
-  const allDispatched=deal.settlement_legs.length>0&&deal.settlement_legs.every(leg=>leg.state==="DISPATCHED_UNVERIFIED");
-  if(deal.status==="SETTLEMENT_PENDING"&&allDispatched)return "Transfers Dispatched — Verification Pending";
-  const labels:Record<V2Deal["status"],string>={DRAFT_UNFUNDED:"Awaiting funding",FUNDED:"Awaiting worker acceptance",ACTIVE_A:"Awaiting Agent A delivery",ACTIVE_B:"Awaiting Agent B delivery",REVIEWABLE:"Ready for review",REVIEW_REQUESTED:"Review requested",INCONCLUSIVE:"Review inconclusive",SETTLEMENT_PENDING:"Settlement pending",COMPLETED:"Completed"};
+  if(deal.status==="SETTLEMENT_PENDING"&&allTransfersDispatched(deal))return "Transfers dispatched";
+  const labels:Record<V2Deal["status"],string>={DRAFT_UNFUNDED:"Awaiting funding",FUNDED:"Awaiting worker acceptance",ACTIVE_A:"Awaiting Agent A delivery",ACTIVE_B:"Awaiting Agent B delivery",REVIEWABLE:"Ready for review",REVIEW_REQUESTED:"Review requested",INCONCLUSIVE:"Review inconclusive",SETTLEMENT_PENDING:"Awaiting transfer dispatch",COMPLETED:"Completed"};
   return labels[deal.status];
 }
 
@@ -51,5 +59,5 @@ export function pendingReviewCopy(status:V2Deal["status"]):{title:string;descrip
 }
 
 export function settlementStateLabel(state:V2SettlementLeg["state"]):string {
-  return state==="DISPATCHED_UNVERIFIED"?"Dispatched — verification pending":"Eligible for dispatch";
+  return state==="DISPATCHED_UNVERIFIED"?"Dispatched · receipt unverified":"Eligible for dispatch";
 }
