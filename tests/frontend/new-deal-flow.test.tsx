@@ -1,0 +1,56 @@
+import {fireEvent,render,screen,waitFor} from "@testing-library/react";
+import {beforeEach,describe,expect,it,vi} from "vitest";
+import {V2NewDeal} from "../../frontend/src/V2NewDeal";
+import {submitV2} from "../../frontend/src/v2-transactions";
+import {githubCommitment} from "../../frontend/src/v2-evidence";
+
+vi.mock("../../frontend/src/v2-transactions",()=>({submitV2:vi.fn()}));
+vi.mock("../../frontend/src/v2-evidence",()=>({githubCommitment:vi.fn(async()=>({origin:{provider:"github"}})),githubOrigin:vi.fn(async()=>({provider:"github"}))}));
+const account=`0x${"11".repeat(20)}` as const;
+const next=()=>fireEvent.click(screen.getByRole("button",{name:/Continue/}));
+beforeEach(()=>vi.clearAllMocks());
+describe("clear four-step deal setup",()=>{
+  it("allows wallet-free preparation and preserves edits when the wallet connects",()=>{
+    const onConnect=vi.fn(),onSubmitted=vi.fn();
+    const props={onConnect,onSubmitted,onClose:()=>{}};
+    const {rerender}=render(<V2NewDeal {...props}/>);
+    fireEvent.change(screen.getByLabelText("Deal ID"),{target:{value:"my-new-deal"}});
+    next();
+    expect(screen.getByRole("radio",{name:/Export Rights/})).toBeChecked();
+    fireEvent.click(screen.getByRole("radio",{name:/Refund Policy/}));
+    expect(screen.getByRole("radio",{name:/Refund Policy/})).toBeChecked();
+    next();
+    fireEvent.change(screen.getByLabelText(/Stage A/),{target:{value:"Preserve the exact refund window."}});
+    fireEvent.click(screen.getByRole("button",{name:/Back/}));
+    next();
+    expect(screen.getByLabelText(/Stage A/)).toHaveValue("Preserve the exact refund window.");
+    next();
+    fireEvent.click(screen.getByRole("button",{name:"Connect wallet to sign"}));
+    expect(onConnect).toHaveBeenCalledTimes(1);
+    expect(submitV2).not.toHaveBeenCalled();
+    rerender(<V2NewDeal {...props} account={account}/>);
+    expect(screen.getByRole("button",{name:"Sign & create deal"})).toBeEnabled();
+    expect(screen.getByLabelText("Deal ID")).toHaveValue("my-new-deal");
+    expect(screen.getByLabelText(/Stage A/)).toHaveValue("Preserve the exact refund window.");
+  });
+  it("signs only on the final explicit action and preserves the selected evidence and duties",async()=>{
+    const onSubmitted=vi.fn();
+    render(<V2NewDeal account={account} onClose={()=>{}} onSubmitted={onSubmitted}/>);
+    fireEvent.change(screen.getByLabelText("Deal ID"),{target:{value:"reviewed-deal"}});
+    next();fireEvent.click(screen.getByRole("radio",{name:/Eligibility/}));next();
+    fireEvent.change(screen.getByLabelText(/Stage A/),{target:{value:"Keep every eligibility requirement."}});
+    fireEvent.change(screen.getByLabelText(/Stage B/),{target:{value:"Preserve A's handoff without guarantees."}});
+    next();
+    expect(submitV2).not.toHaveBeenCalled();
+    expect(githubCommitment).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("checkbox"));
+    fireEvent.click(screen.getByRole("button",{name:"Sign & create deal"}));
+    await waitFor(()=>expect(onSubmitted).toHaveBeenCalledWith("reviewed-deal"));
+    expect(submitV2).toHaveBeenCalledTimes(1);
+    expect(githubCommitment).toHaveBeenCalledWith("tanphung","veristep-evidence","5502b42323eb533306dbae2c82cf0e0f25b6cd8b","templates/eligibility.md");
+    const call=vi.mocked(submitV2).mock.calls[0];
+    expect(call.slice(0,3)).toEqual([account,"reviewed-deal","create_terms"]);
+    const terms=JSON.parse(String(call[3][1]));
+    expect(terms.semantic_obligations.map((item:{statement:string})=>item.statement)).toEqual(["Keep every eligibility requirement.","Preserve A's handoff without guarantees."]);
+  });
+});

@@ -1,6 +1,7 @@
 import {TransactionHashVariant} from "genlayer-js/types";
 import {contract,evidenceChainId,readClient} from "./client";
 import type {V2Deal} from "./v2-types";
+import {finalizedReads,isRateLimited} from "./finalized-reads";
 
 const retryDelayMs=450;
 
@@ -12,7 +13,7 @@ export function isRetryableFinalizedReadError(cause:unknown):boolean{
 export async function readFinalizedWithRetry<T>(read:()=>Promise<T>,delayMs=retryDelayMs):Promise<T>{
   try{return await read();}
   catch(cause){
-    if(!isRetryableFinalizedReadError(cause))throw cause;
+    if(isRateLimited(cause)||!isRetryableFinalizedReadError(cause))throw cause;
     await new Promise(resolve=>setTimeout(resolve,delayMs));
     return read();
   }
@@ -43,7 +44,8 @@ export function validateV2Deal(value:unknown,id:string):V2Deal{
   return deal;
 }
 
-export async function listV2Deals():Promise<string[]>{
+export function listV2Deals():Promise<string[]>{return finalizedReads.read("deal-list",loadV2Deals);}
+async function loadV2Deals():Promise<string[]>{
   const ids:string[]=[];let total=0;
   do{
     const raw=await readClient.readContract({address:contract,functionName:"list_deals",args:[BigInt(ids.length),50n],transactionHashVariant:TransactionHashVariant.LATEST_FINAL});
@@ -58,7 +60,8 @@ export async function listV2Deals():Promise<string[]>{
   return ids;
 }
 
-export async function readV2Deal(id:string):Promise<V2Deal>{
+export function readV2Deal(id:string,fresh=false):Promise<V2Deal>{return finalizedReads.read(`deal:${id}`,()=>loadV2Deal(id),fresh);}
+async function loadV2Deal(id:string):Promise<V2Deal>{
   const raw=await readClient.readContract({address:contract,functionName:"get_terms",args:[id],transactionHashVariant:TransactionHashVariant.LATEST_FINAL});
   if(typeof raw!=="string")throw new Error("Unexpected v2 deal response");
   return validateV2Deal(JSON.parse(raw),id);

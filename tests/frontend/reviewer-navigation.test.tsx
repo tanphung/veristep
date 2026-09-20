@@ -20,6 +20,15 @@ describe("reviewer navigation",()=>{
     expect(screen.getByText(/Connect your wallet to see deals/)).toBeVisible();
   });
   beforeEach(()=>{window.history.replaceState(null,"","#view=compare");});
-  it("keeps stable navigation in the navbar while opening the reviewer view through the primary CTA",async()=>{render(<VeriStepApp/>);const cta=screen.getAllByRole("link",{name:/Verify live cases/}).find(link=>link.classList.contains("nav-verify"));expect(cta).toHaveAttribute("href","#view=compare");expect(screen.getByRole("link",{name:"How it works"})).toHaveAttribute("href","#workflow");expect(screen.getByRole("link",{name:"Agents"})).toHaveAttribute("href","#workspace");expect(screen.getByRole("link",{name:"Why GenLayer"})).toHaveAttribute("href","#boundary");expect(screen.queryByRole("link",{name:"Studio Next"})).not.toBeInTheDocument();expect(screen.queryByRole("link",{name:"Product"})).not.toBeInTheDocument();expect(screen.queryByRole("link",{name:"Validator proof"})).not.toBeInTheDocument();expect(screen.queryByRole("link",{name:"On-chain proof"})).not.toBeInTheDocument();await waitFor(()=>expect(screen.getByRole("heading",{name:"Four finalized proofs"})).toBeVisible());expect(screen.getAllByText("PASS")).toHaveLength(4);});
-  it("keeps reviewer state while an in-page anchor changes the hash",async()=>{render(<VeriStepApp/>);await waitFor(()=>expect(screen.getByRole("heading",{name:"Four finalized proofs"})).toBeVisible());act(()=>{window.history.replaceState(null,"","#workflow");window.dispatchEvent(new HashChangeEvent("hashchange"));});expect(screen.getByRole("heading",{name:"Four finalized proofs"})).toBeVisible();});
+  it("keeps two navigation links and a clear create action",async()=>{
+    render(<VeriStepApp/>);
+    expect(screen.getByRole("link",{name:"Explore examples"})).toHaveAttribute("href","#view=compare");
+    expect(within(screen.getByRole("navigation",{name:"Primary navigation"})).getAllByRole("link")).toHaveLength(2);
+    expect(screen.getByRole("link",{name:"How it works"})).toHaveAttribute("href","#workflow");
+    expect(screen.getByRole("link",{name:"Workspace"})).toHaveAttribute("href","#workspace");
+    expect(screen.getByRole("button",{name:"Create a deal"})).toBeEnabled();
+    await waitFor(()=>expect(screen.getByRole("heading",{name:"Four verified examples."})).toBeVisible());
+    expect(screen.getAllByText("PASS")).toHaveLength(4);
+  });
+  it("keeps reviewer state while an in-page anchor changes the hash",async()=>{render(<VeriStepApp/>);await waitFor(()=>expect(screen.getByRole("heading",{name:"Four verified examples."})).toBeVisible());act(()=>{window.history.replaceState(null,"","#workflow");window.dispatchEvent(new HashChangeEvent("hashchange"));});expect(screen.getByRole("heading",{name:"Four verified examples."})).toBeVisible();});
 });

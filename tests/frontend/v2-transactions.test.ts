@@ -8,6 +8,7 @@ import type {TxRecord} from "../../frontend/src/transactions";
 import type {V2Deal} from "../../frontend/src/v2-types";
 
 vi.mock("../../frontend/src/v2-client",()=>({readV2Deal:vi.fn()}));
+vi.mock("../../frontend/src/finalized-reads",()=>({finalizedReads:{read:(_key:string,fetch:()=>Promise<unknown>)=>fetch()}}));
 const call=abi.calldata.decode(Uint8Array.from(receipt.data.calldata.raw)) as Map<string,unknown>;
 const record:TxRecord={id:"existing-create",jobId:(call.get("args") as string[])[0],method:"create_terms",account:receipt.from_address,chainId:chain.id,contract,value:"0",phase:"ACCEPTED",hash:receipt.hash as NonNullable<TxRecord["hash"]>,createdAt:1};
 beforeEach(()=>{
@@ -23,7 +24,7 @@ describe("v2 receipt recovery with real Studio Next calldata",()=>{
     expect((await observeV2(record)).phase).toBe("FINALIZED_SUCCESS");
     expect(v2History()[0].hash).toBe(record.hash);
     expect(v2History().some(v2Pending)).toBe(false);
-    expect(readV2Deal).toHaveBeenCalledWith(record.jobId);
+    expect(readV2Deal).toHaveBeenCalledWith(record.jobId,true);
   });
   it.each(["method","jobId"] as const)("keeps another %s blocked",async field=>{
     await expect(observeV2({...record,[field]:"wrong"})).rejects.toThrow("another v2 operation");

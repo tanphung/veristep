@@ -1,0 +1,38 @@
+/* Pearl, orchid and ink. Motion stays outside the task workspace. */
+:root {--vs-bg:#121019;--vs-panel:#1c1825;--vs-panel-2:#272031;--vs-line:#403348;--vs-text:#faf1f5;--vs-muted:#bbadbf;--vs-mint:#dfb9f1;--vs-red:#f1aaa8;--forest:#302339;--forest-soft:#3e2b49}
+.vs-navbar {background:#121019f5}
+button:hover:not(:disabled){background:#3b2d45}
+.primary {background:#e2b7ee;border-color:#e2b7ee;color:#281630}
+.primary:hover:not(:disabled){background:#f2d1f7;border-color:#f2d1f7;color:#281630}
+.brand-glyph {filter:hue-rotate(110deg) saturate(.18) brightness(1.45)}
+.vs-intro {position:relative;isolation:isolate;overflow:hidden;width:100%;max-width:none;min-height:470px;padding:100px max(24px,calc((100vw - 1200px)/2)) 80px;gap:60px;background:radial-gradient(ellipse at 87% 30%,#69436480,transparent 55%),radial-gradient(ellipse at 65% 120%,#62448288,transparent 60%),#17121f}
+.vs-intro>div:not(.vs-atmosphere){position:relative;z-index:1}
+.vs-intro h1 {font-weight:550;text-shadow:0 2px 35px #17121f90}
+.vs-intro .eyebrow {color:#e7bdcf}
+.intro-aside {padding:26px 0 4px}
+.intro-aside>p {color:#e0ccdf;max-width:420px}
+.intro-aside>small {color:#c9b5cc}
+.vs-atmosphere,.atmosphere-art {position:absolute;inset:0;pointer-events:none}
+.atmosphere-art {overflow:hidden;mask-image:linear-gradient(90deg,transparent,black 42%)}
+.pearl-orbit {position:absolute;width:470px;height:470px;right:4%;top:-145px;border:35px solid #b899c72b;border-radius:50%;transform:rotate(-32deg) scaleX(.65);box-shadow:inset 12px 4px 25px #f5ccdb30,12px 5px 30px #ca9bd320,inset -10px -10px 30px #210e3670}
+.orbit-inner {width:320px;height:320px;right:10%;top:-65px;border-width:1px;box-shadow:0 0 60px #e7aad01a;transform:rotate(-32deg) scaleX(.65)}
+.butterfly {position:absolute;width:72px;filter:drop-shadow(0 5px 10px #e4a3d330);animation:butterfly-drift 17s ease-in-out infinite alternate;will-change:transform}
+.butterfly svg {display:block;width:100%;overflow:visible}
+.wing {transform-origin:60px 50px;animation:wingbeat 1.8s ease-in-out infinite alternate}
+.wing-right {animation-delay:-.3s}.wing-veins {fill:none;opacity:.38}
+.flight-0{left:79%;top:12%;width:90px;transform:rotate(-22deg)}
+.flight-1{left:57%;top:16%;width:40px;animation-delay:-7s;opacity:.7}
+.flight-2{left:91%;top:65%;width:57px;animation-delay:-11s;animation-duration:21s}
+.flight-3{left:43%;top:17%;width:34px;animation-delay:-3s;opacity:.6}
+.flight-4{left:90%;top:40%;width:24px;animation-delay:-13s;opacity:.45}
+.flight-1 .wing,.flight-3 .wing{animation-duration:1.3s}
+.is-paused .butterfly,.is-paused .wing {animation-play-state:paused}
+.verified-proof {background:#17131f}.verified-proof:hover{background:#261c30;border-color:#a17eae}
+.scenario-number{color:#c49bcc}
+.proof-result.pass,.verdict.satisfied,.activity-status.success {color:#a5dfc6;background:#20342d}
+.verified-proof dd.satisfied{color:#a5dfc6}
+.vs-records a.active{border-color:#82618e;background:#30223a}
+@keyframes wingbeat {from{transform:scaleX(.94)}to{transform:scaleX(.22)}}
+@keyframes butterfly-drift {0%{translate:0 0;rotate:-18deg}35%{translate:32px -27px;rotate:12deg}70%{translate:-20px 20px;rotate:-5deg}100%{translate:35px 8px;rotate:24deg}}
+@media(max-width:780px){.vs-intro{padding:56px 24px 58px;min-height:0;gap:18px}.intro-aside{padding:0}.vs-intro h1{max-width:560px}.pearl-orbit{right:-210px;opacity:.6}.atmosphere-art{mask-image:linear-gradient(90deg,transparent 20%,black)}.flight-0{left:83%;top:9%;width:52px}.flight-1,.flight-3,.flight-4{display:none}.motion-toggle{bottom:12px}}
+@media(prefers-reduced-motion:reduce){.butterfly,.wing{animation:none!important}.motion-toggle{display:none}}

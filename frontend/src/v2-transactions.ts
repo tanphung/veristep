@@ -3,6 +3,7 @@ import {createTransactionKit} from "@genlayer/transaction-kit";
 import type {Address,CalldataEncodable,Hash,MessageFeeAllocationInput} from "genlayer-js/types";
 import {chain,contract,readClient,writesEnabled} from "./client";
 import {readV2Deal} from "./v2-client";
+import {finalizedReads} from "./finalized-reads";
 import {executionName,statusName} from "../../scripts/receipts.mjs";
 import feeProfile from "../../fee-profile.json";
 import {injected,type TxRecord,type Phase} from "./transactions";
@@ -98,7 +99,7 @@ export async function submitV2(account:Address,dealId:string,method:string,args:
 function receiptPhase(receipt:unknown):Phase{const status=statusName(receipt);if(["UNDETERMINED","CANCELED","CANCELLED","VALIDATORS_TIMEOUT","LEADER_TIMEOUT"].includes(status))return"FAILED";if(status==="FINALIZED"){const execution=executionName(receipt);return execution==="FINISHED_WITH_RETURN"?"FINALIZED_SUCCESS":execution==="FINISHED_WITH_ERROR"?"FAILED":"UNKNOWN";}return status==="ACCEPTED"?"ACCEPTED":"PENDING";}
 export async function observeV2(record:TxRecord){
   if(!record.hash||!v2Pending(record))return record;
-  const receipt=await readClient.getTransaction({hash:record.hash});
+  const receipt=await finalizedReads.read(`receipt:${record.hash}`,()=>readClient.getTransaction({hash:record.hash!}),true);
   const next:TxRecord={...record,phase:receiptPhase(receipt)};
   const accounting=(receipt as {data?:{fee_accounting?:{execution_fee_consumed?:unknown;primary_fee_refunded?:unknown}}}).data?.fee_accounting;
   if(accounting){
@@ -111,7 +112,7 @@ export async function observeV2(record:TxRecord){
     const call=abi.calldata.decode(Uint8Array.from(raw.data.calldata.raw));
     // GenLayerJS encodes the method under the empty-string key.
     if(!(call instanceof Map)||call.get("")!==record.method||!Array.isArray(call.get("args"))||(call.get("args") as unknown[])[0]!==record.jobId)throw new Error("Finalized receipt belongs to another v2 operation");
-    const deal=await readV2Deal(record.jobId);
+    const deal=await readV2Deal(record.jobId,true);
     const role=deal.manifest.client.toLowerCase()===record.account.toLowerCase()?"CLIENT":(["A","B"] as const).find(item=>deal.manifest.terms.workers[item].toLowerCase()===record.account.toLowerCase());
     const legId=String((call.get("args") as unknown[])[1]??"");
     const leg=deal.settlement_legs.find(item=>item.id===legId);
