@@ -18,7 +18,8 @@ describe("reviewer navigation",()=>{
     render(<VeriStepApp/>);
     await waitFor(()=>expect(within(screen.getByRole("navigation",{name:"Verified VeriStep scenarios"})).getAllByRole("link")).toHaveLength(4));
     expect(screen.queryByText("evidence-other-wallet")).not.toBeInTheDocument();
-    expect(screen.getByText("Technical history").closest("details")).not.toHaveAttribute("open");
+    expect(screen.queryByText("Technical history")).not.toBeInTheDocument();
+    expect(screen.queryByRole("navigation",{name:"Archived and recovery attempts"})).not.toBeInTheDocument();
     expect(screen.getByText(/Connect your wallet to see deals/)).toBeVisible();
   });
   beforeEach(()=>{window.history.replaceState(null,"","#view=compare");});

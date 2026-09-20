@@ -47,7 +47,7 @@ export default function VeriStepApp(){
   function openReviewer(){requestAnimationFrame(()=>document.getElementById("workspace")?.scrollIntoView({behavior:"smooth"}));}
   const stage=deal?dealLifecycleStage(deal):-1;
   const busy=records.some(v2Pending)||Boolean(historyError);
-  const primaryIds=canonicalReleaseProofs.map(item=>item.id).filter(id=>ids.includes(id)),archivedIds=ids.filter(id=>dealPresentation(id).archived);
+  const primaryIds=canonicalReleaseProofs.map(item=>item.id).filter(id=>ids.includes(id));
   const unresolved=records.filter(v2Pending).length;
   return <div className="veristep-app">
     <header className="vs-navbar">
@@ -74,7 +74,6 @@ export default function VeriStepApp(){
             <div className="sidebar-demo"><strong>Demo</strong><span className="meta">See the protocol in action.</span></div>
             <a className={`verify-cases ${view==="compare"?"active":""}`} href="#view=compare"><ArrowLeftRight/> Verify live cases</a>
             <nav aria-label="Verified VeriStep scenarios">{primaryIds.map((id,index)=><a className={view==="deals"&&selected===id?"active":""} href={jobHref(id)} key={id}><span className="scenario-number">0{index+1}</span><span>{dealPresentation(id).label}</span></a>)}</nav>
-            {archivedIds.length>0&&<details className="archived-records"><summary>Technical history <span>{archivedIds.length}</span></summary><p className="meta">Earlier demo and recovery runs. These may be unfinished.</p><nav aria-label="Archived and recovery attempts">{archivedIds.map(id=><a href={jobHref(id)} key={id}><span>{dealPresentation(id).label}<small className="meta">{id}</small></span></a>)}</nav></details>}
             <a className="contract-link" href={`${explorer}/contracts/${contract}`} target="_blank" rel="noreferrer">View contract <ArrowUpRight/></a>
           </aside>}
           <div className="vs-record-main">
