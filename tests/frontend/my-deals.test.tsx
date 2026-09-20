@@ -7,8 +7,51 @@ const read=vi.hoisted(()=>vi.fn());
 vi.mock("../../frontend/src/v2-client",()=>({readV2Deal:read,readFinalizedWithRetry:(fn:()=>Promise<unknown>)=>fn()}));
 const wallet="0xAbC",other="0xDef";
 const deal=(id:string,client:string)=>({deal_id:id,manifest:{client},status:"DRAFT_UNFUNDED",settlement_legs:[]} as unknown as V2Deal);
-beforeEach(()=>read.mockReset());
+beforeEach(()=>{read.mockReset();});
 describe("wallet-scoped deals",()=>{
+  it("never claims no deals during a 3-second list load and a 12-second ownership scan",async()=>{
+    vi.useFakeTimers();
+    try{
+      read.mockImplementation((id:string)=>new Promise(resolve=>setTimeout(()=>resolve(deal(id,wallet)),12000)));
+      const {rerender}=render(<V2MyDeals account={wallet} ids={[]} idsReady={false} selected=""/>);
+      const expectSync=()=>{expect(screen.getByRole("status")).toHaveTextContent("Syncing your deals");expect(screen.queryByText(/No deals yet/)).not.toBeInTheDocument();};
+      expectSync();
+      await act(async()=>{await vi.advanceTimersByTimeAsync(3000);});
+      expectSync();
+      rerender(<V2MyDeals account={wallet} ids={["mine"]} idsReady selected=""/>);
+      await act(async()=>{await vi.advanceTimersByTimeAsync(11999);});
+      expectSync();
+      await act(async()=>{await vi.advanceTimersByTimeAsync(1);});
+      expect(screen.getByRole("link",{name:/mine/})).toBeVisible();
+      expect(screen.queryByText(/No deals yet/)).not.toBeInTheDocument();
+    }finally{vi.useRealTimers();}
+  });
+  it("scans again when the same wallet reconnects after an earlier empty result",async()=>{
+    const {rerender}=render(<V2MyDeals account={wallet} ids={[]} idsReady selected=""/>);
+    await screen.findByText(/No deals yet/);
+    rerender(<V2MyDeals ids={[]} idsReady={false} selected=""/>);
+    rerender(<V2MyDeals account={wallet} ids={[]} idsReady={false} selected=""/>);
+    expect(screen.getByRole("status")).toHaveTextContent("Syncing your deals");
+    expect(screen.queryByText(/No deals yet/)).not.toBeInTheDocument();
+    read.mockResolvedValue(deal("mine",wallet));
+    rerender(<V2MyDeals account={wallet} ids={["mine"]} idsReady selected=""/>);
+    expect(await screen.findByRole("link",{name:/mine/})).toBeVisible();
+  });
+  it("waits for the global list before reporting an empty wallet",async()=>{
+    const {rerender}=render(<V2MyDeals account={wallet} ids={[]} idsReady={false} selected=""/>);
+    await act(async()=>{});
+    expect(screen.getByRole("status")).toHaveTextContent("Syncing your deals");
+    expect(screen.queryByText(/No deals yet/)).not.toBeInTheDocument();
+    expect(read).not.toHaveBeenCalled();
+    read.mockResolvedValue(deal("mine",wallet));
+    rerender(<V2MyDeals account={wallet} ids={["mine"]} idsReady selected=""/>);
+    expect(await screen.findByRole("link",{name:/mine/})).toBeVisible();
+  });
+  it("shows progress while the wallet connection is still pending",()=>{
+    render(<V2MyDeals connecting ids={[]} idsReady={false} selected=""/>);
+    expect(screen.getByRole("status")).toHaveTextContent("Connecting wallet");
+    expect(screen.queryByText(/No deals yet/)).not.toBeInTheDocument();
+  });
   it("does not scan deals before a wallet connects",()=>{
     render(<V2MyDeals ids={["one"]} selected=""/>);
     expect(screen.getByText(/Connect your wallet/)).toBeVisible();

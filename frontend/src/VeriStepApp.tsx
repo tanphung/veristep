@@ -70,7 +70,7 @@ export default function VeriStepApp(){
         <div className={`vs-dashboard ${creating?"is-creating":""}`} id="workspace">
           {!creating&&<aside className="vs-records">
             <button className="primary new-deal-secondary" onClick={openCreate} disabled={busy||!writesEnabled}><Plus/> New Deal</button>
-            <V2MyDeals account={account} ids={ids} selected={view==="deals"?selected:""}/>
+            <V2MyDeals account={account} ids={ids} idsReady={knownIds.current!==undefined} connecting={connecting} selected={view==="deals"?selected:""}/>
             <div className="sidebar-demo"><strong>Demo</strong><span className="meta">See the protocol in action.</span></div>
             <a className={`verify-cases ${view==="compare"?"active":""}`} href="#view=compare"><ArrowLeftRight/> Verify live cases</a>
             <nav aria-label="Verified VeriStep scenarios">{primaryIds.map((id,index)=><a className={view==="deals"&&selected===id?"active":""} href={jobHref(id)} key={id}><span className="scenario-number">0{index+1}</span><span>{dealPresentation(id).label}</span></a>)}</nav>
