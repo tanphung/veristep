@@ -4,7 +4,7 @@
 button:hover:not(:disabled){background:#3b2d45}
 .primary {background:#e2b7ee;border-color:#e2b7ee;color:#281630}
 .primary:hover:not(:disabled){background:#f2d1f7;border-color:#f2d1f7;color:#281630}
-.brand-glyph {filter:hue-rotate(110deg) saturate(.18) brightness(1.45)}
+.brand-glyph {filter:none}
 .vs-intro {position:relative;isolation:isolate;overflow:hidden;width:100%;max-width:none;min-height:470px;padding:100px max(24px,calc((100vw - 1200px)/2)) 80px;gap:60px;background:radial-gradient(ellipse at 87% 30%,#69436480,transparent 55%),radial-gradient(ellipse at 65% 120%,#62448288,transparent 60%),#17121f}
 .vs-intro>div:not(.vs-atmosphere){position:relative;z-index:1}
 .vs-intro h1 {font-weight:550;text-shadow:0 2px 35px #17121f90}

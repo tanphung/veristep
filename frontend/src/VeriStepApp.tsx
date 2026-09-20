@@ -52,7 +52,7 @@ export default function VeriStepApp(){
   const unresolved=records.filter(v2Pending).length;
   return <div className="veristep-app">
     <header className="vs-navbar">
-      <a className="vs-brand" href="#top" aria-label="VeriStep home"><img className="brand-glyph" src="/veristep-symbol.png" alt=""/><strong>VeriStep</strong></a>
+      <a className="vs-brand" href="#top" aria-label="VeriStep home"><img className="brand-glyph" src="/veristep-logo-mark.png" alt=""/><strong>VeriStep</strong></a>
       <nav aria-label="Primary navigation"><a href="#workspace">Workspace</a><a href="#workflow">How it works</a></nav>
       <div className="vs-nav-actions"><span className="network-note">STUDIO NEXT</span><button className="wallet-button" onClick={()=>void connectWallet()} disabled={connecting}><Wallet/>{connecting?"Connecting…":account?short(account):"Connect wallet"}</button></div>
     </header>
