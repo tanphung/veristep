@@ -41,8 +41,7 @@ All three semantic live cases have finalized with their predetermined outcomes:
 - A-fault recovery 3: A `VIOLATED`, B `SATISFIED`;
 - B-fault recovery 2: A `SATISFIED`, B `VIOLATED`.
 
-All three cases have four native settlement legs honestly recorded as
-`DISPATCHED_UNVERIFIED`. Earlier B-fault attempts ended `UNDETERMINED`; their
+Earlier B-fault attempts ended `UNDETERMINED`; their
 incidents remain preserved as recovery history. Read the [release evidence](docs/RELEASE-EVIDENCE.md),
 [core manifest](reports/studio-next-agent-tank/manifest.json),
 [final B-fault manifest](reports/studio-next-b-fault-final/manifest.json), and
