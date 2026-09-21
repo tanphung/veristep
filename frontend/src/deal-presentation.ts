@@ -53,7 +53,7 @@ export function pendingReviewCopy(status:V2Deal["status"]):{title:string;descrip
     case "ACTIVE_B":return {title:"Awaiting Agent B delivery",description:"Agent B must submit its artifact before the evidence is ready for review."};
     case "REVIEWABLE":return {title:"Evidence ready for review",description:"A participant can now freeze the evidence manifest and request validator review."};
     case "REVIEW_REQUESTED":return {title:"Review requested — no finalized report",description:"The review request is recorded, but no verdict is stored yet. This status alone does not mean validators are currently processing it. Check the available action and transaction details."};
-    case "INCONCLUSIVE":return {title:"Review needs attention",description:"There is no conclusive report available. Check the deal actions and deadline before continuing."};
+    case "INCONCLUSIVE":return {title:"Review inconclusive",description:"The deal is marked inconclusive, but its report is unavailable in this view. Refresh finalized state to inspect each agent’s recorded outcome and entitlements; uncertainty alone is not a violation."};
     default:return {title:"Review report unavailable",description:"No review report is stored for this deal. Check its contract state and transaction details."};
   }
 }

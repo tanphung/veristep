@@ -9,6 +9,16 @@ const wallet="0xAbC",other="0xDef";
 const deal=(id:string,client:string)=>({deal_id:id,manifest:{client},status:"DRAFT_UNFUNDED",settlement_legs:[]} as unknown as V2Deal);
 beforeEach(()=>{read.mockReset();});
 describe("wallet-scoped deals",()=>{
+  it("reveals an owned deal before the remaining ownership reads finish",async()=>{
+    let finish!:(value:V2Deal)=>void;
+    read.mockImplementation((id:string)=>id==="mine"?Promise.resolve(deal(id,wallet)):new Promise<V2Deal>(resolve=>{finish=resolve;}));
+    render(<V2MyDeals account={wallet} ids={["mine","slow"]} selected=""/>);
+    expect(await screen.findByRole("link",{name:/mine/})).toBeVisible();
+    expect(screen.getByRole("status")).toHaveTextContent("1/2 records checked");
+    await act(async()=>finish(deal("slow",other)));
+    await waitFor(()=>expect(screen.queryByRole("status")).not.toBeInTheDocument());
+    expect(screen.queryByRole("link",{name:/slow/})).not.toBeInTheDocument();
+  });
   it("never claims no deals during a 3-second list load and a 12-second ownership scan",async()=>{
     vi.useFakeTimers();
     try{

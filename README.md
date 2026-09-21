@@ -17,6 +17,7 @@ The active release target is **GenLayer Studio Next**, not Bradbury.
 |---|---|
 | Demo video | [Watch the 2:21 product demo on YouTube](https://www.youtube.com/watch?v=8mKo2xxYzgM) ([release file](submission/VeriStep-Agent-Tank-Demo.mp4)) |
 | Live DApp | [veristep-genlayer.vercel.app](https://veristep-genlayer.vercel.app/) |
+| Docs | [Judgment, evidence and settlement](https://veristep-genlayer.vercel.app/#docs) |
 | Network | GenLayer Studio Next, chain `61997` |
 | Contract | [`0xd72A...1b4b`](https://explorer-studio-dev.genlayer.com/contracts/0xd72A7C7e1e9c1A56AE32B827b756fFff031B1b4b) |
 | Release evidence | [docs/RELEASE-EVIDENCE.md](docs/RELEASE-EVIDENCE.md) |
@@ -72,7 +73,22 @@ The completed release matrix is intentionally small and inspectable:
 - A leader and independent validators evaluate semantic duties with structured,
   evidence-grounded output.
 - Settlement is calculated by the Intelligent Contract, not by an agent or worker.
-- Expired paths use a deterministic neutral-timeout rule.
+- Expired paths apply frozen lifecycle rules: delivery failure can establish a
+  violation; semantic uncertainty alone does not.
+
+`UNASSESSABLE` is not `VIOLATED`. An `INCONCLUSIVE` deal preserves the report’s
+role-specific outcomes and entitlements. After the adjudication deadline, a
+successful timeout transition activates settlement legs from that report; a
+satisfied role keeps its fee and full bond, while an unassessable role receives
+no fee, returns its fee to the client and recovers its deposited bond without a
+violation penalty. Without a resolved report, adjudication timeout assigns both
+roles neutral outcomes. `SETTLEMENT_PENDING` means allocations exist, not that
+payment occurred: each eligible leg requires explicit routing. Timeout signing
+currently remains gated by the release’s chain-time simulation check.
+
+[Docs](https://veristep-genlayer.vercel.app/#docs) distinguish these paths and
+outline post-hackathon append-only evidence recovery with one bounded GenLayer
+re-review; those extensions are not part of the submitted contract.
 
 Studio Next currently cannot provide contract-side proof that a dispatched native
 transfer reached its recipient. The UI and evidence therefore use

@@ -23,15 +23,34 @@ function save(record:TxRecord){
   window.dispatchEvent(new Event('veristep:transactions'));
 }
 type InjectedProvider=Provider & {isMetaMask?:boolean;isOkxWallet?:boolean;isOKExWallet?:boolean;providers?:InjectedProvider[]};
+type Eip6963Detail={info?:{name?:string;rdns?:string;uuid?:string};provider?:InjectedProvider};
+let selectedProvider:InjectedProvider|undefined;
+const announcedProviders=new Map<InjectedProvider,Eip6963Detail["info"]>();
+const isOkx=(provider:InjectedProvider,info?:Eip6963Detail["info"])=>Boolean(provider.isOkxWallet||provider.isOKExWallet||/okx|okex/i.test(`${info?.name??""} ${info?.rdns??""}`));
 function providerCandidates():InjectedProvider[]{
-  const browser=window as unknown as {ethereum?:InjectedProvider;okxwallet?:InjectedProvider};
-  const candidates=[...(Array.isArray(browser.ethereum?.providers)?browser.ethereum.providers:[]),browser.ethereum,browser.okxwallet].filter((item):item is InjectedProvider=>Boolean(item?.request));
-  return [...new Set(candidates)].sort((left,right)=>Number(Boolean(right.isMetaMask))-Number(Boolean(left.isMetaMask))||Number(Boolean(right.isOkxWallet||right.isOKExWallet))-Number(Boolean(left.isOkxWallet||left.isOKExWallet)));
+  const browser=window as unknown as {ethereum?:InjectedProvider;okxwallet?:InjectedProvider&{ethereum?:InjectedProvider}};
+  const candidates=[browser.okxwallet?.ethereum,browser.okxwallet,...announcedProviders.keys(),...(Array.isArray(browser.ethereum?.providers)?browser.ethereum.providers:[]),browser.ethereum].filter((item):item is InjectedProvider=>Boolean(item?.request));
+  return [...new Set(candidates)].sort((left,right)=>Number(isOkx(right,announcedProviders.get(right)))-Number(isOkx(left,announcedProviders.get(left)))||Number(Boolean(right.isMetaMask))-Number(Boolean(left.isMetaMask)));
+}
+async function discoverProvider(waitMs=800):Promise<InjectedProvider|undefined>{
+  const existing=providerCandidates()[0];if(existing)return existing;
+  return new Promise(resolve=>{
+    let timer=0;
+    const finish=()=>{window.removeEventListener('eip6963:announceProvider',announce);clearTimeout(timer);resolve(providerCandidates()[0]);};
+    const announce=(event:Event)=>{const detail=(event as CustomEvent<Eip6963Detail>).detail;if(!detail?.provider?.request)return;announcedProviders.set(detail.provider,detail.info);finish();};
+    window.addEventListener('eip6963:announceProvider',announce);
+    timer=window.setTimeout(finish,waitMs);
+    window.dispatchEvent(new Event('eip6963:requestProvider'));
+  });
 }
 export function injected():Provider {
-  const provider=providerCandidates()[0];
-  if(!provider)throw new Error('Install or unlock an EIP-1193 wallet such as MetaMask or OKX Wallet. Never paste a private key here.');
+  const provider=selectedProvider??providerCandidates()[0];
+  if(!provider)throw new Error('No wallet connection is available to this site. Enable site access for MetaMask or OKX Wallet, then try again. Never paste a private key here.');
   return provider;
+}
+export function disconnectWallet(){
+  selectedProvider=undefined;
+  announcedProviders.clear();
 }
 function chainParams(){return {chainId:`0x${chain.id.toString(16)}`,chainName:chain.name,rpcUrls:chain.rpcUrls.default.http,nativeCurrency:chain.nativeCurrency,blockExplorerUrls:chain.blockExplorers?.default.url?[chain.blockExplorers.default.url]:undefined};}
 function errorCode(error:unknown):number|undefined{return typeof error==='object'&&error!==null&&'code' in error&&typeof error.code==='number'?error.code:undefined;}
@@ -47,7 +66,9 @@ async function connectChain(provider:Provider):Promise<void>{
   if(await provider.request({method:'eth_chainId'})!==expected)throw new Error(`Switch your wallet to ${chain.name}`);
 }
 export async function connect():Promise<Address>{
-  const provider=injected();
+  const provider=await discoverProvider();
+  if(!provider)throw new Error('No wallet connection is available to this site. Enable site access for MetaMask or OKX Wallet, then try again. Never paste a private key here.');
+  selectedProvider=provider;
   const accounts=await provider.request({method:'eth_requestAccounts'}) as Address[];
   if(!accounts?.[0])throw new Error('No wallet account selected');
   await connectChain(provider);

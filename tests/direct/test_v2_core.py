@@ -134,6 +134,57 @@ def test_public_lifecycle_keeps_review_and_receipt_authority_in_contract(core, m
     ]
 
 
+@pytest.mark.parametrize("resolved", [True, False])
+def test_docs_adjudication_paths_preserve_role_entitlements(core, monkeypatch, resolved):
+    """Exercise both documented paths locally; no live writes or contract edits."""
+    c, m, vm = core
+    iso = "2026-09-12T00:00:00+00:00"
+    vm.warp(iso)
+    m.gl.message.raw["datetime"] = iso
+    c.create_terms("work-1", json.dumps(terms()))
+    deal = json.loads(c.get_terms("work-1"))
+    vm.value = 20
+    c.fund_terms("work-1", deal["terms_hash"])
+    for role in ("A", "B"):
+        vm.sender = m.Address(terms()["workers"][role]).as_bytes
+        vm.value = 5
+        c.accept_work("work-1", deal["terms_hash"])
+    vm.value = 0
+    for role, upstream in (("A", "SOURCE"), ("B", "A")):
+        vm.sender = m.Address(terms()["workers"][role]).as_bytes
+        deal = json.loads(c.get_terms("work-1"))
+        c.submit_artifact("work-1", json.dumps(artifact()), deal["artifacts"][upstream]["submission_id"])
+    c.request_review("work-1")
+    if resolved:
+        _, artifacts, semantic, _, _ = complete_report(m, {"SEM_B_FAITHFULNESS": "UNASSESSABLE"})
+        monkeypatch.setattr(m, "_review_consensus", lambda *_: {"artifacts": m._wire_artifacts(artifacts), "semantic": semantic})
+        c.resolve_review("work-1")
+    waiting = json.loads(c.get_terms("work-1"))
+    assert waiting["status"] == ("INCONCLUSIVE" if resolved else "REVIEW_REQUESTED")
+    assert waiting["settlement_legs"] == []
+    assert waiting["ledger"]["routed"] == "0"
+    with pytest.raises(m.gl.vm.UserError, match="DEADLINE_NOT_REACHED"):
+        c.advance_timeout("work-1")
+    iso = datetime.fromtimestamp(waiting["adjudication_deadline"], timezone.utc).isoformat()
+    vm.warp(iso)
+    m.gl.message.raw["datetime"] = iso
+    c.advance_timeout("work-1")
+    after = json.loads(c.get_terms("work-1"))
+    stages = after["report"]["decision"]["stages"]
+    assert after["status"] == "SETTLEMENT_PENDING"
+    assert stages["A"]["outcome"] == ("SATISFIED" if resolved else "UNASSESSABLE")
+    assert stages["A"]["entitlements"] == {"PAYOUT": "10" if resolved else "0", "REFUND": "0" if resolved else "10", "BOND_RETURN": "5"}
+    assert stages["B"]["outcome"] == "UNASSESSABLE"
+    assert stages["B"]["entitlements"] == {"PAYOUT": "0", "REFUND": "10", "BOND_RETURN": "5"}
+    if resolved:
+        assert stages == waiting["report"]["decision"]["stages"]
+    else:
+        assert "ADJUDICATION_TIMEOUT" in after["report"]["reasoning"]
+    assert all(leg["state"] == "ELIGIBLE" for leg in after["settlement_legs"])
+    assert sum(int(leg["amount"]) for leg in after["settlement_legs"]) == 30
+    assert after["ledger"]["routed"] == "0"
+
+
 def test_funding_and_acceptance_require_exact_value_and_role(core):
     c, m, vm = core
     c.create_terms("work-1", json.dumps(terms()))

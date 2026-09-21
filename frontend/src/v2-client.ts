@@ -44,7 +44,7 @@ export function validateV2Deal(value:unknown,id:string):V2Deal{
   return deal;
 }
 
-export function listV2Deals():Promise<string[]>{return finalizedReads.read("deal-list",loadV2Deals);}
+export function listV2Deals(fresh=false):Promise<string[]>{return finalizedReads.read("deal-list",loadV2Deals,fresh);}
 async function loadV2Deals():Promise<string[]>{
   const ids:string[]=[];let total=0;
   do{
@@ -60,7 +60,7 @@ async function loadV2Deals():Promise<string[]>{
   return ids;
 }
 
-export function readV2Deal(id:string,fresh=false):Promise<V2Deal>{return finalizedReads.read(`deal:${id}`,()=>loadV2Deal(id),fresh);}
+export function readV2Deal(id:string,fresh=false,priority=0):Promise<V2Deal>{return finalizedReads.read(`deal:${id}`,()=>loadV2Deal(id),fresh,priority);}
 async function loadV2Deal(id:string):Promise<V2Deal>{
   const raw=await readClient.readContract({address:contract,functionName:"get_terms",args:[id],transactionHashVariant:TransactionHashVariant.LATEST_FINAL});
   if(typeof raw!=="string")throw new Error("Unexpected v2 deal response");

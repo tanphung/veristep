@@ -1,4 +1,4 @@
-import {fireEvent,render,screen,waitFor} from "@testing-library/react";
+import {fireEvent,render,screen,waitFor,within} from "@testing-library/react";
 import {describe,expect,it,vi} from "vitest";
 import {contract,evidenceChainId,readClient} from "../../frontend/src/client";
 import {listV2Deals,readFinalizedWithRetry,validateV2Deal} from "../../frontend/src/v2-client";
@@ -30,6 +30,38 @@ function report():Report{
 }
 
 describe("VeriStep v2 finalized-state renderer",()=>{
+  it("preserves mixed role outcomes and recorded allocations while inconclusive, including after the deadline",()=>{
+    const deal=fixture();deal.status="INCONCLUSIVE";deal.adjudication_deadline=1;deal.report=report();
+    deal.report.decision.next_state="NEUTRAL_UNWIND_REQUIRED";
+    deal.report.decision.stages.B={outcome:"UNASSESSABLE",entitlements:{PAYOUT:"0",REFUND:"10",BOND_RETURN:"5"}};
+    deal.report.score.B=null;
+    const original=JSON.stringify(deal);const {rerender}=render(<V2Report deal={deal}/>);
+    expect(screen.getByRole("heading",{name:"Review inconclusive"})).toBeVisible();
+    expect(screen.getByText(/Uncertainty alone is not treated as a violation/)).toBeVisible();
+    expect(screen.getByText(/Expiry alone does not activate or dispatch transfers/)).toBeVisible();
+    const a=within(screen.getByRole("article",{name:"Agent A result"})),b=within(screen.getByRole("article",{name:"Agent B result"}));
+    expect(a.getByText("Satisfied")).toBeVisible();expect(b.getByText("Unassessable")).toBeVisible();
+    fireEvent.click(a.getByText("Recorded entitlements · Agent A"));fireEvent.click(b.getByText("Recorded entitlements · Agent B"));
+    expect(a.getByText("10 attoGEN")).toBeVisible();expect(b.getByText("10 attoGEN")).toBeVisible();
+    expect(a.getByText("0 attoGEN")).toBeVisible();expect(b.getByText("0 attoGEN")).toBeVisible();
+    expect(screen.queryByText("No settlement leg exists before a contract decision.")).not.toBeInTheDocument();
+    expect(JSON.stringify(deal)).toBe(original);
+    deal.status="SETTLEMENT_PENDING";deal.report.decision.next_state="READY_FOR_SETTLEMENT";
+    deal.settlement_legs=[{id:"A:PAYOUT",role:"A",sequence:0,recipient:deal.manifest.terms.workers.A,amount:"10",kind:"PAYOUT",outcome:"SATISFIED",state:"ELIGIBLE",receipt_id:hash}];
+    rerender(<V2Report deal={deal}/>);
+    expect(screen.queryByRole("heading",{name:"Review inconclusive"})).not.toBeInTheDocument();
+    expect(screen.getByText(/settlement pending does not mean paid/)).toBeVisible();
+    expect(screen.getByText("Eligible for dispatch")).toBeVisible();
+    expect(b.getByText("Unassessable")).toBeVisible();
+  });
+  it("shows both neutral adjudication timeout roles without inventing a semantic verdict",()=>{
+    const deal=fixture();deal.status="SETTLEMENT_PENDING";deal.report=report();
+    for(const role of ["A","B"] as const){deal.report.decision.stages[role]={outcome:"UNASSESSABLE",entitlements:{PAYOUT:"0",REFUND:"10",BOND_RETURN:"5"}};deal.report.score[role]=null;}
+    render(<V2Report deal={deal}/>);
+    expect(screen.getAllByText("Unassessable")).toHaveLength(2);expect(screen.getAllByText("—")).toHaveLength(2);
+    expect(screen.queryByText("0%")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button",{name:/appeal|re-review|submit more evidence/i})).not.toBeInTheDocument();
+  });
   it("collapses the entire finding while keeping its evidence available",()=>{
     const deal=fixture();deal.report=report();
     deal.report.findings=[{id:"F001",obligation_id:"SEM_A_TEST",severity:"MATERIAL",summary:"Agent A changed the approval requirement.",citation_ids:["C001"]}];

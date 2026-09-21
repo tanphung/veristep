@@ -42,7 +42,7 @@ describe("new deal finality recovery",()=>{
     await act(async()=>{fireEvent.click(screen.getByRole("button",{name:"Check same hashes"}));});
     await waitFor(()=>expect(screen.getByRole("button",{name:"New Deal"})).toBeEnabled());
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-    expect(mocks.read).toHaveBeenCalledWith(pending.jobId,true);
+    expect(mocks.read).toHaveBeenCalledWith(pending.jobId,true,10);
     fireEvent.click(screen.getByRole("button",{name:"New Deal"}));
     expect(screen.getByRole("heading",{name:"New deal form"})).toBeVisible();
   });

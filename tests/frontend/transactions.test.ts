@@ -1,6 +1,6 @@
 import {beforeEach,describe,it,expect,vi} from 'vitest';
 import {chain,contract,readClient} from '../../frontend/src/client';
-import {connect,history,historyKey,observe,pending,receiptPhase,submit,assertReceiptMatches,recoverHash,walletChanged,watchWallet,type TxRecord} from '../../frontend/src/transactions';
+import {connect,disconnectWallet,history,historyKey,observe,pending,receiptPhase,submit,assertReceiptMatches,recoverHash,walletChanged,watchWallet,type TxRecord} from '../../frontend/src/transactions';
 import {abi} from 'genlayer-js';
 import * as clientModule from '../../frontend/src/client';
 import {jobFixture} from './fixtures';
@@ -11,6 +11,7 @@ const hash=('0x'+'ab'.repeat(32)) as NonNullable<TxRecord['hash']>;
 const record=():TxRecord=>({id:'test-tx',jobId:'test-job',method:'request_review',account,chainId:chain.id,contract,value:'0',phase:'PENDING',hash,createdAt:1});
 const matchedReceipt=()=>({hash,from_address:account,to_address:contract,data:{calldata:{raw:Array.from(abi.calldata.encode(new Map([['method','request_review'],['args',['test-job']]] as [string,any][])))}}});
 beforeEach(()=>{
+  disconnectWallet();
   vi.clearAllMocks();mocks.connect.mockResolvedValue(undefined);mocks.write.mockResolvedValue(hash);
   mocks.request.mockImplementation(async({method}:{method:string})=>method==='eth_chainId'?`0x${chain.id.toString(16)}`:method==='wallet_getSnaps'?{'npm:genlayer-wallet-plugin':{id:'npm:genlayer-wallet-plugin'}}:[account]);
   Object.defineProperty(window,'ethereum',{value:{request:mocks.request},configurable:true});
@@ -42,6 +43,17 @@ describe('transaction safety',()=>{
     await expect(connect()).resolves.toBe(account);
     expect(calls).toEqual(['eth_requestAccounts','eth_chainId','eth_chainId','eth_accounts']);
     expect(calls).not.toContain('wallet_getSnaps');expect(calls).not.toContain('wallet_requestSnaps');
+  });
+  it('discovers a locked OKX provider through EIP-6963 and requests its accounts',async()=>{
+    const calls:string[]=[];
+    const provider={isOkxWallet:true,request:vi.fn(async({method}:{method:string})=>{calls.push(method);if(method==='eth_chainId')return `0x${chain.id.toString(16)}`;if(method==='eth_requestAccounts'||method==='eth_accounts')return [account];throw new Error(`unexpected ${method}`);})};
+    Object.defineProperty(window,'ethereum',{value:undefined,configurable:true});
+    Object.defineProperty(window,'okxwallet',{value:undefined,configurable:true});
+    const announce=()=>window.dispatchEvent(new CustomEvent('eip6963:announceProvider',{detail:{info:{name:'OKX Wallet',rdns:'com.okex.wallet',uuid:'okx-test'},provider}}));
+    window.addEventListener('eip6963:requestProvider',announce);
+    try{await expect(connect()).resolves.toBe(account);}finally{window.removeEventListener('eip6963:requestProvider',announce);}
+    expect(calls[0]).toBe('eth_requestAccounts');
+    expect(provider.request).toHaveBeenCalled();
   });
   it('adds and switches Studio Next only when the selected wallet lacks the chain',async()=>{
     let active='0x1';const calls:string[]=[];

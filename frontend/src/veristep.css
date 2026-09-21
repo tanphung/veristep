@@ -32,6 +32,13 @@ h1,h2,h3 {color:var(--vs-text)}
 .network-note:before {content:"";display:inline-block;width:5px;height:5px;margin-right:8px;background:var(--vs-mint)}
 .wallet-button {min-height:40px;font-size:.78rem;background:transparent}
 .wallet-button svg {width:15px}
+.wallet-menu{position:relative}
+.wallet-menu>summary{display:flex;align-items:center;gap:9px;padding:10px 14px;border:1px solid var(--vs-line);border-radius:5px;cursor:pointer;list-style:none}
+.wallet-menu>summary::-webkit-details-marker{display:none}
+.wallet-menu-panel{position:absolute;z-index:90;right:0;top:calc(100% + 10px);width:min(300px,calc(100vw - 36px));display:grid;gap:14px;padding:18px;background:var(--vs-panel);border:1px solid var(--vs-line);border-radius:6px;box-shadow:0 12px 32px #0008}
+.wallet-menu-panel>span,.wallet-menu-panel>small{font-size:.72rem;color:var(--vs-muted);line-height:1.6}
+.wallet-menu-panel>code{font-size:.75rem;overflow-wrap:anywhere}
+.wallet-menu-panel>button{min-height:40px}
 .vs-intro {width:min(1200px,calc(100% - 48px));margin:auto;padding:76px 0 62px;display:grid;grid-template-columns:1.15fr 1fr;align-items:end;gap:60px;border-bottom:1px solid var(--vs-line)}
 .vs-intro .eyebrow {color:var(--vs-mint);margin-bottom:22px}
 .vs-intro h1 {font-size:clamp(2.7rem,4.2vw,4.15rem);line-height:1.08;letter-spacing:-.055em;font-weight:650}
