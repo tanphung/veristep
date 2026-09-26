@@ -4,13 +4,13 @@ import type {V2Deal} from "../../frontend/src/v2-types";
 import {canonicalReleaseProofs,dealPresentation} from "../../frontend/src/deal-presentation";
 
 const deals=Object.fromEntries(canonicalReleaseProofs.map(item=>[item.id,{deal_id:item.id,status:"SETTLEMENT_PENDING",terms_hash:"a".repeat(64),router:"0x1234567890",manifest:{obligations:[]},settlement_legs:[],report:{decision:{stages:{A:{outcome:item.expected.A},B:{outcome:item.expected.B}}},source_assessments:[],findings:[]}} as unknown as V2Deal]));
-vi.mock("../../frontend/src/v2-client",()=>({listV2Deals:vi.fn(async()=>Object.keys(deals)),readV2Deal:vi.fn(async(id:string)=>deals[id]),readFinalizedWithRetry:vi.fn((read:()=>Promise<unknown>)=>read())}));
+vi.mock("../../frontend/src/v2-client",()=>({cachedV2Deal:vi.fn(()=>undefined),cachedV2Ids:vi.fn(()=>undefined),isV2IdsFresh:vi.fn(()=>false),isV2DealFresh:vi.fn(()=>false),listV2Deals:vi.fn(async()=>Object.keys(deals)),readV2Deal:vi.fn(async(id:string)=>deals[id]),readFinalizedWithRetry:vi.fn((read:()=>Promise<unknown>)=>read())}));
 vi.mock("../../frontend/src/transactions",()=>({connect:vi.fn(),disconnectWallet:vi.fn(),walletChanged:vi.fn(),watchWallet:vi.fn()}));
 vi.mock("../../frontend/src/v2-transactions",()=>({observeV2:vi.fn(),v2History:vi.fn(()=>[]),v2Pending:vi.fn(()=>false)}));
 vi.mock("../../frontend/src/V2Report",()=>({V2Report:()=>null}));
 vi.mock("../../frontend/src/V2OnchainActivity",()=>({V2LifecycleActivity:()=>null,V2OnchainActivity:()=>null}));
 import VeriStepApp from "../../frontend/src/VeriStepApp";
-import {listV2Deals,readV2Deal} from "../../frontend/src/v2-client";
+import {cachedV2Deal,listV2Deals,readV2Deal} from "../../frontend/src/v2-client";
 import {connect,disconnectWallet} from "../../frontend/src/transactions";
 
 describe("reviewer navigation",()=>{
@@ -44,7 +44,7 @@ describe("reviewer navigation",()=>{
     expect(screen.queryByRole("navigation",{name:"Archived and recovery attempts"})).not.toBeInTheDocument();
     expect(screen.getByText(/Connect your wallet to see deals/)).toBeVisible();
   });
-  beforeEach(()=>{window.history.replaceState(null,"","#view=compare");Element.prototype.scrollIntoView=vi.fn();});
+  beforeEach(()=>{vi.mocked(cachedV2Deal).mockReset();window.history.replaceState(null,"","#view=compare");Element.prototype.scrollIntoView=vi.fn();});
   it("keeps workspace navigation, adds Docs and a clear create action",async()=>{
     render(<VeriStepApp/>);
     expect(screen.getByRole("link",{name:"Explore examples"})).toHaveAttribute("href","#view=compare");
@@ -66,32 +66,28 @@ describe("reviewer navigation",()=>{
     navigate("#workspace");await waitFor(()=>expect(screen.getByRole("heading",{name:"Four verified examples."})).toBeVisible());
     const first=canonicalReleaseProofs[0].id;
     navigate(`#job=${first}`);await waitFor(()=>expect(screen.getByRole("heading",{name:dealPresentation(first).label})).toBeVisible());
-    const reads=vi.mocked(readV2Deal).mock.calls.length;
+    vi.mocked(cachedV2Deal).mockImplementation(id=>deals[id]);
     navigate("#docs?section=inconclusive");expect(screen.getByRole("heading",{name:"Inconclusive review & timeouts"})).toBeVisible();
     navigate(`#job=${first}`);expect(screen.getByRole("heading",{name:dealPresentation(first).label})).toBeVisible();
-    expect(readV2Deal).toHaveBeenCalledTimes(reads);
+    expect(screen.queryByText("Reading the VeriStep Intelligent Contract…")).not.toBeInTheDocument();
     navigate("#docs");expect(screen.getByRole("link",{name:"Docs"})).toHaveAttribute("aria-current","page");
     navigate("#workflow");expect(screen.getByRole("heading",{name:/One agreement/})).toBeVisible();
   });
-  it("reuses finalized demo data when navigating back to a viewed case",async()=>{
+  it("keeps shared cached data visible when navigating back while revalidating",async()=>{
     vi.mocked(listV2Deals).mockClear();vi.mocked(readV2Deal).mockClear();
     render(<VeriStepApp/>);
     await waitFor(()=>expect(screen.getAllByText("PASS")).toHaveLength(4));
+    vi.mocked(cachedV2Deal).mockImplementation(id=>deals[id]);
     const navigate=(hash:string)=>act(()=>{window.history.replaceState(null,"",hash);window.dispatchEvent(new HashChangeEvent("hashchange"));});
     const first=canonicalReleaseProofs[0].id,second=canonicalReleaseProofs[1].id;
     navigate(`#job=${first}`);
     await waitFor(()=>expect(screen.getByRole("heading",{name:dealPresentation(first).label})).toBeVisible());
     navigate(`#job=${second}`);
     await waitFor(()=>expect(screen.getByRole("heading",{name:dealPresentation(second).label})).toBeVisible());
-    const readsBeforeReturn=vi.mocked(readV2Deal).mock.calls.filter(([id])=>id===first).length;
-    const listsBeforeReturn=vi.mocked(listV2Deals).mock.calls.length;
     navigate(`#job=${first}`);
     expect(screen.getByRole("heading",{name:dealPresentation(first).label})).toBeVisible();
-    await waitFor(()=>expect(vi.mocked(readV2Deal).mock.calls.filter(([id])=>id===first)).toHaveLength(readsBeforeReturn));
-    expect(vi.mocked(listV2Deals)).toHaveBeenCalledTimes(listsBeforeReturn);
-    const readsBeforeDemo=vi.mocked(readV2Deal).mock.calls.length;
+    expect(screen.queryByText("Reading the VeriStep Intelligent Contract…")).not.toBeInTheDocument();
     navigate("#view=compare");
     expect(screen.getAllByText("PASS")).toHaveLength(4);
-    expect(vi.mocked(readV2Deal)).toHaveBeenCalledTimes(readsBeforeDemo);
   });
 });

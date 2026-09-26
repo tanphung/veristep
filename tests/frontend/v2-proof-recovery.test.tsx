@@ -2,7 +2,7 @@ import {act,fireEvent,render,screen,waitFor} from "@testing-library/react";
 import {expect,it,vi} from "vitest";
 import {canonicalReleaseProofs} from "../../frontend/src/deal-presentation";
 const read=vi.hoisted(()=>vi.fn());
-vi.mock("../../frontend/src/v2-client",()=>({readV2Deal:read,readFinalizedWithRetry:(fn:()=>Promise<unknown>)=>fn()}));
+vi.mock("../../frontend/src/v2-client",()=>({cachedV2Deal:vi.fn(()=>undefined),cachedV2Ids:vi.fn(()=>undefined),isV2DealFresh:vi.fn(()=>false),readV2Deal:read,readFinalizedWithRetry:(fn:()=>Promise<unknown>)=>fn()}));
 import {V2Compare} from "../../frontend/src/V2Compare";
 
 it("retains three successful proofs and retries only the missing proof",async()=>{

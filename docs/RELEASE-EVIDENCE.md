@@ -46,7 +46,9 @@ Reference date: 2026-09-17. Network: Studio Next, chain `61997`.
 - Settlement dispatches: [`A payout`](https://explorer-studio-dev.genlayer.com/transactions/0x40f1e560c4cda6531223dff347b5b848565eb844299607aa348a8be52ad85c45), [`A bond`](https://explorer-studio-dev.genlayer.com/transactions/0x82ff1735e37be2cb1b77f38ac85fc28f03b07521277c144e7aa3ff57f6a8692d), [`B refund`](https://explorer-studio-dev.genlayer.com/transactions/0x725ba345f5a14a7de3ccd435b91356cacfd54e9c8b0a9ee4c92a406ae77d07b5), [`B bond`](https://explorer-studio-dev.genlayer.com/transactions/0xf606da8f7a8e9765270ed68a138c8e0055f817e585661fd41f5a48f5525ad825).
 - Raw manifest, deal snapshot and all 12 receipts: `reports/studio-next-b-fault-final/`.
 
-All settlement states are `DISPATCHED_UNVERIFIED`; Studio Next does not expose a contract-side transfer receipt.
+The three semantic cases above have all settlement legs `DISPATCHED_UNVERIFIED`;
+Studio Next does not expose a contract-side transfer receipt. The Hosted Agent
+case remains `ELIGIBLE`, with no settlement transaction sent, as recorded above.
 
 ## Preserved non-passing evidence
 

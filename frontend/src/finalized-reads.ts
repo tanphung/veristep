@@ -1,3 +1,4 @@
+import {readErrorInfo} from "./read-errors";
 // Share finalized reads across components (including React StrictMode mounts).
 // Keep a margin below the public endpoint's 30 requests/minute allowance.
 export function createFinalizedReads(spacingMs=2500,ttlMs=15000,cooldownMs=61000){
@@ -41,8 +42,16 @@ export function createFinalizedReads(spacingMs=2500,ttlMs=15000,cooldownMs=61000
     pending.set(key,job);queue.push(job);pump();
     return promise as Promise<T>;
   }
-  return {read};
+  // Stale values are for display only. read() still checks the TTL before reuse.
+  function peek<T>(key:string):T|undefined{return cache.get(key)?.value as T|undefined;}
+  function isFresh(key:string){return (cache.get(key)?.expires??0)>Date.now();}
+  return {read,peek,isFresh};
 }
-export function isRateLimited(cause:unknown){return /rate.?limit|too many requests|\b429\b/i.test(cause instanceof Error?cause.message:String(cause));}
+export function isRateLimited(cause:unknown){return readErrorInfo(cause).kind==="rate-limit";}
 export const finalizedReads=createFinalizedReads();
-export function finalizedReadError(cause:unknown,fallback:string){return isRateLimited(cause)?"The network is busy. Please wait about a minute, then try again. No new transaction has been sent.":fallback;}
+export function finalizedReadError(cause:unknown,fallback:string){
+  const {kind}=readErrorInfo(cause);
+  if(kind==="rate-limit")return "The network is busy. Please wait about a minute, then try again. Previously loaded data remains visible; it has not been refreshed.";
+  if(kind==="protocol"||kind==="transient")return "Could not update data from the network. Previously loaded data remains visible; it has not been refreshed. Please retry.";
+  return fallback;
+}

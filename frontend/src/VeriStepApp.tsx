@@ -3,7 +3,8 @@ import {ArrowLeftRight,ArrowRight,ArrowUpRight,CheckCircle2,Plus,RefreshCw,Walle
 import type {Address} from "genlayer-js/types";
 import {contract,deploymentTransaction,explorer,jobHref,short,writesEnabled} from "./client";
 import {connect,disconnectWallet,walletChanged,watchWallet} from "./transactions";
-import {listV2Deals,readFinalizedWithRetry,readV2Deal} from "./v2-client";
+import {cachedV2Deal,cachedV2Ids,isV2IdsFresh,listV2Deals,readFinalizedWithRetry,readV2Deal} from "./v2-client";
+import {finalizedReadError} from "./finalized-reads";
 import {V2Report} from "./V2Report";
 import {shouldRenderV2Actions,V2Actions} from "./V2Actions";
 import {V2NewDeal} from "./V2NewDeal";
@@ -31,30 +32,33 @@ const lifecycle=["Terms frozen","Fees funded","Workers bonded","Artifacts commit
 
 export default function VeriStepApp(){
   const [docs,setDocs]=useState(docsFromUrl);
-  const [ids,setIds]=useState<string[]>([]),[deal,setDeal]=useState<V2Deal>();
+  const [ids,setIds]=useState<string[]>(()=>sortDealIds(cachedV2Ids()??[])),[deal,setDeal]=useState<V2Deal|undefined>(()=>cachedV2Deal(selectedFromUrl()));
+  const [idsReady,setIdsReady]=useState(isV2IdsFresh);
   const [view,setView]=useState<"deals"|"compare">(viewFromUrl);
   const [selected,setSelected]=useState(selectedFromUrl),[loading,setLoading]=useState(true),[error,setError]=useState("");
   const [account,setAccount]=useState<Address>(),[connecting,setConnecting]=useState(false),[walletError,setWalletError]=useState("");
   const [creating,setCreating]=useState(false),[records,setRecords]=useState<TxRecord[]>([]),[historyError,setHistoryError]=useState("");
-  const generation=useRef(0),observing=useRef(false),knownIds=useRef<string[]|undefined>(undefined),knownDeals=useRef(new Map<string,V2Deal>());
+  const generation=useRef(0),observing=useRef(false);
   const refresh=useCallback(async(fresh=false)=>{
     const turn=++generation.current;setError("");
+    setIdsReady(!fresh&&isV2IdsFresh());
     const pendingCreation=selected&&v2History().some(record=>record.jobId===selected&&record.method==="create_terms"&&v2Pending(record));
     // Start the visible deal first. Its ID is already known from the route.
-    const cached=!fresh&&knownDeals.current.get(selected);
+    const cached=cachedV2Deal(selected);
+    if(view==="deals")setDeal(cached);
     const selectedRead=view==="deals"&&selected&&!pendingCreation
-      ?Promise.resolve(cached||readFinalizedWithRetry(()=>readV2Deal(selected,fresh,10))):undefined;
+      ?readFinalizedWithRetry(()=>readV2Deal(selected,fresh,10)):undefined;
     // Attach a handler immediately while the independent list is being loaded.
     void selectedRead?.catch(()=>{});
-    const listRead=knownIds.current&&!fresh?Promise.resolve(knownIds.current):readFinalizedWithRetry(()=>listV2Deals(fresh)).then(found=>{
+    const listRead=readFinalizedWithRetry(()=>listV2Deals(fresh)).then(found=>{
       const sorted=sortDealIds(found);
-      if(turn===generation.current){knownIds.current=sorted;setIds(sorted);}
+      if(turn===generation.current){setIds(sorted);setIdsReady(true);}
       return sorted;
     });
-    void listRead.catch(cause=>{if(turn===generation.current)setError(friendlyError(cause,"Could not sync the deal list. Loaded deals remain available."));});
+    void listRead.catch(cause=>{if(turn===generation.current){setIdsReady(false);setError(finalizedReadError(cause,"Could not update the deal list. Previously loaded deals remain visible. Please retry."));}});
     try{
       if(view==="compare"){await listRead;return;}
-      setLoading(!cached);
+      setLoading(true);
       let id=selected,value:V2Deal;
       if(selectedRead){value=await selectedRead;}
       else{
@@ -62,12 +66,13 @@ export default function VeriStepApp(){
         if(turn!==generation.current)return;
         id=selected||canonicalReleaseProofs.find(item=>found.includes(item.id))?.id||"";
         if(!id||(!found.includes(id)&&pendingCreation)){setDeal(undefined);return;}
-        value=(!fresh&&knownDeals.current.get(id))||await readFinalizedWithRetry(()=>readV2Deal(id,fresh,10));
+        setDeal(cachedV2Deal(id));
+        value=await readFinalizedWithRetry(()=>readV2Deal(id,fresh,10));
       }
       if(turn!==generation.current)return;
-      knownDeals.current.set(id,value);setDeal(value);
+      setDeal(value);
       if(!selected){location.hash=jobHref(id);setSelected(id);}
-    }catch(cause){if(turn===generation.current)setError(friendlyError(cause,"Unable to refresh finalized VeriStep contract state"));}
+    }catch(cause){if(turn===generation.current)setError(finalizedReadError(cause,"Could not update finalized contract data. Previously loaded data remains visible; it has not been refreshed. Please retry."));}
     finally{if(turn===generation.current)setLoading(false);}
   },[selected,view]);
   useEffect(()=>{if(!docs)void refresh();return()=>{generation.current++;};},[refresh,docs]);
@@ -85,7 +90,7 @@ export default function VeriStepApp(){
     scroll();window.addEventListener("hashchange",scroll);
     return()=>window.removeEventListener("hashchange",scroll);
   },[docs]);
-  useEffect(()=>{const change=()=>{const next=routeFromUrl();if(!next.hasContractRoute)return;if(next.selected===selected&&next.view===view)return;setSelected(next.selected);setView(next.view);setDeal(next.view==="deals"?knownDeals.current.get(next.selected):undefined);setCreating(false);};window.addEventListener("hashchange",change);return()=>window.removeEventListener("hashchange",change);},[selected,view]);
+  useEffect(()=>{const change=()=>{const next=routeFromUrl();if(!next.hasContractRoute)return;if(next.selected===selected&&next.view===view)return;setSelected(next.selected);setView(next.view);setDeal(next.view==="deals"?cachedV2Deal(next.selected):undefined);setCreating(false);};window.addEventListener("hashchange",change);return()=>window.removeEventListener("hashchange",change);},[selected,view]);
   useEffect(()=>{if(!account)return;return watchWallet(change=>{if(!walletChanged(account,change))return;setAccount(undefined);setWalletError("Wallet or network changed. Reconnect before signing.");});},[account]);
   const loadHistory=useCallback(()=>{try{setRecords(v2History());setHistoryError("");}catch(cause){setHistoryError(friendlyError(cause,"VeriStep transaction tracking unavailable"));}},[]);
   useEffect(()=>{loadHistory();window.addEventListener("veristep:v2-transactions",loadHistory);return()=>window.removeEventListener("veristep:v2-transactions",loadHistory);},[loadHistory]);
@@ -120,7 +125,7 @@ export default function VeriStepApp(){
         <div className={`vs-dashboard ${creating?"is-creating":""}`} id="workspace">
           {!creating&&<aside className="vs-records">
             <button className="primary new-deal-secondary" onClick={openCreate} disabled={busy||!writesEnabled}><Plus/> New Deal</button>
-            <V2MyDeals account={account} ids={ids} idsReady={knownIds.current!==undefined} connecting={connecting} selected={view==="deals"?selected:""}/>
+            <V2MyDeals account={account} ids={ids} idsReady={idsReady} connecting={connecting} selected={view==="deals"?selected:""}/>
             <div className="sidebar-demo"><strong>Demo</strong><span className="meta">See the protocol in action.</span></div>
             <a className={`verify-cases ${view==="compare"?"active":""}`} href="#view=compare"><ArrowLeftRight/> Verify live cases</a>
             <nav aria-label="Verified VeriStep scenarios">{primaryIds.map((id,index)=><a className={view==="deals"&&selected===id?"active":""} href={jobHref(id)} key={id}><span className="scenario-number">0{index+1}</span><span>{dealPresentation(id).label}</span></a>)}</nav>
@@ -131,9 +136,10 @@ export default function VeriStepApp(){
               <div className="section-heading"><div><span className="eyebrow">DEAL DETAILS</span><h2>{deal?dealPresentation(deal.deal_id).label:selected?dealPresentation(selected).label:"Select a demo or your deal"}</h2></div><button className="icon-button" aria-label="Refresh finalized contract state" onClick={()=>void refresh(true)} disabled={loading}><RefreshCw className={loading?"spinning":""}/></button></div>
               {!deal&&!error&&<p className="empty">{loading?"Reading the VeriStep Intelligent Contract…":records.some(record=>record.jobId===selected&&record.method==="create_terms"&&v2Pending(record))?"Your signed transaction is awaiting finalized contract state. Its existing hash is being checked automatically.":"Choose an example or connect your wallet to find your deals."}</p>}
               {deal&&<>
+                {loading&&<p className="meta" role="status">Checking for updates… Showing previously loaded data.</p>}
                 <div className="v2-identity"><span className="status">{dealStatusLabel(deal)}</span><details><summary>Technical details</summary><div><span>Record ID</span><code>{deal.deal_id}</code><span>Contract status</span><code>{deal.status}</code>{deal.status==="SETTLEMENT_PENDING"&&<p className="contract-status-note">{stage===6?"All transfer instructions have been dispatched. Studio Next cannot verify receipt inside the contract, so its stored status remains SETTLEMENT_PENDING.":"The review is finalized. Transfer instructions still await dispatch; see the settlement section for each transfer."}</p>}<span>Terms</span><code>{short(deal.terms_hash)}</code><span>Deployment owner</span><code>{short(deal.router)}</code></div></details></div>
                 <section className="v2-lifecycle" aria-label="Deal progress"><ol>{lifecycle.map((item,index)=><li className={stage>index?"done":stage===index?"current":""} key={item}><span>{stage>index?<CheckCircle2/>:index+1}</span><strong>{item}</strong></li>)}</ol></section>
-                <div id="agent-actions">{shouldRenderV2Actions(deal,account)&&<V2Actions deal={deal} account={account} busy={busy} onSubmitted={loadHistory}/>}{(["FUNDED","ACTIVE_A","ACTIVE_B"].includes(deal.status)||deal.deal_id==="v2-hosted-agent-live-2")&&<V2Worker deal={deal} account={account}/>}</div>
+                <div id="agent-actions">{shouldRenderV2Actions(deal,account)&&<V2Actions deal={deal} account={account} busy={busy||loading||Boolean(error)} onSubmitted={loadHistory}/>}{(["FUNDED","ACTIVE_A","ACTIVE_B"].includes(deal.status)||deal.deal_id==="v2-hosted-agent-live-2")&&<V2Worker key={deal.deal_id} deal={deal} account={account} readOnly={loading||Boolean(error)}/>}</div>
                 <div id="validator-proof"><V2Report deal={deal}/></div>
                 {!deal.report&&<details className="lifecycle-details"><summary>View lifecycle transactions</summary><V2LifecycleActivity dealId={deal.deal_id}/></details>}
                 <V2OnchainActivity dealId={deal.deal_id}/>

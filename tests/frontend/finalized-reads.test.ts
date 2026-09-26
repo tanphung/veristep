@@ -59,4 +59,15 @@ describe("shared finalized RPC reads",()=>{
     await queue.read("a",fetch);await vi.advanceTimersByTimeAsync(15001);await queue.read("a",fetch);
     expect(fetch).toHaveBeenCalledTimes(2);
   });
+  it("retains stale display data after refresh failure without returning it as a fresh read",async()=>{
+    vi.useFakeTimers();const queue=createFinalizedReads(0,15000);
+    await queue.read("61997:contract-a:deal:1",async()=>"saved");
+    expect(queue.isFresh("61997:contract-a:deal:1")).toBe(true);
+    await vi.advanceTimersByTimeAsync(15001);
+    expect(queue.isFresh("61997:contract-a:deal:1")).toBe(false);
+    await expect(queue.read("61997:contract-a:deal:1",async()=>{throw new Error("offline");})).rejects.toThrow("offline");
+    expect(queue.peek("61997:contract-a:deal:1")).toBe("saved");
+    expect(queue.peek("61997:contract-b:deal:1")).toBeUndefined();
+    expect(queue.peek("61999:contract-a:deal:1")).toBeUndefined();
+  });
 });

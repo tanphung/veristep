@@ -59,10 +59,10 @@ The completed release matrix is intentionally small and inspectable:
 
 | Case | Agent A | Agent B |
 |---|---:|---:|
-| Happy Path / no-fault | `SATISFIED` | `SATISFIED` |
-| Upstream Fault / A-fault | `VIOLATED` | `SATISFIED` |
-| Downstream Fault / B-fault | `SATISFIED` | `VIOLATED` |
-| Hosted Agent A to B | `SATISFIED` | `SATISFIED` |
+| [Happy Path / no-fault](https://veristep-genlayer.vercel.app/#job=v2-studio-no-fault-358323c) | `SATISFIED` | `SATISFIED` |
+| [Upstream Fault / A-fault](https://veristep-genlayer.vercel.app/#job=v2-studio-a-fault-r3-358323c) | `VIOLATED` | `SATISFIED` |
+| [Downstream Fault / B-fault](https://veristep-genlayer.vercel.app/#job=v2-studio-b-fault-r2-358323c) | `SATISFIED` | `VIOLATED` |
+| [Hosted Agent A to B](https://veristep-genlayer.vercel.app/#job=v2-hosted-agent-live-2) | `SATISFIED` | `SATISFIED` |
 
 ## What the Contract Enforces
 
@@ -159,8 +159,15 @@ are not current release instructions or demos.
 Before every commit:
 
 ```powershell
+npm run check:submission
 npm run check:secrets
 ```
+
+`check:submission` compares contract sources, deployment configuration and raw
+evidence with commit `ba065458dd6b70dcf168fb4a934cc1919d9317d4`, the baseline
+preserved while awaiting team review. It reads local files and Git objects only;
+it never deploys or sends a transaction. CI runs the same guard and the offline
+receipt audits. See [submission preservation](docs/SUBMISSION-PRESERVATION.md).
 
 ## Project references
 

@@ -2,13 +2,26 @@ import {act,fireEvent,render,screen,waitFor} from "@testing-library/react";
 import {beforeEach,describe,expect,it,vi} from "vitest";
 import {V2MyDeals} from "../../frontend/src/V2MyDeals";
 import type {V2Deal} from "../../frontend/src/v2-types";
+import {cachedV2Deal} from "../../frontend/src/v2-client";
 
 const read=vi.hoisted(()=>vi.fn());
-vi.mock("../../frontend/src/v2-client",()=>({readV2Deal:read,readFinalizedWithRetry:(fn:()=>Promise<unknown>)=>fn()}));
+vi.mock("../../frontend/src/v2-client",()=>({cachedV2Deal:vi.fn(()=>undefined),cachedV2Ids:vi.fn(()=>undefined),isV2DealFresh:vi.fn(()=>false),readV2Deal:read,readFinalizedWithRetry:(fn:()=>Promise<unknown>)=>fn()}));
 const wallet="0xAbC",other="0xDef";
 const deal=(id:string,client:string)=>({deal_id:id,manifest:{client},status:"DRAFT_UNFUNDED",settlement_legs:[]} as unknown as V2Deal);
-beforeEach(()=>{read.mockReset();});
+beforeEach(()=>{read.mockReset();vi.mocked(cachedV2Deal).mockReset();});
 describe("wallet-scoped deals",()=>{
+  it("keeps cached owned deals after a failed scan and hides them for another wallet",async()=>{
+    vi.mocked(cachedV2Deal).mockReturnValue(deal("mine",wallet));
+    read.mockRejectedValue(new Error("offline"));
+    const {rerender}=render(<V2MyDeals account={wallet} ids={["mine"]} selected=""/>);
+    expect(screen.getByRole("link",{name:/mine/})).toBeVisible();
+    await screen.findByRole("button",{name:"Retry my deals"});
+    expect(screen.getByRole("link",{name:/mine/})).toBeVisible();
+    expect(screen.queryByText(/No deals yet/)).not.toBeInTheDocument();
+    rerender(<V2MyDeals account={other} ids={["mine"]} selected=""/>);
+    expect(screen.queryByRole("link",{name:/mine/})).not.toBeInTheDocument();
+    await screen.findByRole("button",{name:"Retry my deals"});
+  });
   it("reveals an owned deal before the remaining ownership reads finish",async()=>{
     let finish!:(value:V2Deal)=>void;
     read.mockImplementation((id:string)=>id==="mine"?Promise.resolve(deal(id,wallet)):new Promise<V2Deal>(resolve=>{finish=resolve;}));

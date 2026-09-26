@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "check:submission": "node scripts/check-submission.mjs",
     "check:secrets": "node scripts/check-secrets.mjs",
     "release:studio-next": "node scripts/studio-next-release.mjs",
     "prepare:studio-wallets": "node scripts/prepare-studio-next-wallets.mjs",

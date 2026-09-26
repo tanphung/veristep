@@ -1,5 +1,23 @@
 # VeriStep — Threat model v0.2
 
+## Current Studio Next release — clarification, 26/09/2026
+
+The deployed contract and preserved evidence are identified in
+[RELEASE-EVIDENCE.md](RELEASE-EVIDENCE.md). This clarification does not change them.
+
+The active release verifies immutable GitHub provenance and complete artifact
+bytes, independently assesses frozen obligations through GenLayer, and calculates
+role-specific allocations. Native transfers can be dispatched, but the deployed
+contract cannot confirm recipient-side receipts. `DISPATCHED_UNVERIFIED` is not
+payment confirmation; `confirm_settlement` is unavailable for this release.
+Hidden-redirect prevention remains unproven, and timeout signing remains gated
+by the chain-time simulation check.
+
+The dated sections below preserve design history. In particular, receipt-router
+confirmation describes an earlier design, and the original v1 discussion of
+on-chain text without external URLs does not describe the current GitHub adapter.
+For current deployment claims, use the release evidence linked above.
+
 ## Release addendum — receipt namespace and hosted workers (13/09/2026)
 
 - An attacker can pre-fund a predictable receipt ID before the Intelligent Contract if the router indexes receipts by receipt ID alone. The release candidate namespaces every receipt by `(sourceContract, receiptId)`, derives `sourceContract` from `msg.sender` during funding, and requires that source on every read and release. A receipt created by another caller cannot block or authenticate the IC receipt.

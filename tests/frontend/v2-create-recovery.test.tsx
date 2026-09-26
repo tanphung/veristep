@@ -4,7 +4,7 @@ import type {TxRecord} from "../../frontend/src/transactions";
 import type {V2Deal} from "../../frontend/src/v2-types";
 
 const mocks=vi.hoisted(()=>({list:vi.fn(),read:vi.fn(),history:vi.fn(),observe:vi.fn()}));
-vi.mock("../../frontend/src/v2-client",()=>({listV2Deals:mocks.list,readV2Deal:mocks.read,readFinalizedWithRetry:(read:()=>Promise<unknown>)=>read()}));
+vi.mock("../../frontend/src/v2-client",()=>({cachedV2Deal:vi.fn(()=>undefined),cachedV2Ids:vi.fn(()=>undefined),isV2IdsFresh:vi.fn(()=>false),isV2DealFresh:vi.fn(()=>false),listV2Deals:mocks.list,readV2Deal:mocks.read,readFinalizedWithRetry:(read:()=>Promise<unknown>)=>read()}));
 vi.mock("../../frontend/src/v2-transactions",()=>({v2History:mocks.history,observeV2:mocks.observe,v2Pending:(row:TxRecord)=>["PENDING","ACCEPTED","UNKNOWN","SIGNING"].includes(row.phase)}));
 vi.mock("../../frontend/src/V2Report",()=>({V2Report:()=>null}));
 vi.mock("../../frontend/src/V2Actions",()=>({shouldRenderV2Actions:()=>false,V2Actions:()=>null}));

@@ -2,12 +2,13 @@ import {TransactionHashVariant} from "genlayer-js/types";
 import {contract,evidenceChainId,readClient} from "./client";
 import type {V2Deal} from "./v2-types";
 import {finalizedReads,isRateLimited} from "./finalized-reads";
+import {readErrorInfo,reportReadFailure} from "./read-errors";
 
-const retryDelayMs=450;
+const retryDelayMs=1500;
 
 export function isRetryableFinalizedReadError(cause:unknown):boolean{
-  const message=cause instanceof Error?cause.message:String(cause);
-  return /unknown rpc|failed to fetch|network(?: error)?|fetch failed|timeout|timed out|gateway|\b(?:429|500|502|503|504)\b/i.test(message);
+  const {kind}=readErrorInfo(cause);
+  return kind==="transient"||kind==="protocol";
 }
 
 export async function readFinalizedWithRetry<T>(read:()=>Promise<T>,delayMs=retryDelayMs):Promise<T>{
@@ -44,11 +45,18 @@ export function validateV2Deal(value:unknown,id:string):V2Deal{
   return deal;
 }
 
-export function listV2Deals(fresh=false):Promise<string[]>{return finalizedReads.read("deal-list",loadV2Deals,fresh);}
+const cacheDomain=`v2:${evidenceChainId}:${contract.toLowerCase()}`;
+const listKey=`${cacheDomain}:deal-list`;
+const dealKey=(id:string)=>`${cacheDomain}:deal:${id}`;
+export const cachedV2Deal=(id:string)=>finalizedReads.peek<V2Deal>(dealKey(id));
+export const cachedV2Ids=()=>finalizedReads.peek<string[]>(listKey);
+export const isV2IdsFresh=()=>finalizedReads.isFresh(listKey);
+export const isV2DealFresh=(id:string)=>finalizedReads.isFresh(dealKey(id));
+export function listV2Deals(fresh=false):Promise<string[]>{return finalizedReads.read(listKey,loadV2Deals,fresh);}
 async function loadV2Deals():Promise<string[]>{
   const ids:string[]=[];let total=0;
   do{
-    const raw=await readClient.readContract({address:contract,functionName:"list_deals",args:[BigInt(ids.length),50n],transactionHashVariant:TransactionHashVariant.LATEST_FINAL});
+    const raw=await rpcRead("list_deals",[BigInt(ids.length),50n]);
     if(typeof raw!=="string")throw new Error("Unexpected v2 deal list");
     const value=JSON.parse(raw) as {total:number;ids:string[]};
     if(!Number.isSafeInteger(value.total)||value.total<0||!Array.isArray(value.ids)||value.ids.some(id=>typeof id!=="string"||!id)||value.ids.length>50)throw new Error("Invalid v2 deal list");
@@ -60,9 +68,13 @@ async function loadV2Deals():Promise<string[]>{
   return ids;
 }
 
-export function readV2Deal(id:string,fresh=false,priority=0):Promise<V2Deal>{return finalizedReads.read(`deal:${id}`,()=>loadV2Deal(id),fresh,priority);}
+export function readV2Deal(id:string,fresh=false,priority=0):Promise<V2Deal>{return finalizedReads.read(dealKey(id),()=>loadV2Deal(id),fresh,priority);}
+async function rpcRead(functionName:"get_terms"|"list_deals",args:(string|bigint)[]){
+  try{return await readClient.readContract({address:contract,functionName,args,transactionHashVariant:TransactionHashVariant.LATEST_FINAL});}
+  catch(cause){reportReadFailure(functionName,cause);throw cause;}
+}
 async function loadV2Deal(id:string):Promise<V2Deal>{
-  const raw=await readClient.readContract({address:contract,functionName:"get_terms",args:[id],transactionHashVariant:TransactionHashVariant.LATEST_FINAL});
+  const raw=await rpcRead("get_terms",[id]);
   if(typeof raw!=="string")throw new Error("Unexpected v2 deal response");
   return validateV2Deal(JSON.parse(raw),id);
 }
